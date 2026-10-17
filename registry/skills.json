@@ -3,9 +3,9 @@
   "package": "ai-product-team",
   "reconstruction_note": "registry/skills.json was not supplied with the package. Skill ids S01-S28 are fixed by the agent registry. Names for S01-S11 follow the admitted sources named in the build prompt; names for S12-S28 follow, in order, the list of new specialisms in section 6 of the build prompt (evidence/lineage; requirements/acceptance; AI responsibility allocation; retrieval/context; tool/permission boundaries; evaluation planning, data, execution; cost/latency; rollout/operations; outcome analysis; adversarial challenge; adjudication; delegated authority; security/privacy; controlled learning; accessible interactions). The mapping was cross-checked against which roles reference each id.",
   "naming": {
-    "skill_directory": "skills/<name>/SKILL.md",
+    "skill_directory": "skills/aipt-method-<name>/SKILL.md",
     "installed_name": "aipt-method-<name>",
-    "constraints": "Agent Skills spec: 1-64 chars, lowercase letters, digits and single hyphens; name must match its directory."
+    "constraints": "Agent Skills spec: 1-64 chars, lowercase letters, digits and single hyphens; the frontmatter name must equal the directory name, so the canonical directory already carries the aipt-method- prefix."
   },
   "provenance_statuses": ["reuse", "adapt", "reference_only", "newly_authored", "hold", "exclude", "unresolved"],
   "skills": [
