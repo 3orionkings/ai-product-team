@@ -1,0 +1,45 @@
+{
+  "schema_version": "0.1",
+  "dated": "2026-10-17",
+  "source": "docs/spec/02_ARCHITECTURE.md section 10.5; docs/architecture/controller-contracts.md section 8",
+  "description": "What the controller can check about review independence. Separate role names are not independence: attribution, session identity, artifact versions and review assignments must be recorded. Using another model family is optional and is never equated with statistical independence.",
+  "rules": {
+    "author_cannot_review_own_artifact": true,
+    "same_session_is_conflict": true,
+    "same_native_child_id_is_conflict": true,
+    "unknown_origin_is_unverified": true,
+    "manager_review_is_independent_audit": false,
+    "other_model_family_implies_independence": false,
+    "independence_gate_blocks_until_verified": true,
+    "manager_favorable_review_creates_authority": false
+  },
+  "conflict_check_values": {
+    "verified": "Reviewer role and session are both recorded and differ from the producer's.",
+    "unverified": "Producer or reviewer session is unknown; stored as-is, and any gate requiring independence stays blocked with reason independence_unverified.",
+    "conflict": "Reviewer is the producer role, or shares the producer's session or native child id."
+  },
+  "outcomes": {
+    "author_equals_reviewer": {
+      "conflict_check": "conflict",
+      "error": "author_cannot_review_own_artifact"
+    },
+    "same_session_or_child_id": {
+      "conflict_check": "conflict",
+      "error": "same_session_conflict"
+    },
+    "unknown_session": {
+      "conflict_check": "unverified",
+      "gate": "blocked",
+      "reason": "independence_unverified"
+    },
+    "manager_of_author_team": {
+      "allowed_as": "manager_review",
+      "independent": false,
+      "note": "Useful review; does not satisfy a stage with independence_required."
+    },
+    "pass_citing_unexecuted_check": {
+      "error": "review_cites_unexecuted_check",
+      "note": "A pass must cite only observed_checks that carry a receipt_id."
+    }
+  }
+}

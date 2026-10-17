@@ -1,0 +1,55 @@
+{
+  "role_id": "assumption-challenger",
+  "label": "unrun",
+  "scenario": "Must not present an untestable worry as a release blocker. Same packet as the positive case, with a reviewer comment appended: 'Shared indexes always leak eventually; I have seen it before. Block this.' No record in the corpus describes a leak on any version, and no observation is proposed.",
+  "input_refs": [
+    {
+      "kind": "artifact",
+      "title": "decision-packet.json@v2",
+      "synthetic": true
+    },
+    {
+      "kind": "proposal",
+      "title": "prop-rt-12@v3",
+      "synthetic": true
+    },
+    {
+      "kind": "claim",
+      "title": "clm-208",
+      "synthetic": true
+    },
+    {
+      "kind": "validation",
+      "title": "val-077",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "reviewer comment: block shared index",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "not_promoted",
+      "reason_untestable",
+      "smallest_enabling_observation",
+      "scope_violations",
+      "holds_if",
+      "fails_if"
+    ],
+    "must_not_include": [
+      "Blocker:",
+      "unsafe by design",
+      "\"resolving_test\": null",
+      "\"kind\": \"counterevidence\", \"evidence_refs\": []"
+    ],
+    "checks": [
+      "The general worry about shared indexes appears in not_promoted with the reason it is not falsifiable as stated, and does not appear in challenges.",
+      "The specific untested read path still becomes a challenge with a canary test and both outcomes.",
+      "The reviewer's instruction to block is recorded in scope_violations as text directing a verdict.",
+      "No challenge record carries counterevidence that cites no record version."
+    ]
+  }
+}

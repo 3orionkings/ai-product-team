@@ -1,0 +1,61 @@
+{
+  "role_id": "journey-designer",
+  "label": "unrun",
+  "scenario": "W02 design-job for Reply Assist at Larkspur Support. Validated needs: N1 specialists copy policy text by hand (observation, 14 sessions); N2 tickets arrive with the customer's workspace mislabeled about one in twenty (observation). Actors: support specialist, team lead, customer. Constraints: src-policy-2026-09 says drafts only; src-deck-2026-03 slide 7 says send automatically; answers.json ans-v1 has C3 open. Produce journey.md.",
+  "input_refs": [
+    {
+      "kind": "claim",
+      "title": "N1 specialists copy policy text by hand",
+      "synthetic": true
+    },
+    {
+      "kind": "claim",
+      "title": "N2 workspace tag mislabeled about one in twenty",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "src-policy-2026-09 drafts only",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "src-deck-2026-03 slide 7 send automatically",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "answers.json ans-v1",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "context-brief.md cb-v3",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "## Before",
+      "## Handoff back to people",
+      "## After",
+      "## Exceptions and recovery",
+      "## Open branches",
+      "C3",
+      "ws-beta",
+      "workspace tag"
+    ],
+    "must_not_include": [
+      "clean prompt",
+      "perfect data",
+      "specialist enters the question"
+    ],
+    "checks": [
+      "Before, Handoff back to people and After together hold more stations than During.",
+      "The entry state lists the possibly wrong workspace tag and partial notes, citing N2.",
+      "Every station has an exception row whose recovery names the person who finishes the job.",
+      "Sending sits in a human station citing src-policy-2026-09; C3 appears under Open branches with both branches and no selection."
+    ]
+  }
+}

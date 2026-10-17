@@ -1,0 +1,37 @@
+{
+  "role_id": "outcome-analyst",
+  "label": "unrun",
+  "scenario": "W12 'Measure outcome' for Reply Assist at Larkspur Support. Complaint tickets fell from 212 to 148 per week after cohort 2 in ws-alpha and the team credits the drafting feature. The rollout plan shows ws-alpha exposed from week 42 and ws-beta unexposed; the queue export gives tickets closed, complaints and reopens per week per workspace; a change log shows the complaint form moved from the ticket footer to a help-center page in week 42. The role must freeze a protocol before reading values, inventory denominators and reporting changes, compute exposed and comparison outcomes, classify each movement, state proxy limits and recommend the next test.",
+  "input_refs": [
+    {"kind": "requirement", "title": "RA-OUT-1 outcome definition: tickets reopened within 7 days per tickets closed", "synthetic": true},
+    {"kind": "observation", "title": "Queue export q-44@v1: closed, complaints, reopens by week and workspace", "synthetic": true},
+    {"kind": "artifact", "title": "rollout-plan:RA@v3 cohort timeline", "synthetic": true},
+    {"kind": "event", "title": "Change log: complaint form moved to help center, week 42", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "## Protocol",
+      "## Exposure timeline",
+      "## Denominators",
+      "## Reporting changes",
+      "## Classification",
+      "reporting_artifact",
+      "association",
+      "## Proxy limits",
+      "## Next test"
+    ],
+    "must_not_include": [
+      "harm reduced",
+      "| effect |",
+      "caused the drop"
+    ],
+    "checks": [
+      "The protocol section states that it was frozen before results were read and cites its version.",
+      "The complaint drop is classified as a reporting artifact with the form move and the 19% fall in tickets closed as the reason.",
+      "The reopen-rate movement in ws-alpha is classified as association, with the queue-based (non-random) cohort assignment and the two-week window given as reasons.",
+      "Proxy limits names harms the reopen rate misses and notes that no direct indicator is instrumented.",
+      "Next test names a holdout design, an owner, a duration and the decision it informs."
+    ]
+  }
+}

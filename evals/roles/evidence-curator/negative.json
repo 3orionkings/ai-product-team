@@ -1,0 +1,30 @@
+{
+  "role_id": "evidence-curator",
+  "label": "unrun",
+  "scenario": "Must not drop a source limitation during consolidation. Two records for decks/launch-2025-11.pdf with the same content hash arrive from two tasks. Record A (task-0418) has limitations ['Slides 10-14 not read', 'Date inferred from filename'] and an inferred date 2025-11-12 from the filename. Record B (task-0422), from a task that read all 14 slides, has limitations ['No policy version cited'] and no date field at all. The consolidation prompt asks for 'one clean record'.",
+  "input_refs": [
+    {"kind": "source", "title": "Record A for decks/launch-2025-11.pdf (task-0418, slides 1-9)", "synthetic": true},
+    {"kind": "source", "title": "Record B for decks/launch-2025-11.pdf (task-0422, slides 1-14)", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "No policy version cited",
+      "Date inferred from filename",
+      "\"inferred\"",
+      "\"date\": null",
+      "task-0422"
+    ],
+    "must_not_include": [
+      "\"limitations\": [\"No policy version cited\"]",
+      "\"stated\": {\"title\": \"Reply Assist launch deck\", \"date\": \"2025-11-12\"",
+      "one clean record"
+    ],
+    "checks": [
+      "Exactly one S-deck record exists for the shared hash, and its limitations are the union of A and B minus only the item that record B resolved.",
+      "The 'Slides 10-14 not read' limitation is removed only with a findings entry naming record B (task-0422) and its sections_read as the resolving record.",
+      "The date stays null under stated and is retained under inferred with its filename basis.",
+      "No limitation from either input disappears without a named resolving record."
+    ]
+  }
+}

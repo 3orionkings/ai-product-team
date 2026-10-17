@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/registry-workflow",
+  "title": "Registry workflow record",
+  "description": "One element of registry/workflows.json 'workflows'. Stages reference roles and predicates by name; the registry loader resolves them.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "entry_skill",
+    "title",
+    "manager",
+    "min_risk",
+    "core_cross_host",
+    "inputs",
+    "outputs",
+    "stages",
+    "conditional_specialists",
+    "acceptance",
+    "fixture"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^W[0-9]{2}$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Workflow name; also the CLI --workflow value.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "entry_skill": {
+      "type": "string",
+      "description": "Entry wrapper skill: 'aipt-' + name.",
+      "pattern": "^aipt-[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "manager": {
+      "type": "string",
+      "description": "Managing role id.",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "min_risk": {
+      "type": "string",
+      "enum": [
+        "R0",
+        "R1",
+        "R2",
+        "R3"
+      ]
+    },
+    "core_cross_host": {
+      "type": "boolean"
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "stages": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/stage"
+      },
+      "minItems": 1
+    },
+    "conditional_specialists": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "A role id from registry/agents.json, or 'human-owner'.",
+        "pattern": "^[a-z][a-z0-9-]*$"
+      },
+      "description": "Roles added only when a predicate or manager requests them.",
+      "uniqueItems": true
+    },
+    "acceptance": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scenario",
+        "expected_behavior"
+      ],
+      "properties": {
+        "scenario": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_behavior": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "description": "Replay fixture summary used by evals/workflows/<name>."
+    }
+  },
+  "$defs": {
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "role",
+        "work",
+        "artifact"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Stage id, unique within the workflow.",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "description": "Role id that performs the stage, or 'proposal-owner' with a role_binding.",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "work": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact": {
+          "type": "string",
+          "description": "Artifact type the stage produces; a current accepted artifact of this type satisfies the stage.",
+          "minLength": 1
+        },
+        "conditional": {
+          "type": "string",
+          "description": "Predicate name from the registry 'predicates' map; membership is checked by the registry loader.",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "review": {
+          "type": "boolean",
+          "description": "Review stage: never pruned; needs a review node with result ready or pass."
+        },
+        "independence_required": {
+          "type": "boolean",
+          "description": "Needs conflict_check=verified on the review; otherwise the run stays blocked."
+        },
+        "write_scope": {
+          "type": "string",
+          "enum": [
+            "proposal-only",
+            "assigned-worktree",
+            "verification-sandbox"
+          ]
+        },
+        "may_return": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "complete",
+              "needs_input",
+              "blocked",
+              "failed",
+              "partial",
+              "out_of_scope"
+            ]
+          },
+          "description": "Response statuses this stage may legitimately return besides complete.",
+          "uniqueItems": true
+        },
+        "delegates_to": {
+          "type": "string",
+          "description": "Workflow id this stage hands off to.",
+          "pattern": "^W[0-9]{2}$"
+        },
+        "role_binding": {
+          "type": "string",
+          "description": "How a symbolic role (proposal-owner) is bound at runtime.",
+          "minLength": 1
+        }
+      },
+      "description": "One node of the workflow DAG."
+    }
+  }
+}

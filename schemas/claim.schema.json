@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/claim",
+  "title": "Claim",
+  "description": "A statement with its type, support and status. A hypothesis does not become a fact from repetition.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "statement",
+    "claim_type",
+    "status",
+    "supporting_refs",
+    "contrary_refs",
+    "confidence_label",
+    "assessed_by"
+  ],
+  "properties": {
+    "statement": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim_type": {
+      "type": "string",
+      "enum": [
+        "fact",
+        "hypothesis",
+        "observation"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "supported",
+        "contested",
+        "unsupported",
+        "superseded"
+      ]
+    },
+    "supporting_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "An identifier minted by ids.new_id().",
+        "minLength": 1
+      }
+    },
+    "contrary_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "An identifier minted by ids.new_id().",
+        "minLength": 1
+      }
+    },
+    "confidence_label": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "unknown"
+      ]
+    },
+    "assessed_by": {
+      "type": "string",
+      "description": "Role id or 'human-owner' that assessed the claim.",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    }
+  }
+}

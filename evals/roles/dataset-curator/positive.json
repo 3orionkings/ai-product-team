@@ -1,0 +1,55 @@
+{
+  "role_id": "dataset-curator",
+  "label": "unrun",
+  "scenario": "Plan v1 for Reply Assist requires slices S-ISO (n>=40), S-SEND (n>=30) and S-REF (n>=40) on the held-out split. Permitted pools: larkspur-tickets-q3 (ws-alpha and ws-beta, evaluation use only, not for public fixtures) and synthetic-gen-v3 (evaluation and public fixture). The resulting fixture will be committed to a public repository. Produce the versioned dataset manifest.",
+  "input_refs": [
+    {
+      "kind": "proposal",
+      "title": "evaluation-plan.json@v1 with slices and min_n",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "source:perm-q3@v1 (evaluation only, not public)",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "source:synthetic-policy@v1 (evaluation and public fixture)",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "scenario-taxonomy@v1",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "split_rule",
+      "held_out",
+      "development",
+      "shortfall",
+      "sampling_limits",
+      "excluded_pools",
+      "permission_ref",
+      "content_hash",
+      "satisfies_plan",
+      "\"synthetic\": true",
+      "retrieval_workspaces"
+    ],
+    "must_not_include": [
+      "sufficient for release",
+      "representative of production",
+      "\"access_classification\": \"private\""
+    ],
+    "checks": [
+      "Every pool in sources cites a permission record and larkspur-tickets-q3 appears in excluded_pools for the public fixture with the permission's limitation quoted.",
+      "counts has a row per plan slice with development, held_out, min_n and shortfall, and any slice below min_n shows a non-zero shortfall rather than padded cases.",
+      "The split rule is mechanical (hash or seeded draw) and no held_out row carries a preview field.",
+      "Every case in the public fixture is classified synthetic or public.",
+      "Coverage notes map sampling limits to the plan's decision questions."
+    ]
+  }
+}

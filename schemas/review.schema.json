@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/review",
+  "title": "Review",
+  "description": "A review of exact versions. conflict_check records independence; a manager review is a review, not an independent audit.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "reviewed_refs",
+    "reviewer_role",
+    "reviewer_session",
+    "findings",
+    "evidence_sufficiency",
+    "result",
+    "conflict_check",
+    "unresolved"
+  ],
+  "properties": {
+    "reviewed_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "An identifier minted by ids.new_id().",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "reviewer_role": {
+      "type": "string",
+      "description": "A role id from registry/agents.json, or 'human-owner'.",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "reviewer_session": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Host child/session id; null when unobservable."
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": [
+          "string",
+          "object"
+        ]
+      },
+      "description": "Findings as prose or structured objects."
+    },
+    "evidence_sufficiency": {
+      "type": "string",
+      "enum": [
+        "sufficient",
+        "insufficient",
+        "not_assessed"
+      ]
+    },
+    "result": {
+      "type": "string",
+      "enum": [
+        "ready",
+        "revise",
+        "blocked",
+        "escalate",
+        "pass",
+        "fail"
+      ]
+    },
+    "conflict_check": {
+      "type": "string",
+      "enum": [
+        "verified",
+        "unverified",
+        "conflict"
+      ]
+    },
+    "unresolved": {
+      "type": "array",
+      "items": {
+        "type": [
+          "string",
+          "object"
+        ]
+      },
+      "description": "Unresolved matters."
+    },
+    "independent": {
+      "type": "boolean",
+      "description": "False for a manager review of the manager's own team."
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "An identifier minted by ids.new_id().",
+        "minLength": 1
+      },
+      "description": "Receipt or version ids the review relies on."
+    }
+  }
+}

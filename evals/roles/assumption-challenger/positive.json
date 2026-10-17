@@ -1,0 +1,61 @@
+{
+  "role_id": "assumption-challenger",
+  "label": "unrun",
+  "scenario": "Work order wo-c-101, W11 test-premise, round 1, one challenge allowed. prop-rt-12@v3 option B: shared retrieval index across ws-alpha and ws-beta with a query-time workspace filter and a per-ticket summary cache, for Reply Assist at Larkspur Support. Protected criterion REQ-ISO-01. Cited: clm-208 (hypothesis: the filter is sufficient) and val-077 (passage retrieval, 500 queries, zero leaks, target retrieval@1b7e). Current target retrieval@2f9c. Produce assumption-challenge.json.",
+  "input_refs": [
+    {
+      "kind": "artifact",
+      "title": "decision-packet.json@v2",
+      "synthetic": true
+    },
+    {
+      "kind": "proposal",
+      "title": "prop-rt-12@v3",
+      "synthetic": true
+    },
+    {
+      "kind": "claim",
+      "title": "clm-208",
+      "synthetic": true
+    },
+    {
+      "kind": "validation",
+      "title": "val-077",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "challenge-plan.json@v1 slot wo-c-101",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "assumptions_examined",
+      "dependency",
+      "implied_assumption",
+      "counterevidence_or_gap",
+      "val-077",
+      "retrieval@2f9c",
+      "holds_if",
+      "fails_if",
+      "resolution_state",
+      "not_promoted"
+    ],
+    "must_not_include": [
+      "\"resolving_test\": null",
+      "unsafe by design",
+      "reject option",
+      "the assumption is false",
+      "Blocker:"
+    ],
+    "checks": [
+      "The kept assumption names the untested read path (summary cache) and the component or criterion that depends on it.",
+      "val-077 is described as applicability unestablished on retrieval@2f9c, not as failed.",
+      "The resolving test names a target version, both outcomes, a cost bound and a runner role.",
+      "The challenge count is within the one allowed; further candidates sit in requested_followups.",
+      "The challenge is addressed to the proposal owner as a question answerable by evidence, revision or disagreement."
+    ]
+  }
+}

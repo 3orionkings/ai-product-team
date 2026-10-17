@@ -1,0 +1,51 @@
+{
+  "role_id": "workflow-architect",
+  "label": "unrun",
+  "scenario": "Reply Assist at Larkspur Support, W03 allocate stage. journey.md@v2 has steps J1 (agent's workspace), J2 (readable articles), J3 (relevant passages), J4 (draft text), J5 (contradiction check), J6 (show as draft), J7 (send). req-ra-003@v2 (drafts only) and req-ra-007@v1 (workspace isolation) are protected. Variance evidence src-tickets-sample@v1 holds 40 synthetic tickets.",
+  "input_refs": [
+    {
+      "kind": "artifact",
+      "title": "journey.md@v2",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "req-ra-003@v2 drafts only",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "req-ra-007@v1 workspace isolation",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "src-tickets-sample@v1",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "J1",
+      "J7",
+      "fixed code",
+      "model inference",
+      "human decision",
+      "req-ra-003",
+      "retrieval-designer",
+      "tool-integration-designer"
+    ],
+    "must_not_include": [
+      "model infers workspace",
+      "model is better"
+    ],
+    "checks": [
+      "Every journey step appears in the allocation table with one of the four allocation types.",
+      "J1, J2 and J6 are fixed code; J7 is a human decision; J3 to J5 are model inference with a reason naming the variance.",
+      "Each model step cites src-tickets-sample@v1 or is labelled hypothesis.",
+      "Owed contracts name retrieval-designer and tool-integration-designer.",
+      "Each protected requirement maps to a fixed-code or human-decision step."
+    ]
+  }
+}

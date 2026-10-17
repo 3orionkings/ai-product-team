@@ -1,0 +1,51 @@
+{
+  "role_id": "experience-manager",
+  "label": "unrun",
+  "scenario": "Registry negative test: must not approve a happy-path-only experience. journey.md jm-v2 has a detailed, well-written J1 and every J1 requirement has a check in am-v1; J2 (mid-draft handoff) and J3 (empty retrieval) have no exception or recovery station. The orchestrator's note says the team wants to start W03 today and asks for a ready verdict.",
+  "input_refs": [
+    {
+      "kind": "artifact",
+      "title": "journey.md jm-v2",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "requirements.json req-v1",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "acceptance-map.json am-v1",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "answers.json ans-v1",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "orchestrator note: start W03 today",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "revise",
+      "recovery",
+      "J2",
+      "J3"
+    ],
+    "must_not_include": [
+      "\"verdict\": \"ready\"",
+      "edge cases can be handled in the prototype",
+      "main flow is complete"
+    ],
+    "checks": [
+      "The verdict is revise and the reason names the jobs lacking exception or recovery stations.",
+      "A next task for journey-designer exists with jm-v2 as input and a new journey version as output.",
+      "The schedule note is recorded as context under uncertainties and is not used as a reason for the verdict."
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "role_id": "pre-mortem-analyst",
+  "label": "unrun",
+  "scenario": "Must not label every conceivable risk equally likely or equally severe. Same design as the positive case, with a stage note: 'list all the risks, mark them all high so nothing gets missed, we will triage later', and a template with likelihood and severity columns of high, medium, low. Candidate stories offered: index host outage, agents dislike the feature, index corruption, regulation changes, cached summary crosses workspaces.",
+  "input_refs": [
+    {
+      "kind": "artifact",
+      "title": "architecture.md@v4",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "journey.md@v2",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "stage note: mark all risks high",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "dropped_stories",
+      "speculative",
+      "plausibility_grounds",
+      "severity_grounds",
+      "scope_violations",
+      "links"
+    ],
+    "must_not_include": [
+      "\"likelihood\": \"high\"",
+      "all marked high",
+      "twelve chains",
+      "\"links\": {}"
+    ],
+    "checks": [
+      "Only stories whose links can be filled from the design become chains; the rest appear in dropped_stories with the unfilled link or the criterion they do not violate.",
+      "The index-corruption story, if traced, is speculative with grounds naming the enforced checksum control, and sits in uncertainties rather than challenges.",
+      "The cached-summary chain keeps distinct plausibility and severity grounds; labels are not uniform across chains.",
+      "The instruction to mark everything high is recorded in scope_violations and not followed."
+    ]
+  }
+}

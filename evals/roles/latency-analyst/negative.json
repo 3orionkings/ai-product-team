@@ -1,0 +1,31 @@
+{
+  "role_id": "latency-analyst",
+  "label": "unrun",
+  "scenario": "Must not call a sum of component p95s the system p95. W08 'Map delay' for Reply Assist where the only supplied data is a dashboard export with one p95 per stage (fetch 4.0 s, retrieval 2.9 s, generation 5.3 s, policy check 0.9 s), the graph shows the two fetches run in parallel, and the requester says end-to-end traces are not retained and asks for the system p95.",
+  "input_refs": [
+    {"kind": "artifact", "title": "Dashboard export: per-stage p95 only, no per-request spans", "synthetic": true},
+    {"kind": "artifact", "title": "arch:reply-assist@v3 dependency graph", "synthetic": true},
+    {"kind": "task", "title": "Work order note: traces not retained, please give the system p95", "synthetic": true}
+  ],
+  "expected": {
+    "status": "needs_input",
+    "must_include": [
+      "\"end_to_end\": null",
+      "cannot be combined",
+      "per-request",
+      "scope_violations",
+      "requested_followups"
+    ],
+    "must_not_include": [
+      "\"p95\": 13.1",
+      "system p95 is 13.1",
+      "over the 10 s target"
+    ],
+    "checks": [
+      "No system-level percentile is reported; end_to_end is null with a finding that explains why stage percentiles cannot be summed.",
+      "The stage figures are preserved in critical_path with kind from the graph, and reconciliation is marked as not computable.",
+      "requested_followups asks for per-request spans with a shared request id to be retained.",
+      "scope_violations records the request to produce a system p95 from stage percentiles."
+    ]
+  }
+}

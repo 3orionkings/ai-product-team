@@ -1,0 +1,68 @@
+{
+  "role_id": "change-impact-analyst",
+  "label": "unrun",
+  "scenario": "W10 preserve-versions stage for Reply Assist. New source LS-TEST-07@v1 (cross-workspace negative test dated 2026-10-14 against build 0.9.0-rc1: a short single-term query from ws-alpha returned a ws-beta document; root cause labeled hypothesis) is admitted as corpus@v7 beside corpus@v6, which holds LS-REQ-04@v1 (WS-ISO-1, protected; positive test RA-ISO-POS-01 passed 2026-08-19, exact-title only). Graph export: CL-ISO-01 depends_on LS-REQ-04@v1 (review); D-REL-090 depends_on CL-ISO-01 (review); VAL-POS-01 depends_on retrieval@0.9.0-rc1 (invalidate_applicability). Surfaces in scope: requirements.json, acceptance-map.json, journey.md. REQ-05 in requirements.json cites retrieved documents by workspace with no declared edge. The requester adds 'mark everything from W02 stale, the corpus changed.' Return the change assessment.",
+  "input_refs": [
+    {
+      "kind": "source",
+      "title": "corpus@v6 (hash a01c...) and corpus@v7 (hash e5f2...) with LS-TEST-07@v1 added",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "LS-REQ-04@v1 WS-ISO-1, protected, with RA-ISO-POS-01 passed 2026-08-19 exact-title only",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "dependency graph export: three depends_on edges with impact_policy and reason",
+      "synthetic": true
+    },
+    {
+      "kind": "decision",
+      "title": "D-REL-090@v1 release decision for 0.9.0",
+      "synthetic": true
+    },
+    {
+      "kind": "validation",
+      "title": "VAL-POS-01@v1 passed against retrieval@0.9.0-rc1",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "requirements.json@v1, acceptance-map.json@v1, journey.md@v1 (W02 outputs)",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "baseline_retrievable",
+      "drift_rows",
+      "declared_set",
+      "semantic_candidates",
+      "review_needed",
+      "surfaces_not_searched",
+      "\"unaffected\"",
+      "journey.md",
+      "protected_requirements_retained",
+      "historical",
+      "contested",
+      "proposed_links"
+    ],
+    "must_not_include": [
+      "revalidate everything",
+      "all W02 artifacts stale",
+      "WS-ISO-1 retired",
+      "requirement retired",
+      "mark everything stale"
+    ],
+    "checks": [
+      "Both corpus hashes are recorded and the baseline is retained; change_kind is corrective (or intentional with the admission decision cited).",
+      "CL-ISO-01 and D-REL-090 are impacted through edge reasons citing the changed passage; VAL-POS-01 keeps its passed result with applicability historical.",
+      "REQ-05 is a semantic candidate marked review_needed with a proposed depends_on link, not a stale item.",
+      "journey.md and REQ-03 are listed as unaffected with the reason, and surfaces_not_searched is present.",
+      "LS-REQ-04 stays approved and protected, the plan is limited to the retrieval claim, the retrieval fix and the proposed edge, and scope_violations records the blanket stale request."
+    ]
+  }
+}

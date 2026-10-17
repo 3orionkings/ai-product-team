@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/decision",
+  "title": "Decision",
+  "description": "A decision on an exact proposal version. Acceptance is not execution permission; dissent is preserved verbatim.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "proposal_version_id",
+    "outcome",
+    "selected_option",
+    "criteria",
+    "rationale",
+    "dissent",
+    "authority_basis",
+    "revisit_conditions",
+    "status"
+  ],
+  "properties": {
+    "proposal_version_id": {
+      "type": "string",
+      "description": "An identifier minted by ids.new_id().",
+      "minLength": 1
+    },
+    "outcome": {
+      "type": "string",
+      "enum": [
+        "accepted",
+        "rejected",
+        "deferred",
+        "human_required"
+      ]
+    },
+    "selected_option": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Option id, or null when deferred or rejected."
+    },
+    "criteria": {
+      "type": [
+        "string",
+        "array"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "description": "Decision criteria."
+    },
+    "rationale": {
+      "type": "string"
+    },
+    "dissent": {
+      "type": [
+        "string",
+        "array"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "description": "Dissent preserved verbatim."
+    },
+    "authority_basis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "delegation",
+            "human_input"
+          ]
+        },
+        "approval_version_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "revisit_conditions": {
+      "type": [
+        "string",
+        "array"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "description": "Conditions that reopen the decision."
+    },
+    "requested_authority": {
+      "type": "string",
+      "enum": [
+        "R0",
+        "R1",
+        "R2",
+        "R3"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "under_review",
+        "accepted",
+        "rejected",
+        "deferred",
+        "human_required",
+        "review_required",
+        "superseded"
+      ]
+    }
+  }
+}

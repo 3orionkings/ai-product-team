@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/event",
+  "title": "Event",
+  "description": "An immutable, sequenced event. seq is assigned by the store; idempotency_key deduplicates replays.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "seq",
+    "case_id",
+    "type",
+    "actor_role",
+    "actor_task",
+    "expected_state_version",
+    "payload_refs",
+    "created_at",
+    "idempotency_key"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "An identifier minted by ids.new_id().",
+      "minLength": 1
+    },
+    "seq": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "case_id": {
+      "type": "string",
+      "description": "An identifier minted by ids.new_id().",
+      "minLength": 1
+    },
+    "type": {
+      "type": "string",
+      "description": "Dotted event type, e.g. node.current_changed.",
+      "minLength": 1
+    },
+    "actor_role": {
+      "type": "string",
+      "description": "Role, 'controller' or 'human-owner'.",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "actor_task": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "expected_state_version": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "payload_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "An identifier minted by ids.new_id().",
+        "minLength": 1
+      }
+    },
+    "payload": {
+      "type": "object"
+    },
+    "payload_sha256": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Store clock at append."
+    },
+    "idempotency_key": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

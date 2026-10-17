@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/policy-authority",
+  "title": "Authority policy",
+  "description": "Shape of policies/authority.json: rights per role type and defaults per risk tier. No tier grants autonomous execution of R3.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "roles",
+    "risk_tiers"
+  ],
+  "properties": {
+    "roles": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/rights"
+      },
+      "description": "Keyed by role type."
+    },
+    "special": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/rights"
+      },
+      "description": "Keyed by special principal, e.g. human-owner."
+    },
+    "risk_tiers": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/tier"
+      },
+      "description": "Keyed by risk tier."
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "dated": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "rights": {
+      "type": "object",
+      "properties": {
+        "propose": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "review": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "adjudicate": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "accept": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "execute": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        }
+      },
+      "description": "Rights per action: true, false, or a qualifier such as assigned_only or delegation_only."
+    },
+    "tier": {
+      "type": "object",
+      "properties": {
+        "autonomous": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "requires": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "executable_in_v0_1": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

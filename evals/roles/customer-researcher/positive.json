@@ -1,0 +1,35 @@
+{
+  "role_id": "customer-researcher",
+  "label": "unrun",
+  "scenario": "The discovery-manager review returned the gap: claim C2 (agents retype the same three answers daily) rests on one ws-alpha ticket. Permissioned records supplied: src-tickets-q3 (11 ws-alpha tickets, 2026-07 to 2026-09) and src-interviews-2026-10 (3 ws-alpha agent interview notes). Three tickets show near-identical refund-status replies; one interviewee pastes the same refund paragraph daily; another uses a personal snippet file and reports no retyping. No ws-beta records exist.",
+  "input_refs": [
+    {"kind": "source", "title": "src-tickets-q3 (11 ws-alpha tickets)", "synthetic": true},
+    {"kind": "source", "title": "src-interviews-2026-10 (3 ws-alpha interview notes)", "synthetic": true},
+    {"kind": "review", "title": "problem-review.json gap: C2 rests on one ticket", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "## Record inventory",
+      "supports:",
+      "does not support:",
+      "contrary examples:",
+      "count: 3 of 11",
+      "saturation: not reached",
+      "ws-beta",
+      "## Gaps"
+    ],
+    "must_not_include": [
+      "saturation: reached",
+      "all agents need",
+      "market-wide"
+    ],
+    "checks": [
+      "The record inventory lists both record sets with population ws-alpha, dates and access scope.",
+      "N1 is bounded to ws-alpha agents and refund-status tickets; the does-not-support line excludes all agents and any ws-beta need.",
+      "The contrary interview (snippet file, no retyping) and the one-off tickets appear as contrary examples.",
+      "Every quote carries a record id and a locator.",
+      "Gaps request the ws-beta export and the handle-time export and name the claims they block."
+    ]
+  }
+}

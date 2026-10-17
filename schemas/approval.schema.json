@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/approval",
+  "title": "Approval or delegation",
+  "description": "A grant of decision or action rights bound to an exact version. provenance.attested is set by the controller from the channel, never by the caller.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "granted_by",
+    "scope",
+    "allowed_decisions",
+    "allowed_actions",
+    "bound_version_id",
+    "limits",
+    "expires_at",
+    "revoked",
+    "provenance"
+  ],
+  "properties": {
+    "granted_by": {
+      "type": "string",
+      "enum": [
+        "human-owner",
+        "delegation"
+      ]
+    },
+    "scope": {
+      "type": [
+        "string",
+        "object"
+      ],
+      "description": "What the grant covers."
+    },
+    "allowed_decisions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "allowed_actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "bound_version_id": {
+      "type": "string",
+      "description": "Exact proposal version the grant binds to.",
+      "minLength": 1
+    },
+    "limits": {
+      "description": "Free-form limits (object, list or text)."
+    },
+    "expires_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "Expiry; null means no expiry."
+    },
+    "revoked": {
+      "type": "boolean"
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "channel",
+        "attested"
+      ],
+      "properties": {
+        "channel": {
+          "type": "string",
+          "enum": [
+            "cli",
+            "host_user_input",
+            "file"
+          ]
+        },
+        "attested": {
+          "type": "boolean"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

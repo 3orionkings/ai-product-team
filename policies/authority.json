@@ -1,0 +1,152 @@
+{
+  "schema_version": "0.1",
+  "dated": "2026-10-17",
+  "source": "docs/spec/01_INITIAL_PRD.md section 10 (decision-rights matrix); docs/spec/02_ARCHITECTURE.md section 9 (risk and decision rights)",
+  "description": "Rights per role type and per special principal, and default authority per risk tier. A right is true, false or a qualifier naming the only condition under which it holds. Rights are checked by the controller (decisions.authority_check); a role label never authenticates the actor. Acceptance of a decision is never execution permission. No tier grants autonomous or executable R3 in v0.1: deploy, publish, send, pay, delete production data and broaden access are prepared as a human action request only. Tiers R0-R2 are executable only inside the declared write scope and only once their 'requires' gates are satisfied.",
+  "roles": {
+    "leader": {
+      "propose": "cross_team_direction",
+      "review": "cross_team_coherence",
+      "adjudicate": "organizational_tradeoff_recommendation",
+      "accept": "explicit_human_delegation_only",
+      "execute": false
+    },
+    "orchestrator": {
+      "propose": "route_plan",
+      "review": "returned_outputs_against_contract",
+      "adjudicate": false,
+      "accept": false,
+      "execute": "native_dispatch_only"
+    },
+    "manager": {
+      "propose": "work_order_and_recommendation",
+      "review": "team_outputs",
+      "adjudicate": false,
+      "accept": false,
+      "execute": false
+    },
+    "specialist": {
+      "propose": true,
+      "review": "assigned_only",
+      "adjudicate": false,
+      "accept": false,
+      "execute": "declared_scope"
+    },
+    "steward": {
+      "propose": true,
+      "review": "assigned_only",
+      "adjudicate": false,
+      "accept": false,
+      "execute": "declared_scope"
+    },
+    "reviewer": {
+      "propose": "findings",
+      "review": "assigned_only",
+      "adjudicate": false,
+      "accept": false,
+      "execute": "declared_scope"
+    },
+    "builder": {
+      "propose": true,
+      "review": "assigned_only",
+      "adjudicate": false,
+      "accept": false,
+      "execute": "assigned_worktree_only"
+    },
+    "executor": {
+      "propose": "run_results_with_receipts",
+      "review": "assigned_only",
+      "adjudicate": false,
+      "accept": false,
+      "execute": "verification_sandbox_only"
+    },
+    "adversarial_orchestrator": {
+      "propose": "challenge_plan",
+      "review": "proposal_weaknesses",
+      "adjudicate": false,
+      "accept": false,
+      "execute": false
+    },
+    "challenger": {
+      "propose": "counterargument_or_test",
+      "review": "proposal_weaknesses",
+      "adjudicate": false,
+      "accept": false,
+      "execute": "authorized_synthetic_or_local_checks_only"
+    },
+    "judge": {
+      "propose": "ruling_and_next_test",
+      "review": "evidence_and_options",
+      "adjudicate": "assigned_question",
+      "accept": false,
+      "execute": false
+    },
+    "decision_maker": {
+      "propose": "decision_record",
+      "review": "authority_and_conditions",
+      "adjudicate": "applies_rulings_does_not_replace_them",
+      "accept": "delegation_only",
+      "execute": false
+    },
+    "auditor": {
+      "propose": "findings_and_verification_report",
+      "review": "frozen_delivered_work",
+      "adjudicate": false,
+      "accept": "own_audit_output",
+      "execute": "reproduce_authorized_checks"
+    }
+  },
+  "special": {
+    "human-owner": {
+      "propose": "purpose_and_protected_scope",
+      "review": true,
+      "adjudicate": "final_unresolved_choice",
+      "accept": true,
+      "execute": "personally"
+    },
+    "decision-authority": {
+      "propose": "decision_record",
+      "review": "authority_and_conditions",
+      "adjudicate": "applies_rulings_does_not_replace_them",
+      "accept": "delegation_only",
+      "execute": false
+    },
+    "independent-auditor": {
+      "propose": "findings_and_verification_report",
+      "review": "frozen_delivered_work",
+      "adjudicate": false,
+      "accept": "own_audit_output",
+      "execute": "reproduce_authorized_checks"
+    }
+  },
+  "risk_tiers": {
+    "R0": {
+      "autonomous": "recommendation",
+      "requires": [],
+      "executable_in_v0_1": true
+    },
+    "R1": {
+      "autonomous": "reversible_local_change_with_delegation",
+      "requires": [
+        "recorded_scope",
+        "explicit_delegation"
+      ],
+      "executable_in_v0_1": true
+    },
+    "R2": {
+      "autonomous": false,
+      "requires": [
+        "independent_review",
+        "human_acceptance"
+      ],
+      "executable_in_v0_1": true
+    },
+    "R3": {
+      "autonomous": false,
+      "requires": [
+        "human_action_request"
+      ],
+      "executable_in_v0_1": false
+    }
+  }
+}

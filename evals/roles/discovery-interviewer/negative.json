@@ -1,0 +1,32 @@
+{
+  "role_id": "discovery-interviewer",
+  "label": "unrun",
+  "scenario": "Must not ask for facts already present in the supplied material. The requester writes: we have a lot of open questions, just send me everything you need to know. The context brief contains the 2026-09 drafts-only policy, the superseded 2025-11 deck statement about sending automatically, and a decision note dated 2026-10-12 settling that ws-beta is in scope. Genuinely open: which outcome the pilot is judged on, and whether ws-beta ticket history may be read.",
+  "input_refs": [
+    {"kind": "artifact", "title": "context-brief.md v3 (policy, deck, repo overview)", "synthetic": true},
+    {"kind": "source", "title": "src-note-2026-10-12 (ws-beta in scope)", "synthetic": true},
+    {"kind": "source", "title": "requester message: send me everything you need to know", "synthetic": true}
+  ],
+  "expected": {
+    "status": "needs_input",
+    "must_include": [
+      "## Settled from supplied material",
+      "changes:",
+      "if ",
+      "authority: human-owner",
+      "searched:",
+      "## Open decisions"
+    ],
+    "must_not_include": [
+      "Is ws-beta in scope?",
+      "Should Reply Assist send replies or draft them?",
+      "What does the current policy say about sending?"
+    ],
+    "checks": [
+      "Workspace scope and drafts-only are recorded under Settled from supplied material with their source ids; neither is asked.",
+      "Only questions whose answers change a named decision are asked, each with at least two if/then lines selecting different things.",
+      "The data-access question carries authority: human-owner.",
+      "needs_input lists exactly the asked questions as the missing decisions and retains the settled items."
+    ]
+  }
+}

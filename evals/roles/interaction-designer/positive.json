@@ -1,0 +1,56 @@
+{
+  "role_id": "interaction-designer",
+  "label": "unrun",
+  "scenario": "Interaction specification for Reply Assist. journey.md jm-v3 lists control points D1 (draft and source display), D2 (edit and reject), H1 (send confirmation), H2 (handoff note). User permissions: edit-ticket, send-reply, reassign. Authority: src-policy-2026-09 drafts only; no decision record for C3. Uncertainty states from architecture.md arch-v1: retrieval_empty, scope_mismatch. Produce interaction-spec.json.",
+  "input_refs": [
+    {
+      "kind": "artifact",
+      "title": "journey.md jm-v3",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "src-policy-2026-09 drafts only",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "user permissions: edit-ticket, send-reply, reassign",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "architecture.md arch-v1 uncertainty states",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "answers.json ans-v1",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"class\": \"draft\"",
+      "\"class\": \"preview\"",
+      "\"class\": \"confirmation\"",
+      "\"class\": \"executed_action\"",
+      "preceded_by",
+      "enforcement_points",
+      "retrieval_empty",
+      "scope_mismatch"
+    ],
+    "must_not_include": [
+      "saves and sends",
+      "sends when ticket risk is low"
+    ],
+    "checks": [
+      "Every control has exactly one class and every control point D1, D2, H1, H2 has at least one control.",
+      "The send executed action is preceded by a confirmation control and cites user-permission:send-reply.",
+      "No draft or preview control lists a change that leaves the product.",
+      "The scope_mismatch state withholds the draft and the send confirmation and offers the workspace correction.",
+      "No automatic-send control exists; findings record that C3 is open and requested_followups route it to W11."
+    ]
+  }
+}

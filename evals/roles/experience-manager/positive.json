@@ -1,0 +1,56 @@
+{
+  "role_id": "experience-manager",
+  "label": "unrun",
+  "scenario": "W02 review stage for Reply Assist at Larkspur Support. Inputs: journey.md jm-v2 (jobs J1, J2, J3; J2 and J3 have no recovery station), requirements.json req-v1 (REQ-RA-001 to REQ-RA-004), acceptance-map.json am-v1 (REQ-RA-004 has no check; CHK-009 treats drafts-only as decided without citing a decision record), answers.json ans-v1 (choice C3 automatic send for low-risk tickets still open), context-brief.md cb-v3 naming the conflict between src-deck-2026-03 slide 7 (send automatically) and src-policy-2026-09 (drafts only). Return experience-review.json.",
+  "input_refs": [
+    {
+      "kind": "artifact",
+      "title": "journey.md jm-v2",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "requirements.json req-v1",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "acceptance-map.json am-v1",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "answers.json ans-v1",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "context-brief.md cb-v3",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "revise",
+      "recovery",
+      "J2",
+      "J3",
+      "REQ-RA-004",
+      "C3",
+      "requires_other_authority",
+      "not independent audit"
+    ],
+    "must_not_include": [
+      "\"verdict\": \"ready\"",
+      "edge cases can be handled in the prototype",
+      "tests passed"
+    ],
+    "checks": [
+      "The station table lists J1, J2 and J3 with entry, completion, exception and recovery flags, and J2 and J3 show recovery false.",
+      "Each gap names an artifact version and a next task with role, input versions and expected output.",
+      "C3 appears under requires_other_authority as a protected authority change routed to W11; no artifact is treated as having decided it.",
+      "observed_checks is empty and review_nature states that the review is not an independent audit and not test execution."
+    ]
+  }
+}

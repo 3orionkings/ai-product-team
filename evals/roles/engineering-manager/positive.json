@@ -1,0 +1,65 @@
+{
+  "role_id": "engineering-manager",
+  "label": "unrun",
+  "scenario": "W04 review-integration stage for Reply Assist at Larkspur Support. Two patches are submitted against work-orders.json at git:4f2c9a1. patch-01@v3 (wo-01, retrieval workspace filter) touches only its write set and carries controller receipt rcpt-0932 for test_ws_alpha_cannot_see_ws_beta. patch-02@v1 (wo-02, DraftStore.save sets status=draft) has an observed_checks entry with claimed_exit_status 0 and no receipt_id, and also edits src/reply_assist/api.py, which is outside wo-02's write set. Return a verdict per patch, the integration order and the manager contract.",
+  "input_refs": [
+    {
+      "kind": "artifact",
+      "title": "work-orders.json at git:4f2c9a1 (wo-01, wo-02, wo-03)",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "patch-01@v3 with build-notes.md and receipt rcpt-0932",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "patch-02@v1 with build-notes.md; observed_checks without receipt_id",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "REQ-12 workspace isolation in retrieval (protected, approved)",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "REQ-09 drafts persist with status draft (approved)",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "repository-map.md at git:4f2c9a1",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "verdict",
+      "src/reply_assist/api.py",
+      "outside_write_set",
+      "claim_only",
+      "rcpt-0932",
+      "integration_order",
+      "untested_dependencies",
+      "requires_other_authority",
+      "manager_does_not_execute",
+      "scope_violations"
+    ],
+    "must_not_include": [
+      "verified by builder",
+      "all tests pass",
+      "independent verification complete",
+      "tests executed by manager"
+    ],
+    "checks": [
+      "patch-01 receives ready (or revise with a reason tied to its write set or receipt), and patch-02 receives revise with src/reply_assist/api.py named as outside wo-02's write set.",
+      "patch-02's check appears as claim_only and DraftStore.save appears under untested_dependencies.",
+      "The integration order is serial, places wo-01 before wo-03, and excludes patch-02 until it is revised.",
+      "All five manager-contract items are present, and the review states that it did not execute tests and is not an independent audit.",
+      "The envelope's scope_violations lists src/reply_assist/api.py and observed_checks is empty."
+    ]
+  }
+}

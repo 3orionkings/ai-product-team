@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/challenge",
+  "title": "Challenge",
+  "description": "A material challenge: all five material fields must be non-empty, otherwise it is not a challenge.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contested_ref",
+    "premise",
+    "counterevidence_or_gap",
+    "consequence",
+    "resolving_test",
+    "proposer_role",
+    "round",
+    "state"
+  ],
+  "properties": {
+    "contested_ref": {
+      "type": "string",
+      "description": "Version id of the contested claim or option.",
+      "minLength": 1
+    },
+    "premise": {
+      "type": "string",
+      "minLength": 1
+    },
+    "counterevidence_or_gap": {
+      "type": "string",
+      "minLength": 1
+    },
+    "consequence": {
+      "type": "string",
+      "minLength": 1
+    },
+    "resolving_test": {
+      "type": "string",
+      "minLength": 1
+    },
+    "proposer_role": {
+      "type": "string",
+      "description": "A role id from registry/agents.json, or 'human-owner'.",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "round": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "open",
+        "answered",
+        "upheld",
+        "withdrawn",
+        "unresolved"
+      ]
+    },
+    "response": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Proposal owner's response, when answered."
+    },
+    "responded_by": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[a-z][a-z0-9-]*$"
+    }
+  }
+}

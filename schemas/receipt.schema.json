@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/receipt",
+  "title": "Execution receipt",
+  "description": "Evidence that a command ran with an exit status. timed_out with exit_status null distinguishes a timeout from a failure. A receipt proves the exit status only.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "task_id",
+    "command",
+    "cwd",
+    "snapshot",
+    "started_at",
+    "ended_at",
+    "exit_status",
+    "timed_out",
+    "cancelled",
+    "stdout_path",
+    "stderr_path",
+    "observation_source",
+    "test_ids",
+    "redactions_applied"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "An identifier minted by ids.new_id().",
+      "minLength": 1
+    },
+    "task_id": {
+      "type": "string",
+      "description": "An identifier minted by ids.new_id().",
+      "minLength": 1
+    },
+    "command": {
+      "type": [
+        "array",
+        "string"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "description": "argv list (preferred) or command line."
+    },
+    "cwd": {
+      "type": "string",
+      "minLength": 1
+    },
+    "snapshot": {
+      "$ref": "#/$defs/snapshot"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Controller clock at start."
+    },
+    "ended_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "Controller clock at end; null if the process never ended."
+    },
+    "exit_status": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "timed_out": {
+      "type": "boolean"
+    },
+    "cancelled": {
+      "type": "boolean"
+    },
+    "stdout_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stderr_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observation_source": {
+      "type": "string",
+      "enum": [
+        "native",
+        "controller",
+        "agent_reported"
+      ]
+    },
+    "test_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "redactions_applied": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "proves": {
+      "const": "command_exit_status_only"
+    },
+    "input_hashes": {
+      "type": "object",
+      "description": "Hashes of inputs, configs, tests and datasets, keyed by label."
+    }
+  },
+  "$defs": {
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "git",
+            "manifest"
+          ]
+        },
+        "commit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "dirty_diff_sha256": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "manifest_sha256": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Target snapshot: git commit plus dirty-tree diff hash, or a content manifest."
+    }
+  }
+}

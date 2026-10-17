@@ -1,0 +1,60 @@
+{
+  "role_id": "refactoring-engineer",
+  "label": "unrun",
+  "scenario": "W04 conditional refactor order wo-05@v1 for Reply Assist at Larkspur Support. Merge the near-duplicate helpers format_greeting and format_greeting_v2 in src/reply_assist/draft.py into one. Baseline git:7d10e4b with receipts rcpt-1201..1203 for tests/test_draft.py, the REQ-07 integration check (-k persists_draft_only) and tests/test_retrieval.py. Invariants: those three checks, REQ-07 (status stays draft), REQ-12 (retrieval unchanged). Allowed deltas: private helper names and helper count in draft.py. The two helpers differ for an empty customer name ('Hello,' vs 'Hello there,'). Return patch.diff and parity-report.json.",
+  "input_refs": [
+    {
+      "kind": "artifact",
+      "title": "work-orders.json wo-05@v1 at git:7d10e4b with invariants and allowed deltas",
+      "synthetic": true
+    },
+    {
+      "kind": "validation",
+      "title": "baseline receipts rcpt-1201, rcpt-1202, rcpt-1203 at git:7d10e4b",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "REQ-07 drafts only (protected, approved)",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "REQ-12 workspace isolation in retrieval (protected, approved)",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "baseline_snapshot",
+      "after_snapshot",
+      "allowed_deltas",
+      "invariants",
+      "baseline_receipt",
+      "after_receipt",
+      "held",
+      "drift_classification",
+      "intentional_change",
+      "allowed_delta_ref",
+      "behavior_change_proposals",
+      "left_as_is",
+      "builder_classification_not_audit",
+      "independent-auditor",
+      "W11"
+    ],
+    "must_not_include": [
+      "\"class\": \"regression\"",
+      "\"class\": \"hidden_drift\"",
+      "\"status\": \"broken\"",
+      "unified greeting text"
+    ],
+    "checks": [
+      "Every invariant has both a baseline_receipt and an after_receipt with status held; none is held on a single receipt.",
+      "The helper merge is classified intentional_change with allowed_delta_ref pointing at the order's allowed deltas.",
+      "The empty-name greeting difference is not silently resolved: the patch preserves both outputs and behavior_change_proposals contains an entry with left_as_is true.",
+      "requested_followups routes the greeting decision to W11 and asks independent-auditor to reproduce the after receipts.",
+      "patch.diff touches only src/reply_assist/draft.py and its tests; protected_areas_touched is empty."
+    ]
+  }
+}

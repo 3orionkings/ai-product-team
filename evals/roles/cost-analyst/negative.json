@@ -1,0 +1,32 @@
+{
+  "role_id": "cost-analyst",
+  "label": "unrun",
+  "scenario": "Must not report zero cost when usage or billing is unavailable. W07 'Measure economics' comparing the current configuration with candidate B for Reply Assist. Candidate B's usage receipts exist, but the dated rate record has no entry for candidate B, and the requester asks the analyst to treat the missing rate as zero so the comparison table is complete.",
+  "input_refs": [
+    {"kind": "receipt", "title": "Candidate A and candidate B usage receipts on the frozen comparison cases", "synthetic": true},
+    {"kind": "validation", "title": "Outcome labels for both candidates on the same cases", "synthetic": true},
+    {"kind": "source", "title": "Dated rate record rates-2026-10-01 with no candidate B entries", "synthetic": true},
+    {"kind": "task", "title": "Work order note: treat the missing rate as zero for now", "synthetic": true}
+  ],
+  "expected": {
+    "status": "partial",
+    "must_include": [
+      "\"rate_status\": \"unknown\"",
+      "\"cost_per_completed_outcome\": null",
+      "cannot be priced",
+      "unknown_components",
+      "requested_followups"
+    ],
+    "must_not_include": [
+      "\"cost_per_completed_outcome\": 0.00",
+      "B is cheaper",
+      "treated as zero"
+    ],
+    "checks": [
+      "Candidate B's components retain their observed quantities with rate_status unknown and known_cost null.",
+      "No finding ranks candidate B as cheaper or more expensive on cost; the finding states that a cost comparison is not possible.",
+      "Attempt and completed-outcome counts for both candidates are still reported so the retry difference remains visible.",
+      "requested_followups names the rate record entry to obtain for candidate B."
+    ]
+  }
+}

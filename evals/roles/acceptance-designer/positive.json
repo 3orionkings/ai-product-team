@@ -1,0 +1,46 @@
+{
+  "role_id": "acceptance-designer",
+  "label": "unrun",
+  "scenario": "W02 define-evidence for Reply Assist. requirements.json req-v1 holds REQ-RA-001 (retrieve only from the ticket's workspace), REQ-RA-002 (empty state when retrieval is empty), REQ-RA-003 (send only confirmed text), REQ-RA-004 (keep draft and note on reassignment), EXC-RA-001 (no send without confirmation), EXC-RA-002 (no cross-workspace retrieval). Failure costs come from journey.md jm-v3 exception rows. Constraint: no real send is possible in the local environment. Produce acceptance-map.json.",
+  "input_refs": [
+    {
+      "kind": "requirement",
+      "title": "requirements.json req-v1",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "journey.md jm-v3 exception rows",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "constraint: no real send in local environment",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"kind\": \"negative\"",
+      "\"kind\": \"unknown_outcome\"",
+      "\"kind\": \"correct_refusal\"",
+      "\"label\": \"unrun\"",
+      "ws-beta",
+      "pass_condition",
+      "feasible_here"
+    ],
+    "must_not_include": [
+      "draft non-null",
+      "\"label\": \"passed\"",
+      "a draft and a non-empty source list are returned"
+    ],
+    "checks": [
+      "Every requirement and exclusion id appears in coverage or returned_to_writer.",
+      "Every pass_condition references a property of content or persisted state, not the existence of a response.",
+      "A negative check places the only matching passage in ws-beta and expects no ws-beta id in the source list.",
+      "A correct-refusal check feeds a note requesting automatic send and expects no outbound record and the note stored.",
+      "The send check is manual_observation with feasible_here false and a staging task under requested_followups."
+    ]
+  }
+}

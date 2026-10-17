@@ -1,0 +1,37 @@
+{
+  "role_id": "opportunity-analyst",
+  "label": "unrun",
+  "scenario": "W01 Compare stage for Reply Assist at Larkspur Support. Inputs: context-brief.md v3; need-findings.md v1 (N1: some ws-alpha agents want a refund-status draft; ws-beta unexamined); constraints drafts-only and workspace isolation; a ws-alpha handle-time export giving a 6.2 minute median on refund-status tickets. The comparison must cover doing nothing, a non-AI option and the AI options on the same criteria, with a falsifiable value hypothesis.",
+  "input_refs": [
+    {"kind": "artifact", "title": "context-brief.md v3", "synthetic": true},
+    {"kind": "artifact", "title": "need-findings.md v1 (N1, ws-alpha only)", "synthetic": true},
+    {"kind": "requirement", "title": "drafts only (protected)", "synthetic": true},
+    {"kind": "requirement", "title": "workspace isolation ws-alpha / ws-beta (protected)", "synthetic": true},
+    {"kind": "source", "title": "src-handle-time (ws-alpha refund-status median)", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "O0 do nothing",
+      "O1",
+      "## Criteria",
+      "## Comparison",
+      "unknown",
+      "## Value hypothesis",
+      "requires: human-owner",
+      "## Recommendation"
+    ],
+    "must_not_include": [
+      "will reduce",
+      "recommend A2",
+      "Recommendation: A2"
+    ],
+    "checks": [
+      "The comparison table has a column for O0 and for at least one non-AI option, with the same criteria as the AI options.",
+      "Every cell holds a sourced value or the literal unknown; the O0 outcome cell carries the measured ws-alpha median.",
+      "Any option that sends replies carries a requires line naming human-owner approval and is not recommended.",
+      "The value hypothesis names a baseline option, a minimum meaningful difference and a refuting observation.",
+      "The recommendation names where the leading option loses or proposes the next test that fills named unknown cells."
+    ]
+  }
+}

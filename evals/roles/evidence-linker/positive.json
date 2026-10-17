@@ -1,0 +1,40 @@
+{
+  "role_id": "evidence-linker",
+  "label": "unrun",
+  "scenario": "Propose links for the Reply Assist case. S-policy v3 has assessment A-12 (C-04 v1 'drafts are never sent automatically', supported, section 2 lines 14-19). S-retrieval-note v2 has assessment A-15 (C-07 v1, insufficient_evidence). REQ-3 v1 'The system never sends a reply' cites C-04; REQ-5 v1 'Retrieval is scoped to the requesting workspace' cites C-07. Existing edge E-40 reads S-policy v2 supports C-04 v1. Conflict CF-01 is open on the drafts-only point.",
+  "input_refs": [
+    {"kind": "artifact", "title": "evidence-records.json (S-policy v3, S-retrieval-note v2)", "synthetic": true},
+    {"kind": "artifact", "title": "claim-assessment.json (A-12 supported, A-15 insufficient_evidence)", "synthetic": true},
+    {"kind": "claim", "title": "C-04 v1 and C-07 v1", "synthetic": true},
+    {"kind": "requirement", "title": "REQ-3 v1 and REQ-5 v1", "synthetic": true},
+    {"kind": "artifact", "title": "Existing edge E-40 (S-policy v2 supports C-04 v1)", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"relation\": \"supports\"",
+      "\"assessment_id\": \"A-12\"",
+      "\"relation\": \"depends_on\"",
+      "\"impact_policy\": \"review\"",
+      "\"certainty_effect\": \"none\"",
+      "unlinked_claims",
+      "\"reason\": \"insufficient_evidence\"",
+      "\"kind\": \"stale_version\"",
+      "CF-01",
+      "dependency-steward"
+    ],
+    "must_not_include": [
+      "\"impact_policy\": \"none\"",
+      "\"certainty_effect\": \"supported\"",
+      "now verified",
+      "C-07 is supported"
+    ],
+    "checks": [
+      "Exactly one supports edge is proposed, from S-policy v3 to C-04 v1, carrying passage_ref with assessment A-12 and the section 2 position.",
+      "No supports edge is proposed from S-retrieval-note v2 to C-07 v1; the pair appears under unlinked_claims with reason insufficient_evidence.",
+      "depends_on edges are proposed from REQ-3 v1 to C-04 v1 and from REQ-5 v1 to C-07 v1, each with a reason naming what must be revisited; the REQ-3 reason mentions CF-01.",
+      "E-40 is listed under drift as stale_version with a proposed replacement pointing at S-policy v3 and E-40 marked historical.",
+      "Every edge names versions on both ends and carries certainty_effect none; requested_followups names dependency-steward for downstream coverage."
+    ]
+  }
+}

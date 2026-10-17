@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/proposal",
+  "title": "Proposal",
+  "description": "Options with evidence and a recommendation. recommended_option must name one of the option ids (checked in code).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "options",
+    "recommended_option",
+    "assumptions",
+    "evidence_refs",
+    "constraints",
+    "unresolved_questions",
+    "target_refs",
+    "author_role",
+    "requested_authority"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "options": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/option"
+      },
+      "minItems": 1
+    },
+    "recommended_option": {
+      "type": "string",
+      "description": "Id of the recommended option.",
+      "minLength": 1
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "An identifier minted by ids.new_id().",
+        "minLength": 1
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unresolved_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "target_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "An identifier minted by ids.new_id().",
+        "minLength": 1
+      },
+      "description": "Versions the proposal targets or would change."
+    },
+    "author_role": {
+      "type": "string",
+      "description": "A role id from registry/agents.json, or 'human-owner'.",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "author_session": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Host child/session id when observable."
+    },
+    "requested_authority": {
+      "type": "string",
+      "enum": [
+        "R0",
+        "R1",
+        "R2",
+        "R3"
+      ]
+    }
+  },
+  "$defs": {
+    "option": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "summary"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

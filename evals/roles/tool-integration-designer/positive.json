@@ -1,0 +1,47 @@
+{
+  "role_id": "tool-integration-designer",
+  "label": "unrun",
+  "scenario": "Reply Assist at Larkspur Support, W03 specify-tools stage. architecture.md@v3 has J4 (model proposes a draft) and J6 (code saves and shows the draft). Tool documentation src-ticketing-api@2026-10-03 documents draft creation with a version field and no send endpoint is required. req-ra-003@v2 (drafts only) is protected. Risk tier R1.",
+  "input_refs": [
+    {
+      "kind": "source",
+      "title": "src-ticketing-api@2026-10-03",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "architecture.md@v3",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "req-ra-003@v2 drafts only",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "propose_draft",
+      "create_draft",
+      "keyed",
+      "binds_to",
+      "ticket_version",
+      "result_validation",
+      "undefined_operations",
+      "send_reply"
+    ],
+    "must_not_include": [
+      "send operation exposed",
+      "blind retry",
+      "retry regardless"
+    ],
+    "checks": [
+      "The effectful draft operation appears as a propose form callable from model inference and an execute form callable only from fixed code.",
+      "create_draft is keyed with idempotency_key_source proposal_id and binds_to ticket_id and ticket_version.",
+      "Every operation called from model_inference has non-empty result_validation.",
+      "send_reply appears in undefined_operations with requirement_ref req-ra-003@v2.",
+      "Every execute operation lists receipt_fields tying draft_id to proposal_id."
+    ]
+  }
+}

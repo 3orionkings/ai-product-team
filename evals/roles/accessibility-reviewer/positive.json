@@ -1,0 +1,49 @@
+{
+  "role_id": "accessibility-reviewer",
+  "label": "unrun",
+  "scenario": "Accessibility review of Reply Assist interaction-spec.json is-v1 (CTL-01 to CTL-07) against prototype snapshot proto-0412, operable locally. Supported modes: keyboard and screen reader. Two screenshots of the H1 confirmation are attached. The budget allows the listed checks for CTL-04, CTL-05, CTL-07 and the scope_mismatch state. Produce accessibility-findings.json.",
+  "input_refs": [
+    {
+      "kind": "artifact",
+      "title": "interaction-spec.json is-v1",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "prototype snapshot proto-0412",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "supported input modes: keyboard, screen_reader",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "screenshots 1 and 2 of H1 confirmation",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"label\": \"observed\"",
+      "\"result\": \"failed\"",
+      "AX-05s",
+      "visual_observation",
+      "does not certify",
+      "observed_checks"
+    ],
+    "must_not_include": [
+      "\"certification\": \"accessible\"",
+      "conformant",
+      "looks clear and well labeled"
+    ],
+    "checks": [
+      "Every check carries a label and a result, and summary_counts reports observed, untested and visual observations separately.",
+      "The screen-reader name-role-state check on CTL-05 is observed and failed, with a finding addressed to interaction-designer.",
+      "The screenshot-based check is labeled visual_observation and no operability or announcement check takes passed from it.",
+      "observed_checks in the envelope contains exactly the checks labeled observed, each with its steps and the snapshot id."
+    ]
+  }
+}

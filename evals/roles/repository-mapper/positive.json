@@ -1,0 +1,57 @@
+{
+  "role_id": "repository-mapper",
+  "label": "unrun",
+  "scenario": "W04 map stage for Reply Assist at Larkspur Support. Requested change: add a workspace filter so retrieval for ws-alpha cannot return ws-beta articles (REQ-12). Authorized repository at git:4f2c9a1 contains a Makefile with a test target running python -m pytest -q tests, a pyproject.toml console script reply-assist = reply_assist.cli:main, src/reply_assist/api.py registering POST /workspaces/{ws}/tickets/{id}/draft, retrieval.py with search_articles(query) and no workspace predicate, permissions.py with can_view(agent, workspace_id), model_client.py as an external boundary, and tests/test_retrieval.py with one ranking test. Produce repository-map.md.",
+  "input_refs": [
+    {
+      "kind": "source",
+      "title": "Authorized repository tree at git:4f2c9a1 (synthetic reply-assist service)",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "REQ-12 workspace isolation in retrieval (protected, approved)",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "architecture.md naming retrieval, draft composition and persistence components",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "Snapshot",
+      "4f2c9a1",
+      "Declared commands",
+      "python -m pytest -q tests",
+      "Makefile",
+      "Entry points",
+      "reply_assist.api",
+      "Execution path",
+      "search_articles",
+      "retrieval.py",
+      "Protected areas",
+      "permissions.py",
+      "can_view",
+      "Existing checks",
+      "Candidate edit locations",
+      "Not inspected",
+      "Stated, inferred, assumed"
+    ],
+    "must_not_include": [
+      "npm test",
+      "reply_assist.server",
+      "dev server",
+      "write_set"
+    ],
+    "checks": [
+      "Every command in Declared commands cites a file and line that exists at 4f2c9a1; no command is listed without a source.",
+      "The execution path runs from api.py through retrieval.search_articles with file and line per hop and stops at model_client as a named boundary.",
+      "Protected areas lists permissions.can_view and notes that no send path exists on the route (REQ-07 adjacent).",
+      "Candidate edit locations names retrieval.search_articles and its callers without writing work orders or write sets.",
+      "Not inspected lists every file referenced but not opened, and each inferred item has a matching uncertainties entry."
+    ]
+  }
+}

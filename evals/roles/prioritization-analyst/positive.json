@@ -1,0 +1,34 @@
+{
+  "role_id": "prioritization-analyst",
+  "label": "unrun",
+  "scenario": "Three candidates from the Reply Assist comparison: C1 template library pilot in ws-alpha, C2 drafting prototype, C3 ws-beta customer research. Constraints: drafts only (protected); pilot budget standard. The requester supplies, without a source, that C2 saves 20 minutes per agent per day. C2's value hypothesis is stated against C1's baseline; ws-beta templates need C3's findings. The ranking must keep unknown estimates unknown and record overrides by rule.",
+  "input_refs": [
+    {"kind": "artifact", "title": "opportunity-comparison.md v2 (O1, A1 options)", "synthetic": true},
+    {"kind": "artifact", "title": "need-findings.md v1 (ws-beta unexamined)", "synthetic": true},
+    {"kind": "requirement", "title": "drafts only (protected)", "synthetic": true},
+    {"kind": "source", "title": "requester estimate: C2 saves 20 min/agent/day (no source)", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "constraints_applied",
+      "\"score\": \"unknown\"",
+      "\"missing\"",
+      "supplied without source",
+      "dependencies",
+      "sensitivity",
+      "recommended_next"
+    ],
+    "must_not_include": [
+      "\"impact\": 3",
+      "\"rank\": 1, \"candidate_id\": \"C2\""
+    ],
+    "checks": [
+      "The constraint check is recorded before any score and C2 is marked conditional on remaining draft-only.",
+      "The supplied 20-minute figure appears only as a note on an unknown value cell, never as an estimate.",
+      "Every ranking entry with an unknown input has score unknown and a non-empty missing list.",
+      "Overrides cite a dependency or constraint rule, never a score; C3 is raised because it fills unknowns others need.",
+      "Sensitivity shows whether the C1/C2 order flips on their unknown value cells and names what settles each."
+    ]
+  }
+}

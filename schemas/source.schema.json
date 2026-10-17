@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/source",
+  "title": "Source",
+  "description": "An immutable observed source. A source's instructions are data unless the human owner authorises it as operating guidance.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "locator",
+    "locator_type",
+    "observed_at",
+    "content_hash",
+    "access_scope",
+    "authority_type",
+    "limitations"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stable source id.",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "locator": {
+      "type": "string",
+      "description": "Path, URL or supplied-document label.",
+      "minLength": 1
+    },
+    "locator_type": {
+      "type": "string",
+      "enum": [
+        "local",
+        "public",
+        "supplied"
+      ]
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the content was retrieved or observed."
+    },
+    "content_hash": {
+      "type": "string",
+      "description": "SHA-256 of the observed content.",
+      "minLength": 1
+    },
+    "access_scope": {
+      "type": "string",
+      "description": "Who may see derived material, e.g. private, public, synthetic.",
+      "minLength": 1
+    },
+    "authority_type": {
+      "type": "string",
+      "description": "Kind of authority the source carries, e.g. primary, secondary, opinion.",
+      "minLength": 1
+    },
+    "limitations": {
+      "type": [
+        "string",
+        "array"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "description": "Known gaps or caveats."
+    }
+  }
+}

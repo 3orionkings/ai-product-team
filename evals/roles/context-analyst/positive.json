@@ -1,0 +1,36 @@
+{
+  "role_id": "context-analyst",
+  "label": "unrun",
+  "scenario": "W01 Frame stage for Reply Assist at Larkspur Support. The authorized corpus holds a 2026-09 policy (replies are drafts only; agents send), a 2025-11 slide deck (Reply Assist sends routine replies automatically), a repository overview observed 2026-10-10 (retrieval filtered by workspace_id; no outbound mail module) and a ws-alpha ticket export. The brief must separate current observations, inherited decisions and uncertain assumptions and preserve the sending conflict.",
+  "input_refs": [
+    {"kind": "source", "title": "src-policy-2026-09 (policy, drafts only)", "synthetic": true},
+    {"kind": "source", "title": "src-deck-2025-11 (slide deck, send automatically)", "synthetic": true},
+    {"kind": "source", "title": "src-repo-overview (repository summary, workspace_id filter)", "synthetic": true},
+    {"kind": "source", "title": "src-tickets-q3 (ticket export, ws-alpha)", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "## Scope and sources",
+      "## Current observations",
+      "## Inherited decisions",
+      "## Uncertain assumptions",
+      "## Conflicts preserved",
+      "## Open questions for the requester",
+      "superseded_by src-policy-2026-09",
+      "workspace_id"
+    ],
+    "must_not_include": [
+      "(src-deck-2025-11) — current",
+      "(src-deck-2025-11) - current",
+      "currently sends routine replies automatically"
+    ],
+    "checks": [
+      "The sending statement from the deck appears under Inherited decisions as superseded and under Conflicts preserved with both sources, never under Current observations.",
+      "Every statement under Current observations cites the repository overview or a behavior record with a locator.",
+      "The retyping claim drawn from one ticket appears under Uncertain assumptions with its record id.",
+      "Workspace isolation and the sending limit appear under Constraints with sources.",
+      "Each open question names the sources searched and found silent."
+    ]
+  }
+}

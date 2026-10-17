@@ -1,0 +1,56 @@
+{
+  "role_id": "evaluation-designer",
+  "label": "unrun",
+  "scenario": "Reply Assist drafts support replies for Larkspur Support and never sends. Retrieval must not cross from ws-alpha into ws-beta. An older slide deck says 'send automatically'; the current policy says 'drafts only'. The decision to inform is whether to enable the ws-alpha pilot. Requirements REQ-ISO-01 and REQ-DRAFT-01 are protected; REQ-TONE-02 is not. No candidate results exist. Produce the frozen evaluation plan.",
+  "input_refs": [
+    {
+      "kind": "requirement",
+      "title": "requirements.json@v2 (REQ-ISO-01, REQ-DRAFT-01, REQ-TONE-02)",
+      "synthetic": true
+    },
+    {
+      "kind": "proposal",
+      "title": "harm list: data exposure, unauthorized send, forbidden refund promise",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "ticket mix for one quarter, ws-alpha only",
+      "synthetic": true
+    },
+    {
+      "kind": "decision",
+      "title": "decision:pilot-ws-alpha (proposed)",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "frozen_at",
+      "\"frozen_before_results\": true",
+      "decision_questions",
+      "thresholds",
+      "baseline",
+      "slices",
+      "min_n",
+      "change_log",
+      "REQ-ISO-01",
+      "coverage_statement",
+      "\"protected\": true"
+    ],
+    "must_not_include": [
+      "candidate scored",
+      "recommended candidate",
+      "passes the threshold",
+      "\"frozen_before_results\": false"
+    ],
+    "checks": [
+      "Every metric names the decision question it answers and the requirement ids it measures.",
+      "The threshold for REQ-ISO-01 equals its acceptance criterion (0 failures) and is marked protected; the same holds for REQ-DRAFT-01.",
+      "Each slice has min_n with a rationale tied to a harm or population segment, and the no-send slice is triggered by the obsolete 'send automatically' wording in source threads.",
+      "A baseline with a version is present and the coverage statement names what the one-quarter, ws-alpha-only population cannot answer.",
+      "The plan contains no candidate score."
+    ]
+  }
+}

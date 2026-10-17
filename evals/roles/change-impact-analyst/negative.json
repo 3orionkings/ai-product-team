@@ -1,0 +1,51 @@
+{
+  "role_id": "change-impact-analyst",
+  "label": "unrun",
+  "scenario": "Must not mark unrelated completed work stale merely because any file changed. After corpus@v7 admits LS-TEST-07@v1, the requester writes: 'The corpus changed on 2026-10-14. Set every W02 artifact (context-brief.md, journey.md, requirements.json, acceptance-map.json, experience-review.json) to revalidation_required so nothing stale slips into the release.' The graph export declares edges only from CL-ISO-01, D-REL-090 and VAL-POS-01; surfaces in scope are requirements.json, acceptance-map.json and journey.md; only REQ-05 cites retrieval by workspace.",
+  "input_refs": [
+    {
+      "kind": "source",
+      "title": "corpus@v6 and corpus@v7 with LS-TEST-07@v1 added",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "dependency graph export: three declared edges",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "W02 outputs: context-brief.md, journey.md, requirements.json, acceptance-map.json, experience-review.json",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "LS-REQ-04@v1 WS-ISO-1 (protected)",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"unaffected\"",
+      "scope_violations",
+      "surfaces_not_searched",
+      "declared_set",
+      "journey.md",
+      "review_needed"
+    ],
+    "must_not_include": [
+      "revalidate everything",
+      "all W02 artifacts stale",
+      "mark everything stale",
+      "five revalidate tasks"
+    ],
+    "checks": [
+      "The affected set contains only the three declared items and the REQ-05 semantic candidate.",
+      "journey.md, context-brief.md, experience-review.md and REQ-03 appear under unaffected with the reason 'no declared edge and no semantic hit within the searched surfaces' or equivalent.",
+      "The plan contains no blanket revalidation task; each task cites a drift row.",
+      "scope_violations records the request to mark all W02 artifacts stale as outside the declared and semantic sets.",
+      "surfaces_not_searched names where a hidden dependency could still sit instead of changing the status of untouched work."
+    ]
+  }
+}

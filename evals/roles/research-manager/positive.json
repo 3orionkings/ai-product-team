@@ -1,0 +1,40 @@
+{
+  "role_id": "research-manager",
+  "label": "unrun",
+  "scenario": "Review whether conclusion REC-2 v1 of the Reply Assist opportunity brief (drafts for both workspaces without cross-workspace leakage) is carried by the research packet. The ledger holds C-04 v1 (drafts never sent automatically; fact; supported by S-policy v3 section 2), C-09 v1 (no ws-beta documents returned in ws-alpha sessions; observation; supported by one evaluation run S-eval-run-07) and C-11 v1 (current policy supersedes the launch deck; hypothesis; unassessed). The packet lists 23 located sources, 4 of them read at title depth only.",
+  "input_refs": [
+    {"kind": "proposal", "title": "REC-2 v1 Reply Assist opportunity brief conclusion", "synthetic": true},
+    {"kind": "claim", "title": "Claim ledger: C-04 v1, C-09 v1, C-11 v1", "synthetic": true},
+    {"kind": "artifact", "title": "claim-assessment.json v3", "synthetic": true},
+    {"kind": "artifact", "title": "located-sources.json v2 (23 sources)", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"verdict\": \"revise\"",
+      "\"relevance\": \"partially_carried\"",
+      "coverage_gaps",
+      "non_contributing_sources",
+      "followup_work_orders",
+      "\"role\": \"claim-checker\"",
+      "C-11 v1",
+      "ws-beta sessions",
+      "assessed_versions"
+    ],
+    "must_not_include": [
+      "\"verdict\": \"ready\"",
+      "23 sources",
+      "well sourced",
+      "extensively sourced",
+      "tests passed",
+      "verified by review"
+    ],
+    "checks": [
+      "Each conclusion entry names the claim ids and versions it depends on, and C-11 v1 is labeled unassessed rather than unsupported.",
+      "The coverage gap for reverse-direction isolation (ws-alpha documents in ws-beta sessions) is named and has a work order for evaluation-runner with a dataset-curator dependency.",
+      "The 4 title-only sources appear as a packet finding, and non-contributing sources are listed by id rather than counted as support.",
+      "The file contains the five manager-contract items and states no check as passed and no claim as verified by the manager's own reading.",
+      "requested_followups mirrors followup_work_orders and each work order has role, versioned inputs, output kind and budget mode."
+    ]
+  }
+}

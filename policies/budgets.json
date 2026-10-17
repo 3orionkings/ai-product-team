@@ -1,0 +1,45 @@
+{
+  "schema_version": "0.1",
+  "dated": "2026-10-17",
+  "source": "registry/workflows.json budget_modes; docs/spec/02_ARCHITECTURE.md section 8.2",
+  "description": "Initial design defaults to test, not established performance claims. Admission enforces every limit here; the host's token or currency usage is reported as unknown when it is not exposed, never promised as a hard cap.",
+  "counting_rules": [
+    "Every actual worker attempt and retry counts toward max_worker_tasks.",
+    "The root orchestrator is not a worker slot.",
+    "Managers, directors and fresh reviewers count when actually invoked.",
+    "A challenge round counts toward max_challenge_rounds; a risk-triggered challenge that does not fit requires explicit replanning or human approval to expand.",
+    "Crossing a limit returns a useful partial result and a specific request to expand scope. Never silently switch to deep mode or hide review work to fit a budget."
+  ],
+  "task_timeout_s": 900,
+  "wallclock_limit_s": {
+    "focused": 1800,
+    "standard": 5400,
+    "deep": 10800
+  },
+  "modes": {
+    "focused": {
+      "max_worker_tasks": 4,
+      "concurrent_workers": 2,
+      "max_challenge_rounds": 0,
+      "wallclock_limit_s": 1800,
+      "tokens_cap": null,
+      "target_use": "Narrow research or a single-role output."
+    },
+    "standard": {
+      "max_worker_tasks": 12,
+      "concurrent_workers": 3,
+      "max_challenge_rounds": 1,
+      "wallclock_limit_s": 5400,
+      "tokens_cap": null,
+      "target_use": "Typical feature analysis or bounded prototype stage."
+    },
+    "deep": {
+      "max_worker_tasks": 24,
+      "concurrent_workers": 3,
+      "max_challenge_rounds": 2,
+      "wallclock_limit_s": 10800,
+      "tokens_cap": null,
+      "target_use": "Explicitly requested cross-team design or disputed decision."
+    }
+  }
+}

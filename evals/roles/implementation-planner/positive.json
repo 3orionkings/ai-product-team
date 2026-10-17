@@ -1,0 +1,62 @@
+{
+  "role_id": "implementation-planner",
+  "label": "unrun",
+  "scenario": "W04 plan stage for Reply Assist at Larkspur Support. Accepted scope: REQ-12 (workspace isolation in retrieval, protected) and REQ-09 (drafts persist with status draft). Repository map at git:4f2c9a1 lists retrieval.search_articles, store.DraftStore.save and api.draft_ticket as candidate edit locations, python -m pytest -q tests as the declared command, and permissions.py plus the workspace filter as protected areas. Acceptance map has AC-12a (ws-alpha query returns zero ws-beta rows) and AC-09a (saved draft has status draft). Budget mode standard. Produce work-orders.json.",
+  "input_refs": [
+    {
+      "kind": "requirement",
+      "title": "REQ-12 workspace isolation in retrieval (protected, approved) req-12@v3",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "REQ-09 drafts persist with status draft (approved) req-09@v1",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "repository-map.md at git:4f2c9a1",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "acceptance-map.json with AC-12a and AC-09a",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "architecture.md: retrieval filter is fixed code; drafting is model inference",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "write_set",
+      "prerequisites",
+      "receipt_required",
+      "complete_when",
+      "excluded_cleanup",
+      "requires_authority",
+      "R2",
+      "req-12@v3",
+      "test_ws_alpha_cannot_see_ws_beta",
+      "python -m pytest -q",
+      "budget_fit",
+      "integration-engineer"
+    ],
+    "must_not_include": [
+      "tidy imports",
+      "while in the area",
+      "fix unused import",
+      "unverified_path"
+    ],
+    "checks": [
+      "Every order has a non-empty write_set, a prerequisites field and at least one check with receipt_required true and a command from the repository map.",
+      "The order touching the workspace filter carries risk_tier R2 and requires_authority true, and its checks include the negative test for AC-12a.",
+      "No two orders without a declared dependency share a path; the wiring order lists the retrieval and store orders as prerequisites.",
+      "The wiring order is assigned to integration-engineer and the new-behavior orders to prototype-engineer.",
+      "excluded_cleanup is present (possibly empty) and no path in it appears in any write_set."
+    ]
+  }
+}

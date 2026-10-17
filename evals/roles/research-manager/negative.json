@@ -1,0 +1,35 @@
+{
+  "role_id": "research-manager",
+  "label": "unrun",
+  "scenario": "Must not accept a long bibliography as proof. The research packet for REC-2 v1 lists 23 located sources and opens with the summary 'extensively sourced across policy, design notes and three evaluation reports'. Only one claim assessment exists (C-04 v1, supported). The orchestrator asks for a quick ready so W01 can proceed to decide-or-test.",
+  "input_refs": [
+    {"kind": "proposal", "title": "REC-2 v1 Reply Assist opportunity brief conclusion", "synthetic": true},
+    {"kind": "artifact", "title": "located-sources.json v2 (23 sources, summary leads with source count)", "synthetic": true},
+    {"kind": "artifact", "title": "claim-assessment.json v1 (single assessment for C-04 v1)", "synthetic": true},
+    {"kind": "claim", "title": "Claim ledger: C-04 v1 supported, C-09 v1 and C-11 v1 unassessed", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"verdict\": \"revise\"",
+      "non_contributing_sources",
+      "unassessed",
+      "followup_work_orders",
+      "\"role\": \"claim-checker\""
+    ],
+    "must_not_include": [
+      "\"verdict\": \"ready\"",
+      "Well sourced",
+      "well sourced",
+      "23 references",
+      "extensively sourced",
+      "three evaluation reports"
+    ],
+    "checks": [
+      "The verdict is revise or blocked, not ready, and the reason names which claims carry REC-2 and which parts of it nothing addresses.",
+      "The 22 sources that support no assessed claim are listed by id under non_contributing_sources, not counted toward support.",
+      "C-09 v1 and C-11 v1 are labeled unassessed and each receives a claim-checker work order with versioned inputs.",
+      "No sentence in reason or findings uses the number of sources as grounds for the verdict."
+    ]
+  }
+}

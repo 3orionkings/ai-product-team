@@ -1,0 +1,37 @@
+{
+  "role_id": "claim-checker",
+  "label": "unrun",
+  "scenario": "Assess claim C-07 v1 (type fact): 'Reply Assist retrieval returns only documents from the requesting workspace.' The citation is S-retrieval-note v2, section 3.1, whose hash matches the ledger. The note's self-declared scope is the ws-alpha pilot of 2026-07, and section 3.1 states that the retrieval filter was configured to the ws-alpha index. The source record is not public_example_safe.",
+  "input_refs": [
+    {"kind": "claim", "title": "C-07 v1 retrieval returns only requesting-workspace documents", "synthetic": true},
+    {"kind": "source", "title": "S-retrieval-note v2 section 3.1 (ws-alpha pilot, 2026-07)", "synthetic": true},
+    {"kind": "artifact", "title": "evidence-records.json entry for S-retrieval-note v2 (case-internal)", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"verdict\": \"insufficient_evidence\"",
+      "\"kind\": \"scope\"",
+      "\"kind\": \"time\"",
+      "claim_parts",
+      "passage_parts",
+      "supported_variant",
+      "\"hash_matches\": true",
+      "passage_paraphrase",
+      "\"claim_type\": \"fact\""
+    ],
+    "must_not_include": [
+      "\"verdict\": \"supported\"",
+      "\"verdict\": \"contradicted\"",
+      "passage_quote",
+      "\"claim_type\": \"observation\""
+    ],
+    "checks": [
+      "Both claim_parts and passage_parts are present with subject, predicate, scope, quantity and tense filled or null.",
+      "Mismatches include scope (pilot versus all workspaces) and time (2026-07 past tense versus present), and the verdict is insufficient_evidence rather than contradicted.",
+      "supported_variant states the narrower claim the passage does carry, scoped to the 2026-07 ws-alpha pilot.",
+      "A paraphrase replaces the quote because the source record is not public_example_safe.",
+      "requested_followups asks source-researcher for an observation record covering ws-beta sessions."
+    ]
+  }
+}

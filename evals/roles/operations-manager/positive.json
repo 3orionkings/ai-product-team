@@ -1,0 +1,39 @@
+{
+  "role_id": "operations-manager",
+  "label": "unrun",
+  "scenario": "W09 operational review of rollout-plan:RA@v2 for Reply Assist at Larkspur Support, build ra-7f3c. The plan cites a rollback drill and an isolation negative test; validation records show the drill passed at ra-7f3c and the isolation test not_run; the scope_mismatch alert lists owner 'operations team'; cost-model:RA@v3 has two unknown components and latency-model:RA@v2 reconciles within tolerance. The role must return the five-item manager contract with a blocked verdict, named gaps with next resolving tasks, specialist assignments, authority items, readiness conditions and a statement that the review is not an independent audit and executed no tests.",
+  "input_refs": [
+    {"kind": "artifact", "title": "cost-model:RA@v3", "synthetic": true},
+    {"kind": "artifact", "title": "latency-model:RA@v2", "synthetic": true},
+    {"kind": "artifact", "title": "rollout-plan:RA@v2", "synthetic": true},
+    {"kind": "validation", "title": "validation:V-88 rollback drill passed at ra-7f3c", "synthetic": true},
+    {"kind": "validation", "title": "validation:V-91 isolation negative test not_run", "synthetic": true},
+    {"kind": "artifact", "title": "roster:ops@v4 ownership roster", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "review_nature",
+      "not an independent audit",
+      "\"verdict\"",
+      "\"value\": \"blocked\"",
+      "gaps",
+      "next_resolving_task",
+      "assignments",
+      "requires_other_authority",
+      "readiness_conditions"
+    ],
+    "must_not_include": [
+      "\"value\": \"ready\"",
+      "tests passed by this role",
+      "independently verified by this review"
+    ],
+    "checks": [
+      "The verdict is blocked and its references cite the not_run isolation validation and the plan's ownership section.",
+      "The cost assessment states the denominator is completed outcomes, lists the unknown components, and says the headline was recomputed and matched.",
+      "Each gap names a next resolving task with a role, and the assignments carry inputs, outputs, dependencies and budget.",
+      "requires_other_authority lists enabling the flag as a human action and routes the send-automatically conflict to W11.",
+      "review_nature states that the review is a manager review, not an independent audit, and that no tests were executed by this role."
+    ]
+  }
+}

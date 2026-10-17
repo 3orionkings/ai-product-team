@@ -1,0 +1,63 @@
+{
+  "role_id": "safety-boundary-designer",
+  "label": "unrun",
+  "scenario": "Reply Assist at Larkspur Support, W03 constrain-authority stage. architecture.md@v3 has model steps J3, J4, J5 and a human send at J7. tool-contracts.json@v2 defines propose_draft and create_draft and lists send_reply under undefined_operations. req-ra-003@v2 (drafts only) is protected. src-policy-current@v2 says drafts only; src-slide-deck-2025@v1 says send automatically. The envelope lists ticketing.send as unavailable.",
+  "input_refs": [
+    {
+      "kind": "artifact",
+      "title": "architecture.md@v3",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "tool-contracts.json@v2",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "req-ra-003@v2 drafts only",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "src-policy-current@v2",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "src-slide-deck-2025@v1",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "task envelope capabilities with ticketing.send unavailable",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "Permission matrix",
+      "Enforceable boundaries",
+      "Instructions that request compliance",
+      "enforced_by_code",
+      "enforced_by_host",
+      "Stop conditions",
+      "forbidden",
+      "Boundary tests",
+      "Conflicting authority sources"
+    ],
+    "must_not_include": [
+      "sandbox",
+      "role file enforces",
+      "prompt enforces"
+    ],
+    "checks": [
+      "Every effect in tool-contracts.json and every adaptive step has a consequence class and a matrix column.",
+      "send_reply is forbidden for the feature with the mechanism being the absent operation and the host allowlist, labelled with host evidence from the envelope.",
+      "Enforceable boundaries and instructions that request compliance are separate sections.",
+      "J4 and J5 have stop conditions with numeric limits.",
+      "The deck versus current-policy conflict is listed under changes requiring other authority, with the restrictive source applied."
+    ]
+  }
+}

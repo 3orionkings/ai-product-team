@@ -1,0 +1,254 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/agent-response",
+  "title": "Agent response",
+  "description": "The typed envelope every role returns. An observed check without receipt_id is a claim, not evidence; the controller flags it. actual_execution_metadata is agent-reported until a dispatch record confirms it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task_id",
+    "role_id",
+    "status",
+    "summary",
+    "input_versions",
+    "findings",
+    "evidence_refs",
+    "artifact_refs",
+    "proposed_links",
+    "observed_checks",
+    "uncertainties",
+    "requested_followups",
+    "scope_violations",
+    "actual_execution_metadata"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "description": "An identifier minted by ids.new_id().",
+      "minLength": 1
+    },
+    "role_id": {
+      "type": "string",
+      "description": "A role id from registry/agents.json, or 'human-owner'.",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "complete",
+        "needs_input",
+        "blocked",
+        "failed",
+        "partial",
+        "out_of_scope"
+      ]
+    },
+    "summary": {
+      "type": "string"
+    },
+    "input_versions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "An identifier minted by ids.new_id().",
+        "minLength": 1
+      },
+      "description": "Version ids the role actually read."
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": [
+          "string",
+          "object"
+        ]
+      },
+      "description": "Findings as prose or structured objects."
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "An identifier minted by ids.new_id().",
+        "minLength": 1
+      },
+      "description": "Version or receipt ids cited as evidence."
+    },
+    "artifact_refs": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "description": "Artifacts produced; stored by the controller as artifact nodes with status proposed."
+    },
+    "proposed_links": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/proposed_link"
+      },
+      "description": "Edges the role proposes; stored with status proposed."
+    },
+    "observed_checks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/observed_check"
+      }
+    },
+    "uncertainties": {
+      "type": "array",
+      "items": {
+        "type": [
+          "string",
+          "object"
+        ]
+      },
+      "description": "Open uncertainties."
+    },
+    "requested_followups": {
+      "type": "array",
+      "items": {
+        "type": [
+          "string",
+          "object"
+        ]
+      },
+      "description": "Follow-up work orders the role requests (it may not dispatch them)."
+    },
+    "scope_violations": {
+      "type": "array",
+      "items": {
+        "type": [
+          "string",
+          "object"
+        ]
+      },
+      "description": "Non-empty blocks the task."
+    },
+    "actual_execution_metadata": {
+      "$ref": "#/$defs/execution_metadata"
+    }
+  },
+  "$defs": {
+    "observed_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command"
+      ],
+      "properties": {
+        "command": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "Command line or argv."
+        },
+        "claimed_exit_status": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "receipt_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Receipt proving the command ran; absent means claimed only."
+        }
+      }
+    },
+    "execution_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "execution_mode"
+      ],
+      "properties": {
+        "execution_mode": {
+          "type": "string",
+          "enum": [
+            "native",
+            "sequential",
+            "manual_handoff",
+            "fixture_replay"
+          ]
+        },
+        "native_child_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "host": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "started_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "Agent-reported start time."
+        },
+        "ended_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "Agent-reported end time."
+        }
+      }
+    },
+    "proposed_link": {
+      "type": "object",
+      "required": [
+        "relation"
+      ],
+      "properties": {
+        "from_version": {
+          "type": "string",
+          "description": "Dependent or citing version.",
+          "minLength": 1
+        },
+        "to_version": {
+          "type": "string",
+          "description": "Dependency or cited version.",
+          "minLength": 1
+        },
+        "relation": {
+          "type": "string",
+          "enum": [
+            "supports",
+            "contradicts",
+            "implements",
+            "verifies",
+            "derived_from",
+            "supersedes",
+            "depends_on"
+          ]
+        },
+        "impact_policy": {
+          "type": "string",
+          "enum": [
+            "review",
+            "invalidate_applicability",
+            "none"
+          ],
+          "description": "Required by the controller for depends_on edges."
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "description": "A proposed edge; additional keys are kept for the reviewer."
+    }
+  }
+}

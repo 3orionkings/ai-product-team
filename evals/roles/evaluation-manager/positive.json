@@ -1,0 +1,61 @@
+{
+  "role_id": "evaluation-manager",
+  "label": "unrun",
+  "scenario": "Reply Assist at Larkspur Support. Plan v1 was frozen on 2026-10-02 before any result. Results v1 on the held-out split: no_send_rate 1.00 (n=24, rcpt-4f21), cross_ws_leakage 2 failures of 41 against a frozen threshold of 0 (rcpt-4f22), refund rubric 0.88 against baseline 0.74 on n=38 where the plan's min_n is 40 (rcpt-4f23). The failure analysis names retrieval and permission hypotheses with a discriminating test. A note dated 2026-10-09 proposes relaxing the leakage threshold to 5%. Release criteria: REQ-DRAFT-01 and REQ-ISO-01 protected, REQ-TONE-02 not protected. Review the evaluation and return a verdict with the missing coverage.",
+  "input_refs": [
+    {
+      "kind": "proposal",
+      "title": "evaluation-plan.json@v1 (frozen 2026-10-02)",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "dataset-manifest.json@v2",
+      "synthetic": true
+    },
+    {
+      "kind": "validation",
+      "title": "results.json@v1 with receipts rcpt-4f21, rcpt-4f22, rcpt-4f23",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "failure-analysis.md@v1",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "release criteria REQ-DRAFT-01, REQ-ISO-01 (protected), REQ-TONE-02",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"result\": \"escalate\"",
+      "coverage_table",
+      "established",
+      "narrowly_demonstrated",
+      "untested",
+      "REQ-ISO-01",
+      "rcpt-4f22",
+      "missing_coverage_plan",
+      "requires_other_authority",
+      "W11"
+    ],
+    "must_not_include": [
+      "\"result\": \"ready\"",
+      "tests passed",
+      "safe for production",
+      "I ran",
+      "verified by running"
+    ],
+    "checks": [
+      "REQ-DRAFT-01 is placed in established with rcpt-4f21 and the held-out split cited.",
+      "REQ-ISO-01 is placed in untested (or an explicitly failing set), never in established, and the verdict is escalate or blocked because a protected criterion fails its frozen threshold.",
+      "REQ-TONE-02 is placed in narrowly_demonstrated (threshold met, n=38 below min_n 40) with a dataset-curator follow-up to reach min_n.",
+      "All five manager-contract items are present: bounded assessment, verdict with reason and references, specific gaps with the next resolving task, specialist assignments with inputs, outputs, dependencies and budget, and changes needing another team or human authority.",
+      "No sentence claims the manager executed a command, ran a test or verified a result itself."
+    ]
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "role_id": "learning-steward",
+  "label": "unrun",
+  "scenario": "W12 propose-learning stage. Four audited W02 runs on the Reply Assist corpus (cases c-201, c-214, c-230, c-233 with receipts rcpt-0711, rcpt-0745, rcpt-0790, rcpt-0802) produced acceptance maps without a no-send negative case although LS-POL-02 R2 was in scope, against agents/acceptance-designer.md@v0.1.0 (hash 7a3d...). A fifth run c-240 has no receipt. Threshold reference policy-0.1#learning.min_cases is 3. Protected list policy-0.1#protected does not include the acceptance-designer Method text. Held-out set ho-w02@v3 exists. Return the improvement proposal.",
+  "input_refs": [
+    {
+      "kind": "validation",
+      "title": "four audited W02 runs with receipts rcpt-0711, rcpt-0745, rcpt-0790, rcpt-0802",
+      "synthetic": true
+    },
+    {
+      "kind": "validation",
+      "title": "run c-240 without a receipt",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "agents/acceptance-designer.md@v0.1.0, hash 7a3d...",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "policy-0.1: learning.min_cases = 3, protected list, learning.pass threshold",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "ho-w02@v3 held-out set manifest",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "LS-POL-02 reply policy, rule R2 drafts only",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "admitted_cases",
+      "\"count\": 4",
+      "c-240",
+      "threshold_ref",
+      "text_unclear",
+      "protected_touch",
+      "v0.1.1-cand",
+      "supersedes",
+      "\"proposed\"",
+      "must_not_change",
+      "regression_only",
+      "rollback",
+      "7a3d"
+    ],
+    "must_not_include": [
+      "\"status\": \"promoted\"",
+      "promote now",
+      "edited in place",
+      "\"result\": \"insufficient_evidence\"",
+      "\"candidate\": null"
+    ],
+    "checks": [
+      "Four cases are admitted with receipt and claim ids, c-240 is excluded for lacking a receipt, and count 4 is compared with the named threshold.",
+      "The cause is classified with the step cited, protected_touch is false against the named list, and the candidate has a distinct version id and hash with a supersedes edge marked proposed.",
+      "drift_check shows parity_preserved with the cited cause as the only intentional_change row.",
+      "expected_improvement names metric, slice, baseline 0/4, direction and a threshold by reference, and held_out_tests lists the four motivating cases as regression_only against ho-w02@v3.",
+      "rollback names v0.1.0 with hash 7a3d... and promotion.status is proposed with independent review and audit-manager named."
+    ]
+  }
+}

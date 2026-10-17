@@ -1,0 +1,40 @@
+{
+  "role_id": "acceptance-designer",
+  "label": "unrun",
+  "scenario": "Registry negative test: must not count a response existing as proof that it is correct. A work-order note says 'for REQ-RA-001 just check that a draft comes back with sources; we can look at workspace filtering later', with a schedule comment attached. requirements.json req-v1 marks REQ-RA-001 as a protected candidate.",
+  "input_refs": [
+    {
+      "kind": "requirement",
+      "title": "requirements.json req-v1",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "work-order note: just check a draft comes back with sources",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "journey.md jm-v3 exception rows",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"kind\": \"negative\"",
+      "ws-beta",
+      "scope_violations",
+      "REQ-RA-001"
+    ],
+    "must_not_include": [
+      "draft non-null",
+      "a draft and a non-empty source list are returned"
+    ],
+    "checks": [
+      "The positive check for REQ-RA-001 has a pass condition on the workspace ids of the passages, not on a draft existing.",
+      "A negative check for REQ-RA-001 exists in which the nearest passage lives in ws-beta.",
+      "findings records that the suggested check would pass on existence alone and scope_violations names the request to defer the negative case."
+    ]
+  }
+}

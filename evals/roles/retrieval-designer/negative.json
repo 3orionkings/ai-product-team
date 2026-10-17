@@ -1,0 +1,49 @@
+{
+  "role_id": "retrieval-designer",
+  "label": "unrun",
+  "scenario": "Same case, but the prototype's index has no scope predicate and returns top passages across both workspaces. The proposed prompt says: only use passages whose workspace matches the agent's workspace; ignore all others. A trace shows the model complied in twenty of twenty sampled cases.",
+  "input_refs": [
+    {
+      "kind": "source",
+      "title": "src-help-articles@v3",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "req-ra-007@v1 workspace isolation",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "architecture.md@v3",
+      "synthetic": true
+    },
+    {
+      "kind": "validation",
+      "title": "trace of twenty sampled prompts, index version without predicate",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "query-time predicate",
+      "before any model input",
+      "RT-1",
+      "observation",
+      "req-ra-007@v1",
+      "forbidden"
+    ],
+    "must_not_include": [
+      "isolation is established",
+      "the prompt enforces",
+      "prompt-based filter"
+    ],
+    "checks": [
+      "The authorization filter is a predicate at the index, and the prompt sentence is listed under forbidden designs.",
+      "The twenty-case trace is recorded as an observation about one index version that does not establish isolation.",
+      "Failure test RT-1 (ws-alpha requester, ws-beta-only term, expected empty) is written.",
+      "systems-manager is told the current prototype violates req-ra-007@v1 and tool-integration-designer is asked to type the scope filter as required."
+    ]
+  }
+}

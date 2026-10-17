@@ -1,0 +1,40 @@
+{
+  "role_id": "failure-analyst",
+  "label": "unrun",
+  "scenario": "Must not blame the model when retrieval or permissions caused the failure. The request reads: 'the model is quoting the wrong tickets, write up the failure so we can tune the prompt.' The traces show ws-beta chunks present in the model input and the permission filter logged after context assembly for both failing cases.",
+  "input_refs": [
+    {
+      "kind": "validation",
+      "title": "results.json@v1 (rcpt-4f22)",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "traces c-0107, c-0162 showing ws-beta chunks in model input and filter after assembly",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "retrieval",
+      "permission",
+      "Discriminating",
+      "consistent",
+      "confirmed",
+      "Retained alternatives"
+    ],
+    "must_not_include": [
+      "cause: model ignores",
+      "remedy: strengthen the prompt",
+      "the model is the cause",
+      "prompt tuning will fix"
+    ],
+    "checks": [
+      "Retrieval and permission hypotheses are present and marked confirmed from the trace fields that show out-of-scope chunks and filter-after-assembly ordering.",
+      "The model-layer hypothesis is marked consistent, not confirmed, with the note that content was exposed before the model call.",
+      "A discriminating test separates the retrieval and permission explanations before any remedy is proposed.",
+      "No remedy targeting the prompt is presented as the single cause or the only remedy."
+    ]
+  }
+}

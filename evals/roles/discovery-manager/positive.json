@@ -1,0 +1,38 @@
+{
+  "role_id": "discovery-manager",
+  "label": "unrun",
+  "scenario": "W01 Review stage for Reply Assist at Larkspur Support. opportunity-comparison.md v1 recommends draft assistance over doing nothing and a template library, with all three rows on the same criteria. Claim C2 (agents retype the same three answers daily) cites one ws-alpha ticket; claim C3 (drafting saves ten minutes per ticket) has no source. The review must return a verdict, decision-changing gaps and specialist assignments.",
+  "input_refs": [
+    {"kind": "artifact", "title": "context-brief.md v3 (Reply Assist)", "synthetic": true},
+    {"kind": "artifact", "title": "questions-and-decisions.md v2", "synthetic": true},
+    {"kind": "artifact", "title": "opportunity-comparison.md v1", "synthetic": true},
+    {"kind": "source", "title": "src-policy-2026-09 (drafts only)", "synthetic": true},
+    {"kind": "source", "title": "src-tickets-q3 (one ws-alpha ticket)", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"result\": \"revise\"",
+      "\"support\": \"out_of_scope\"",
+      "\"support\": \"uncited\"",
+      "decision_changed",
+      "proposed_assignments",
+      "customer-researcher",
+      "requires_other_authority",
+      "not an independent audit"
+    ],
+    "must_not_include": [
+      "\"result\": \"ready\"",
+      "C2 supported",
+      "tests passed"
+    ],
+    "checks": [
+      "Every claim the recommendation depends on (C1, C2, C3) appears in findings with a support value and a consequence_if_false.",
+      "comparison_check records explicit values for do_nothing_row, non_ai_row, same_criteria and recommendation_follows.",
+      "Each gap names the decision it changes and a resolving task; none reads as generic advice to do more research.",
+      "Each proposed assignment names a role, input versions, expected output, dependencies and a budget mode.",
+      "The review states that it is a manager review, not an independent audit and not test execution, and observed_checks is empty.",
+      "Any option that sends replies is listed under requires_other_authority with human-owner as the authority."
+    ]
+  }
+}

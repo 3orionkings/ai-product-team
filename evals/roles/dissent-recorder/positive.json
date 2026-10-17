@@ -1,0 +1,67 @@
+{
+  "role_id": "dissent-recorder",
+  "label": "unrun",
+  "scenario": "W11 record for Reply Assist at Larkspur Support. prop-rt-12@v4 (revised after round 1) accepted by decision.json@v1 within delegation. Challenges: chl-031 (assumption-challenger, sess-c41: isolation on the cached-summary path) and chl-032 (alternative-advocate, sess-c42: per-workspace alternative unscored on Q1). judgment.json@v1 resolves chl-031 by val-090 (canary test, zero occurrences on retrieval@2f9c) and overrules chl-032 ('Q1 evidence for C1 absent; B meets threshold on val-081; C1 run deferred as a next test'). decision.json@v1 has dissent: none. Produce dissent-register.json.",
+  "input_refs": [
+    {
+      "kind": "challenge",
+      "title": "chl-031@v1",
+      "synthetic": true
+    },
+    {
+      "kind": "challenge",
+      "title": "chl-032@v1",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "challenge-response.json@v1",
+      "synthetic": true
+    },
+    {
+      "kind": "review",
+      "title": "judgment.json@v1",
+      "synthetic": true
+    },
+    {
+      "kind": "decision",
+      "title": "decision.json@v1",
+      "synthetic": true
+    },
+    {
+      "kind": "validation",
+      "title": "val-090",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "objection_verbatim",
+      "trail",
+      "resolution_state",
+      "resolved_by_evidence",
+      "overruled",
+      "resolution_grounds",
+      "owner",
+      "consequence_if_right",
+      "next_evidence",
+      "revisit_trigger",
+      "discrepancies",
+      "status_brief",
+      "proposed_links"
+    ],
+    "must_not_include": [
+      "unanimous agreement",
+      "\"discrepancies\": []",
+      "paraphrased"
+    ],
+    "checks": [
+      "chl-031 is resolved_by_evidence citing val-090 in its trail; chl-032 is overruled citing judgment.json@v1, not the decision's acceptance.",
+      "The overruled entry has an owner, the consequence if right, the C1 next evidence with both outcomes, and a revisit trigger.",
+      "discrepancies records decision.json@v1 dissent 'none' against the overruled entry.",
+      "Each objection text is copied verbatim from its source record version.",
+      "requested_followups contains the C1 evaluation work order and a note to decision-recorder referencing the register."
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "role_id": "workflow-orchestrator",
+  "label": "unrun",
+  "scenario": "Larkspur Support, Reply Assist. Root session via aipt-start, mode standard. Request: 'In requirements v3, change the label text Send to Save draft on REQ-014.' Case state: W02 outputs are current and accepted; REQ-014 is not protected; the change aligns the label with req-012 (drafts only).",
+  "input_refs": [
+    {
+      "kind": "requirement",
+      "title": "REQ-014 insertion control label, not protected, status approved",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "requirements@v3 current accepted",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "acceptance-map@v1 current accepted",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "req-012 drafts only, protected",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "requirements-writer",
+      "focused",
+      "REQ-014",
+      "omitted_roles",
+      "satisfied_by_version_id",
+      "planned_tasks"
+    ],
+    "must_not_include": [
+      "\"deep\"",
+      "re-run for consistency",
+      "\"planned_tasks\": 14"
+    ],
+    "checks": [
+      "The route is a specialist route with requirements-writer as the only selected role and mode focused.",
+      "Every W02 stage role appears in omitted_roles with satisfied_by_version_id; directors and judges are omitted with a reason naming no tradeoff, no dispute and no protected scope.",
+      "budget_check shows one planned task and fits true; mode is not raised.",
+      "Reconciliation checks that the diff touches only REQ-014 and leaves its status unchanged, and routes to W10 if meaning or a protected flag changed."
+    ]
+  }
+}

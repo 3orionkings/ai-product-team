@@ -1,0 +1,38 @@
+{
+  "role_id": "evidence-curator",
+  "label": "unrun",
+  "scenario": "Version and index located-sources.json v2 from the Reply Assist case: docs/reply-assist/policy-v3.md read in full (printed date 2026-09-04, scope ws-alpha and ws-beta, drafts only) and decks/launch-2025-11.pdf read for slides 1-9 with the date inferred from its filename and researcher bounds 'slides 10-14 not read' and 'no policy version cited'. Classification rules mark docs/ and decks/ as case-internal. The ledger already holds S-policy v2 with a different hash.",
+  "input_refs": [
+    {"kind": "artifact", "title": "located-sources.json v2", "synthetic": true},
+    {"kind": "source", "title": "S-policy v2 (existing ledger record, different hash)", "synthetic": true},
+    {"kind": "case", "title": "Classification rules: docs/ and decks/ case-internal", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"source_id\": \"S-policy\"",
+      "\"source_id\": \"S-deck\"",
+      "\"supersedes\": \"S-policy v2\"",
+      "\"public_example_safe\": false",
+      "\"inferred\"",
+      "\"basis\"",
+      "Slides 10-14 not read",
+      "No policy version cited",
+      "paraphrase",
+      "limitation_count"
+    ],
+    "must_not_include": [
+      "\"body\":",
+      "\"access_class\": \"public\"",
+      "\"relation\": \"supports\"",
+      "\"stated\": {\"title\": \"Reply Assist launch deck\", \"date\": \"2025-11-12\""
+    ],
+    "checks": [
+      "S-policy gets a new version v3 that supersedes v2; v2 is not overwritten.",
+      "The deck's date is null under stated and appears under inferred with the filename basis.",
+      "All three researcher limitations for the deck are present on the S-deck record.",
+      "Excerpts carry position and paraphrase only; no body field appears because both roots are case-internal.",
+      "proposed_links contains only the S-policy v3 supersedes v2 edge, and requested_followups asks evidence-linker for claim links."
+    ]
+  }
+}

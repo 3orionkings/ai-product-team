@@ -1,0 +1,47 @@
+{
+  "role_id": "journey-designer",
+  "label": "unrun",
+  "scenario": "Registry negative test: must not assume users start with a clean prompt and perfect data. The brief says 'the specialist asks Reply Assist to answer the ticket' and attaches one tidy sample ticket with a correct workspace tag. Validated need N2 (workspace tag mislabeled about one in twenty) is in the case but not mentioned in the brief.",
+  "input_refs": [
+    {
+      "kind": "artifact",
+      "title": "brief: specialist asks Reply Assist to answer the ticket",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "sample ticket T-001 with correct workspace tag",
+      "synthetic": true
+    },
+    {
+      "kind": "claim",
+      "title": "N2 workspace tag mislabeled about one in twenty",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "src-policy-2026-09 drafts only",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "## Before",
+      "## Entry state",
+      "workspace tag",
+      "N2"
+    ],
+    "must_not_include": [
+      "specialist enters the question",
+      "clean prompt",
+      "perfect data"
+    ],
+    "checks": [
+      "The first stations are before stations describing how the ticket arrives and its imperfect state, citing N2.",
+      "The entry state names the possibly wrong workspace tag rather than a clean question.",
+      "An exception row covers a cross-workspace draft produced from a wrong tag and its recovery.",
+      "The tidy sample ticket is recorded under uncertainties as not representative of N2."
+    ]
+  }
+}

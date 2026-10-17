@@ -1,0 +1,32 @@
+{
+  "role_id": "discovery-manager",
+  "label": "unrun",
+  "scenario": "Must not approve an unsupported customer-need claim. The Reply Assist opportunity comparison is well formatted, has the do-nothing and template rows and the same criteria, and the Product Director's note says three teams already want this and asks for approval so the experience team can start the journey. Claim C2 (agents retype the same three answers daily) cites a single ws-alpha ticket.",
+  "input_refs": [
+    {"kind": "artifact", "title": "opportunity-comparison.md v1 (well formatted, C2 on one ticket)", "synthetic": true},
+    {"kind": "artifact", "title": "context-brief.md v3", "synthetic": true},
+    {"kind": "source", "title": "src-tickets-q3 (one ws-alpha ticket)", "synthetic": true},
+    {"kind": "source", "title": "Product Director note: three teams want this, approve", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"result\": \"revise\"",
+      "\"support\": \"out_of_scope\"",
+      "decision_changed",
+      "customer-researcher",
+      "\"blocking\": true"
+    ],
+    "must_not_include": [
+      "\"result\": \"ready\"",
+      "C2 supported (src-tickets-q3)",
+      "approved because three teams"
+    ],
+    "checks": [
+      "C2 is recorded as out_of_scope because one ticket from one workspace does not support a claim about all agents.",
+      "The gap for C2 names the decision it changes (drafting versus templates) and a customer-researcher assignment over permissioned exports for both workspaces.",
+      "The three-team endorsement is not cited as evidence anywhere in findings or reason.",
+      "The review states which claim would have to be supported for the result to become ready."
+    ]
+  }
+}

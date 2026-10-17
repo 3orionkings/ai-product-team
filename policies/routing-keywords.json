@@ -1,0 +1,235 @@
+{
+  "schema_version": "0.1",
+  "as_of": "2026-10-17",
+  "source": "registry/workflows.json titles and inputs; docs/spec/02_ARCHITECTURE.md sections 8.1 and 8.3; docs/architecture/controller-contracts.md section 10",
+  "description": "Dated, editable trigger phrases for the keyword stage of routing. An explicit workflow or role always wins over this table. Matching is case-insensitive on whole words or phrases. A request that matches an external_action_keyword is routed at the top risk tier with human_action_request=true and no executable stage. A request that matches a narrow_request_pattern must produce a narrow plan (see narrow_routes), never directors, judges or every specialist.",
+  "workflows": {
+    "W01": [
+      "should we add ai",
+      "assess opportunity",
+      "add ai to this workflow",
+      "is ai worth it",
+      "current workflow",
+      "existing alternatives",
+      "opportunity brief",
+      "compare options"
+    ],
+    "W02": [
+      "shape feature",
+      "feature proposal",
+      "turn these documents into",
+      "requirements",
+      "acceptance criteria",
+      "acceptance map",
+      "user journey",
+      "authorized corpus"
+    ],
+    "W03": [
+      "design system",
+      "design how this ai feature should work",
+      "architecture",
+      "component contracts",
+      "permissions",
+      "tool constraints",
+      "retrieval design",
+      "failure and evaluation plan"
+    ],
+    "W04": [
+      "build prototype",
+      "build a bounded version",
+      "prototype",
+      "implement",
+      "target repository",
+      "write authorization",
+      "test receipts",
+      "handoff"
+    ],
+    "W05": [
+      "evaluate feature",
+      "evaluate this feature",
+      "evaluation plan",
+      "task cases",
+      "expected behaviors",
+      "candidate configurations",
+      "failure slice",
+      "run the evals"
+    ],
+    "W06": [
+      "investigate failure",
+      "why this feature is failing",
+      "failure report",
+      "regression",
+      "incident",
+      "traces",
+      "root cause",
+      "discriminating test"
+    ],
+    "W07": [
+      "compare models",
+      "would another model",
+      "candidate models",
+      "model comparison",
+      "which model",
+      "like-for-like",
+      "migration or retention",
+      "switch model"
+    ],
+    "W08": [
+      "optimize cost latency",
+      "optimize cost",
+      "reduce cost",
+      "reduce waiting",
+      "latency",
+      "too slow",
+      "too expensive",
+      "measured usage"
+    ],
+    "W09": [
+      "review release",
+      "ready for release",
+      "release readiness",
+      "frozen build",
+      "proposed rollout",
+      "rollout scope",
+      "go live",
+      "launch review"
+    ],
+    "W10": [
+      "process change",
+      "something changed",
+      "what must we revisit",
+      "source changed",
+      "artifact changed",
+      "impact queue",
+      "dependency graph",
+      "revalidate"
+    ],
+    "W11": [
+      "resolve decision",
+      "challenge this proposal",
+      "resolve the disagreement",
+      "disputed",
+      "disagreement",
+      "decide between",
+      "which option",
+      "delegation record"
+    ],
+    "W12": [
+      "learn from outcomes",
+      "verified outcomes",
+      "improve the product or team",
+      "audited runs",
+      "failed approaches",
+      "retrospective",
+      "what did we learn",
+      "improvement proposal"
+    ]
+  },
+  "external_action_keywords": [
+    "deploy",
+    "deploy to",
+    "publish",
+    "send",
+    "send email",
+    "send the email",
+    "email the",
+    "notify customers",
+    "pay",
+    "payment",
+    "purchase",
+    "charge the card",
+    "transfer funds",
+    "delete production",
+    "drop table",
+    "drop the table",
+    "wipe",
+    "production",
+    "push to main",
+    "release to users",
+    "go live now",
+    "broaden access",
+    "grant access",
+    "rotate credentials",
+    "post to",
+    "tweet"
+  ],
+  "narrow_request_patterns": [
+    "summarize",
+    "summarise",
+    "summary of",
+    "give me a summary",
+    "reword",
+    "rewrite one requirement",
+    "rewrite this requirement",
+    "rewrite this sentence",
+    "fix wording",
+    "fix the wording",
+    "proofread",
+    "explain this",
+    "what does this say",
+    "list the",
+    "check this claim",
+    "is this claim supported"
+  ],
+  "narrow_routes": {
+    "summarize": [
+      "context-analyst",
+      "claim-checker"
+    ],
+    "summarise": [
+      "context-analyst",
+      "claim-checker"
+    ],
+    "summary of": [
+      "context-analyst",
+      "claim-checker"
+    ],
+    "give me a summary": [
+      "context-analyst",
+      "claim-checker"
+    ],
+    "explain this": [
+      "context-analyst",
+      "claim-checker"
+    ],
+    "what does this say": [
+      "context-analyst",
+      "claim-checker"
+    ],
+    "list the": [
+      "context-analyst"
+    ],
+    "check this claim": [
+      "claim-checker"
+    ],
+    "is this claim supported": [
+      "claim-checker"
+    ],
+    "reword": [
+      "requirements-writer"
+    ],
+    "rewrite one requirement": [
+      "requirements-writer"
+    ],
+    "rewrite this requirement": [
+      "requirements-writer"
+    ],
+    "rewrite this sentence": [
+      "requirements-writer"
+    ],
+    "fix wording": [
+      "requirements-writer"
+    ],
+    "fix the wording": [
+      "requirements-writer"
+    ],
+    "proofread": [
+      "requirements-writer"
+    ]
+  },
+  "fallback": {
+    "workflow_id": "W01",
+    "confidence": "fallback",
+    "note": "When nothing matches, propose the lowest-complexity workflow and say so in the route plan."
+  }
+}

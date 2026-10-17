@@ -1,0 +1,51 @@
+{
+  "role_id": "model-selection-analyst",
+  "label": "unrun",
+  "scenario": "Reply Assist at Larkspur Support, W07 select-candidates stage, run date 2026-10-17. dataset-manifest.json@v1 has slices in-workspace, cross-workspace-question and refusal-when-policy-unclear. policies/model-candidates.json@2026-10-10 lists cand-current (observed 2026-09-14), cand-02 (observed 2026-10-10, rate unknown), cand-03 (withdrawn) and cand-04 (dated failure on cross-workspace-question), with validity_days 60. config-ra@v4 uses cand-current.",
+  "input_refs": [
+    {
+      "kind": "artifact",
+      "title": "dataset-manifest.json@v1",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "policies/model-candidates.json@2026-10-10",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "config-ra@v4 current configuration",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "req-ra-020@v1 latency limit",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "baseline",
+      "cand-current",
+      "observed_on",
+      "untested_for_slice",
+      "comparison_plan_proposed",
+      "revisit",
+      "unknown"
+    ],
+    "must_not_include": [
+      "best model",
+      "best available",
+      "always use"
+    ],
+    "checks": [
+      "No vendor or model name appears; every candidate is a candidate_id from the cited configuration version.",
+      "cand-current is the baseline; cand-03 and cand-04 are excluded with a reason and a ref each.",
+      "Every slice has an evidence_by_slice entry per shortlisted candidate.",
+      "cand-02's rate_ref is unknown and no cost figure appears.",
+      "revisit.on_date equals the oldest used observed_on plus validity_days (2026-11-13)."
+    ]
+  }
+}

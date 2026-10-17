@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/requirement",
+  "title": "Requirement",
+  "description": "An approved or proposed requirement. Protected requirements are never retired because an implementation failed.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "statement",
+    "owner",
+    "acceptance_criteria",
+    "protected",
+    "originating_refs",
+    "status"
+  ],
+  "properties": {
+    "statement": {
+      "type": "string",
+      "minLength": 1
+    },
+    "owner": {
+      "type": "string",
+      "description": "Owning role or 'human-owner'.",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "protected": {
+      "type": "boolean"
+    },
+    "originating_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "An identifier minted by ids.new_id().",
+        "minLength": 1
+      },
+      "description": "Decision or source versions the requirement derives from."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "approved",
+        "retired",
+        "superseded"
+      ]
+    }
+  }
+}

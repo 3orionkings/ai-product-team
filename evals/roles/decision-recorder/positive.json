@@ -1,0 +1,49 @@
+{
+  "role_id": "decision-recorder",
+  "label": "unrun",
+  "scenario": "Larkspur Support, Reply Assist. Controller event evt-918 committed decision.json dec-11 for prop-iso-03@v2 (hash h-8c1f): element e1 accepted within delegation del-04 (bound h-8c1f, host-attested, expires 2026-11-30), element e2 (pilot enablement) human required. Judgment jdg-06 recommended opt-A, found opt-B failing protected crit-01 on val-iso-05, left opt-C unknown on crit-01, preserved dissent ch-10 with resolving test val-meta-02, and listed crit-03 latency as uncertainty. Evidence: val-iso-07@v1, val-iso-09@v1, val-iso-05@v1, val-send-03@v1, er-04. No later proposal version exists. W11 record stage.",
+  "input_refs": [
+    {"kind": "event", "title": "evt-918 decision transition committing dec-11", "synthetic": true},
+    {"kind": "decision", "title": "decision.json dec-11: e1 accepted_within_delegation, e2 human_required", "synthetic": true},
+    {"kind": "proposal", "title": "prop-iso-03@v2, hash h-8c1f", "synthetic": true},
+    {"kind": "approval", "title": "del-04, host_attested, bound h-8c1f, expires 2026-11-30", "synthetic": true},
+    {"kind": "review", "title": "judgment jdg-06 with option_matrix and preserved_dissent ch-10", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "dec-11",
+      "evt-918",
+      "h-8c1f",
+      "bound_hash",
+      "binding",
+      "match",
+      "host_attested",
+      "selected_option",
+      "opt-A",
+      "rejected_alternatives",
+      "opt-B",
+      "opt-C",
+      "dissent",
+      "ch-10",
+      "revisit_conditions",
+      "2026-11-30",
+      "val-meta-02",
+      "Applies to",
+      "Later proposal versions",
+      "proposed_links"
+    ],
+    "must_not_include": [
+      "dissent resolved",
+      "unanimous",
+      "prop-iso-03@v3",
+      "approval carried forward"
+    ],
+    "checks": [
+      "The record cites evt-918 as event_ref and binds proposal hash h-8c1f beside authority bound_hash h-8c1f with binding match and state accepted.",
+      "rejected_alternatives lists opt-B with its protected crit-01 failure on val-iso-05 and opt-C with its unknown crit-01; the rationale is at most five sentences drawn from the judgment grounds.",
+      "dissent lists ch-10 with state_at_record unresolved and resolving test val-meta-02; revisit_conditions include the del-04 expiry, a val-meta-02 failure, and a version change of req-iso-01 or req-send-01.",
+      "The brief's Applies to names prop-iso-03@v2 (h-8c1f) only, Later proposal versions reads none, and proposed_links connect dec-11 to the proposal version, del-04 and jdg-06."
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "role_id": "adversarial-orchestrator",
+  "label": "unrun",
+  "scenario": "W11 choose-challenges under the standard budget (max_challenge_rounds 1, 7 worker tasks remaining), round 1. Frozen decision-packet.json@v2 recommends prop-rt-12@v3 option B for Reply Assist at Larkspur Support: a shared retrieval index across ws-alpha and ws-beta with a query-time workspace filter. Frozen criteria: REQ-ISO-01 (protected, no cross-workspace content), draft-quality slice score, p95 retrieval latency. Evidence: clm-208 (hypothesis that the filter is sufficient) and val-077 (passage retrieval only, on an older target). Author session sess-a17. Produce challenge-plan.json with work orders for the root to dispatch.",
+  "input_refs": [
+    {
+      "kind": "artifact",
+      "title": "decision-packet.json@v2",
+      "synthetic": true
+    },
+    {
+      "kind": "proposal",
+      "title": "prop-rt-12@v3",
+      "synthetic": true
+    },
+    {
+      "kind": "claim",
+      "title": "clm-208",
+      "synthetic": true
+    },
+    {
+      "kind": "validation",
+      "title": "val-077",
+      "synthetic": true
+    },
+    {
+      "kind": "run",
+      "title": "run budget: standard, round 1 of 1",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "budget_check",
+      "challenges_selected",
+      "premises_considered",
+      "materially_different_from",
+      "work_orders",
+      "independence_check",
+      "sess-a17",
+      "requested_followups",
+      "REQ-ISO-01",
+      "requires_other_authority"
+    ],
+    "must_not_include": [
+      "dispatched",
+      "spawned",
+      "child_id",
+      "\"round\": 2",
+      "option B fails",
+      "reject option"
+    ],
+    "checks": [
+      "challenges_selected is at most challenges_allowed and at most the number of kept premises.",
+      "Each selected challenge targets a different premise, and every slot after the first names what it is materially different from.",
+      "Every work order lists input versions, expected artifact, write scope, budget and an independence check excluding sess-a17.",
+      "Work orders appear in requested_followups and nothing in the envelope claims a challenger was started or ran.",
+      "The result is ready, revise, blocked or escalate with a reason, and the plan states no verdict on the proposal."
+    ]
+  }
+}

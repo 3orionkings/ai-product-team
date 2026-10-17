@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/artifact",
+  "title": "Artifact",
+  "description": "An immutable produced artifact version. Status separates implemented from verified; access_classification travels with every derivative.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "kind",
+    "path",
+    "content_hash",
+    "producer_role",
+    "producer_task",
+    "write_scope",
+    "implements_refs",
+    "status",
+    "access_classification"
+  ],
+  "properties": {
+    "kind": {
+      "type": "string",
+      "description": "Artifact type, matching a workflow stage 'artifact' when produced by a stage.",
+      "minLength": 1
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "content_hash": {
+      "type": "string",
+      "description": "SHA-256 of the content.",
+      "minLength": 1
+    },
+    "producer_role": {
+      "type": "string",
+      "description": "A role id from registry/agents.json, or 'human-owner'.",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "producer_task": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Producing task id; null for human-supplied artifacts."
+    },
+    "producer_session": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Host child/session id when observable."
+    },
+    "write_scope": {
+      "type": "string",
+      "enum": [
+        "proposal-only",
+        "assigned-worktree",
+        "verification-sandbox"
+      ]
+    },
+    "implements_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "An identifier minted by ids.new_id().",
+        "minLength": 1
+      },
+      "description": "Requirement versions the artifact claims to implement."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "implemented_not_verified",
+        "verified_for_scope",
+        "changes_required",
+        "revalidation_required",
+        "archived"
+      ]
+    },
+    "access_classification": {
+      "type": "string",
+      "enum": [
+        "public",
+        "private",
+        "synthetic"
+      ]
+    }
+  }
+}

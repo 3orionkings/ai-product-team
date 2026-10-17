@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/registry-agent",
+  "title": "Registry agent record",
+  "description": "One element of registry/agents.json 'agents'. The registry loader validates referential rules (reports_to resolves, skills exist); this schema fixes structure only.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "number",
+    "id",
+    "native_name",
+    "name",
+    "type",
+    "team",
+    "reports_to",
+    "reviewed_by",
+    "description",
+    "skill_ids",
+    "input_contract",
+    "output_contract",
+    "distinctive_rule",
+    "negative_test",
+    "write_scope",
+    "may_dispatch",
+    "acceptance_authority",
+    "status",
+    "dispatch_condition"
+  ],
+  "properties": {
+    "number": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Catalog position; unique across agents."
+    },
+    "id": {
+      "type": "string",
+      "description": "Stable role id; also the role body file name agents/<id>.md.",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "native_name": {
+      "type": "string",
+      "description": "Installed name on a host: 'aipt-' + id.",
+      "pattern": "^aipt-[a-z][a-z0-9-]*$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable role title.",
+      "minLength": 1
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "leader",
+        "orchestrator",
+        "manager",
+        "specialist",
+        "steward",
+        "reviewer",
+        "builder",
+        "executor",
+        "adversarial_orchestrator",
+        "challenger",
+        "judge",
+        "decision_maker",
+        "auditor"
+      ]
+    },
+    "team": {
+      "type": "string",
+      "description": "Team id from the registry 'teams' list.",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "reports_to": {
+      "type": "string",
+      "description": "Manager, director or 'human-owner'.",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "reviewed_by": {
+      "type": "string",
+      "description": "Default reviewer role or 'human-owner'.",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "skill_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^S(0[1-9]|1[0-9]|2[0-8])$"
+      },
+      "description": "Shared method skills (S01-S28) the role loads.",
+      "uniqueItems": true
+    },
+    "input_contract": {
+      "type": "string",
+      "minLength": 1
+    },
+    "output_contract": {
+      "type": "string",
+      "minLength": 1
+    },
+    "distinctive_rule": {
+      "type": "string",
+      "minLength": 1
+    },
+    "negative_test": {
+      "type": "string",
+      "minLength": 1
+    },
+    "write_scope": {
+      "type": "string",
+      "enum": [
+        "proposal-only",
+        "assigned-worktree",
+        "verification-sandbox"
+      ]
+    },
+    "may_dispatch": {
+      "type": "boolean",
+      "description": "True only for the root orchestrator."
+    },
+    "acceptance_authority": {
+      "type": "string",
+      "description": "'none' or a bounded delegation label; authority is enforced by policies/authority.json, not by this field.",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "description": "Implementation status label, e.g. specified_not_implemented.",
+      "minLength": 1
+    },
+    "dispatch_condition": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

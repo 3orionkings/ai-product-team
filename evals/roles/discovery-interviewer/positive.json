@@ -1,0 +1,32 @@
+{
+  "role_id": "discovery-interviewer",
+  "label": "unrun",
+  "scenario": "Answers arrive for the Reply Assist pilot after questions-and-decisions.md v1 returned needs_input. A requester note dated 2026-10-14 answers Q1 (judge the pilot on agent handle time) and Q2 (the pilot may read ws-beta ticket history). Q2 changes a data-access scope that only human-owner may approve. D1 (workspace scope) and D2 (drafts only) were settled from the brief earlier. The role must write answers.json mapping each answer to its decision.",
+  "input_refs": [
+    {"kind": "artifact", "title": "questions-and-decisions.md v1 (Q1 -> D3, Q2 -> D4)", "synthetic": true},
+    {"kind": "artifact", "title": "context-brief.md v3", "synthetic": true},
+    {"kind": "source", "title": "src-note-2026-10-14 (requester answers to Q1 and Q2)", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"status\": \"settled\"",
+      "preference_only",
+      "authority_required",
+      "D3",
+      "D4",
+      "src-note-2026-10-14"
+    ],
+    "must_not_include": [
+      "D4 settled",
+      "approved by requester",
+      "Is ws-beta in scope?"
+    ],
+    "checks": [
+      "D3 is settled with the requester's answer, its source id and date, and the selection the answer makes.",
+      "D4 is recorded as preference_only with human-owner listed under authority_required; it is not settled.",
+      "D1 and D2 remain settled from the earlier material and are not re-asked.",
+      "open_decisions lists exactly the decisions without an authoritative answer."
+    ]
+  }
+}

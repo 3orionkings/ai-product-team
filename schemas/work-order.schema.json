@@ -1,0 +1,281 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/work-order",
+  "title": "Work order",
+  "description": "An admitted task's dispatch packet: identity plus the task envelope. $defs.task_envelope mirrors task-envelope.schema.json exactly (asserted by tests).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "task_id",
+    "role_id",
+    "envelope"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Work order id (prefix wo).",
+      "minLength": 1
+    },
+    "task_id": {
+      "type": "string",
+      "description": "An identifier minted by ids.new_id().",
+      "minLength": 1
+    },
+    "role_id": {
+      "type": "string",
+      "description": "A role id from registry/agents.json, or 'human-owner'.",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "envelope": {
+      "$ref": "#/$defs/task_envelope"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Admission time."
+    }
+  },
+  "$defs": {
+    "input_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_id",
+        "version_id",
+        "kind"
+      ],
+      "properties": {
+        "node_id": {
+          "type": "string",
+          "description": "An identifier minted by ids.new_id().",
+          "minLength": 1
+        },
+        "version_id": {
+          "type": "string",
+          "description": "An identifier minted by ids.new_id().",
+          "minLength": 1
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "source",
+            "claim",
+            "requirement",
+            "proposal",
+            "decision",
+            "artifact",
+            "validation",
+            "challenge",
+            "review",
+            "approval"
+          ]
+        }
+      },
+      "description": "An immutable input version."
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_steps",
+        "timeout_s"
+      ],
+      "properties": {
+        "max_steps": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timeout_s": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "tokens_cap": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "description": "Per-task limits."
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tools",
+        "unavailable",
+        "execution_mode"
+      ],
+      "properties": {
+        "tools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Tools the task may use."
+        },
+        "unavailable": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Tools that must not be simulated."
+        },
+        "execution_mode": {
+          "type": "string",
+          "enum": [
+            "native",
+            "sequential",
+            "manual_handoff",
+            "fixture_replay"
+          ]
+        }
+      },
+      "description": "Actual capabilities of the dispatch target."
+    },
+    "task_envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_id",
+        "run_id",
+        "task_id",
+        "role_id",
+        "role_version",
+        "objective",
+        "deliverable",
+        "input_refs",
+        "context_brief",
+        "allowed_sources",
+        "write_scope",
+        "output_paths",
+        "prohibited_actions",
+        "risk_tier",
+        "budget",
+        "expected_output_schema",
+        "acceptance_criteria",
+        "review_assignment",
+        "capabilities",
+        "stop_conditions",
+        "escalation_to",
+        "return_instruction"
+      ],
+      "properties": {
+        "case_id": {
+          "type": "string",
+          "description": "An identifier minted by ids.new_id().",
+          "minLength": 1
+        },
+        "run_id": {
+          "type": "string",
+          "description": "An identifier minted by ids.new_id().",
+          "minLength": 1
+        },
+        "task_id": {
+          "type": "string",
+          "description": "An identifier minted by ids.new_id().",
+          "minLength": 1
+        },
+        "role_id": {
+          "type": "string",
+          "description": "Role that performs the task.",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "role_version": {
+          "type": "string",
+          "description": "Version (hash or tag) of the role definition the task was built from.",
+          "minLength": 1
+        },
+        "objective": {
+          "type": "string"
+        },
+        "deliverable": {
+          "type": "string"
+        },
+        "input_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/input_ref"
+          }
+        },
+        "context_brief": {
+          "type": "string"
+        },
+        "allowed_sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Source ids or locators the task may read; must be within the case source_scope."
+        },
+        "write_scope": {
+          "type": "string",
+          "enum": [
+            "proposal-only",
+            "assigned-worktree",
+            "verification-sandbox"
+          ]
+        },
+        "output_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Paths the task may write; empty for proposal-only roles except proposals/."
+        },
+        "prohibited_actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "risk_tier": {
+          "type": "string",
+          "enum": [
+            "R0",
+            "R1",
+            "R2",
+            "R3"
+          ]
+        },
+        "budget": {
+          "$ref": "#/$defs/budget"
+        },
+        "expected_output_schema": {
+          "type": "string",
+          "description": "Schema name the response or artifact must satisfy.",
+          "minLength": 1
+        },
+        "acceptance_criteria": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "review_assignment": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "Reviewer, required independence and current conflict set; null when no review is assigned."
+        },
+        "capabilities": {
+          "$ref": "#/$defs/capabilities"
+        },
+        "stop_conditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "escalation_to": {
+          "type": "string",
+          "description": "Role or 'human-owner' that receives escalations.",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "return_instruction": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

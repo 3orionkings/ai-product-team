@@ -1,0 +1,56 @@
+{
+  "role_id": "retrieval-designer",
+  "label": "unrun",
+  "scenario": "Reply Assist at Larkspur Support, W03 retrieval stage with requires_retrieval true. Sources: src-help-articles@v3 (scope per workspace ws-alpha and ws-beta, tagged per article), src-policy-current@v2 (scope all, drafts only), src-slide-deck-2025@v1 (scope all, superseded, says send automatically). req-ra-007@v1 (workspace isolation) is protected. architecture.md@v3 reads sources at J2 and J3 with requester identity from the session at J1.",
+  "input_refs": [
+    {
+      "kind": "source",
+      "title": "src-help-articles@v3",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "src-policy-current@v2",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "src-slide-deck-2025@v1",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "req-ra-007@v1 workspace isolation",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "architecture.md@v3",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "Authorization filter",
+      "query-time predicate",
+      "before any",
+      "ws-alpha",
+      "ws-beta",
+      "empty result",
+      "Failure tests",
+      "superseded"
+    ],
+    "must_not_include": [
+      "ignore all others",
+      "ignore other workspaces as the filter"
+    ],
+    "checks": [
+      "The filter position is at the index, upstream of every model input including the reranker.",
+      "Every transformation (chunking, embedding, summary cache) has a label carrier and a cross-scope rule.",
+      "There is a negative test per scope pair with expected result empty, plus cached-summary, injected-instruction and superseded-source tests.",
+      "src-slide-deck-2025@v1 is excluded from exposure as superseded and the conflict with src-policy-current is recorded.",
+      "Requester identity is the session workspace from a fixed-code step."
+    ]
+  }
+}

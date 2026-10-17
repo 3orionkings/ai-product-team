@@ -1,0 +1,46 @@
+{
+  "role_id": "evidence-judge",
+  "label": "unrun",
+  "scenario": "Larkspur Support, Reply Assist. Frozen packet pkt-11@v1. Contested claim claim-c21@v1: The workspace-scoped filter prevents ws-alpha text from reaching the model for ws-beta requests; type hypothesis; declared scope all retrieval paths, both workspaces. Dependent: protected crit-01 for opt-A. Cited for: val-iso-07@v1 (query path, 40 ws-beta requests, 0 ws-alpha documents returned, receipt rcpt-311, target patch-filter@v1) and builder note note-pe-12 saying the summary cache is workspace-tagged. Cited against: ch-07 names the cached-summary path as untested. The threshold of 0 leaks in 40 was recorded in eval-plan-02@v1 before the run. W11 judge-sufficiency stage.",
+  "input_refs": [
+    {"kind": "claim", "title": "claim-c21@v1 hypothesis, scope all retrieval paths and both workspaces, contested", "synthetic": true},
+    {"kind": "validation", "title": "val-iso-07@v1 passed, query path, 40 cases, receipt rcpt-311, target patch-filter@v1", "synthetic": true},
+    {"kind": "review", "title": "note-pe-12 builder statement that the summary cache is workspace-tagged", "synthetic": true},
+    {"kind": "challenge", "title": "ch-07 cached-summary path untested", "synthetic": true},
+    {"kind": "artifact", "title": "eval-plan-02@v1 threshold frozen before results", "synthetic": true},
+    {"kind": "proposal", "title": "decision-packet pkt-11@v1", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "claim-c21@v1",
+      "declared_scope",
+      "load",
+      "admissible",
+      "claim_only",
+      "coverage",
+      "covered",
+      "uncovered",
+      "cached summaries",
+      "sufficient_for_narrower_claim",
+      "narrower_claim",
+      "patch-filter@v1",
+      "next_check",
+      "test-engineer",
+      "frozen_before_results"
+    ],
+    "must_not_include": [
+      "isolation is established",
+      "all paths covered",
+      "high confidence",
+      "recommended_option",
+      "release ready"
+    ],
+    "checks": [
+      "The ruling restates claim-c21@v1 verbatim with its type and lists its scope parts, including the cached-summary path, and states the load as protected crit-01 across the full declared scope.",
+      "val-iso-07@v1 is admissible with version and scope; note-pe-12 is inadmissible with reason claim_only; the agreement or confidence of any role carries no weight.",
+      "coverage has one row per scope part with the cached-summary path uncovered; the ruling is sufficient_for_narrower_claim and the narrower claim is written out naming patch-filter@v1, the query path and the 40-case set.",
+      "protocol_findings records the threshold as frozen before results; next_check names the cached-summary negative test with test-engineer as supplier; no option recommendation or release statement appears."
+    ]
+  }
+}

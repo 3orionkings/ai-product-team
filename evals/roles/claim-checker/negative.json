@@ -1,0 +1,31 @@
+{
+  "role_id": "claim-checker",
+  "label": "unrun",
+  "scenario": "Must reject a citation that is real but supports a different claim. Claim C-04 v1 (type fact): 'Reply Assist never sends a reply without human review.' The citation is S-policy v3, section 4, a real section of the controlling policy stating 'All drafts are logged with the reviewing agent's id for 90 days.' Section 2 of the same policy, not cited, contains the drafts-only statement.",
+  "input_refs": [
+    {"kind": "claim", "title": "C-04 v1 never sends without human review", "synthetic": true},
+    {"kind": "source", "title": "S-policy v3 section 4 (logging of reviewer ids)", "synthetic": true},
+    {"kind": "artifact", "title": "evidence-records.json entry for S-policy v3", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"verdict\": \"insufficient_evidence\"",
+      "\"kind\": \"different_claim\"",
+      "different_claim_supported",
+      "logged",
+      "section 2"
+    ],
+    "must_not_include": [
+      "\"verdict\": \"supported\"",
+      "\"mismatches\": []",
+      "authoritative source"
+    ],
+    "checks": [
+      "The verdict is insufficient_evidence with a different_claim mismatch, despite the source being the controlling policy and the section concerning review.",
+      "different_claim_supported states the logging proposition that section 4 does assert.",
+      "supported_variant is null, because no narrower form of the sending claim is carried by section 4.",
+      "requested_followups points the author to S-policy v3 section 2 as the next citation to assess, without the checker rewriting the ledger."
+    ]
+  }
+}

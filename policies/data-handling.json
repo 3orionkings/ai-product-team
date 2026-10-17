@@ -1,0 +1,95 @@
+{
+  "schema_version": "0.1",
+  "dated": "2026-10-17",
+  "source": "docs/spec/02_ARCHITECTURE.md section 14.4; docs/architecture/controller-contracts.md sections 8 and 9",
+  "description": "Default data scope and redaction. Scope is inherited through summaries, embeddings, reports and examples: private inputs do not become public because an agent paraphrased them.",
+  "telemetry": false,
+  "prompt_upload": false,
+  "trace_transmission": false,
+  "public_export_requires_allowlist": true,
+  "public_export_requires_redaction_review": true,
+  "demos": {
+    "synthetic_only": true,
+    "access_classification": "synthetic",
+    "note": "Public demonstrations use synthetic material only; examples/ never carries private inputs."
+  },
+  "allowed_provenance_record": "registry/sources.public.json",
+  "redaction": {
+    "apply_to": [
+      "receipts.stdout",
+      "receipts.stderr",
+      "exports"
+    ],
+    "replacement": "[REDACTED:<name>]",
+    "note": "Patterns are applied to stored logs and counted in receipt.redactions_applied. They catch common secret shapes, not every secret; redaction is a mitigation, not a guarantee.",
+    "patterns": [
+      {
+        "name": "private_key_block",
+        "pattern": "-----BEGIN [A-Z ]*PRIVATE KEY-----[\\s\\S]*?-----END [A-Z ]*PRIVATE KEY-----",
+        "enabled": true
+      },
+      {
+        "name": "aws_access_key_id",
+        "pattern": "\\b(?:AKIA|ASIA)[0-9A-Z]{16}\\b",
+        "enabled": true
+      },
+      {
+        "name": "aws_secret_access_key",
+        "pattern": "(?i)aws[_-]?secret[_-]?access[_-]?key\\s*[:=]\\s*[\\\"']?[A-Za-z0-9/+=]{40}\\b",
+        "enabled": true
+      },
+      {
+        "name": "bearer_token",
+        "pattern": "(?i)\\bbearer\\s+[A-Za-z0-9\\-._~+/]{16,}=*",
+        "enabled": true
+      },
+      {
+        "name": "authorization_header",
+        "pattern": "(?i)\\bauthorization\\s*[:=]\\s*[\\\"']?(?:basic|token)\\s+[A-Za-z0-9\\-._~+/]{8,}=*",
+        "enabled": true
+      },
+      {
+        "name": "generic_api_key_assignment",
+        "pattern": "(?i)\\b(?:api[_-]?key|api[_-]?secret|secret[_-]?key|access[_-]?token|auth[_-]?token|client[_-]?secret|password|passwd)\\b\\s*[:=]\\s*[\\\"']?[A-Za-z0-9_\\-./+=]{12,}",
+        "enabled": true
+      },
+      {
+        "name": "openai_style_key",
+        "pattern": "\\bsk-[A-Za-z0-9_-]{20,}\\b",
+        "enabled": true
+      },
+      {
+        "name": "anthropic_style_key",
+        "pattern": "\\bsk-ant-[A-Za-z0-9_-]{20,}\\b",
+        "enabled": true
+      },
+      {
+        "name": "github_token",
+        "pattern": "\\bgh[pousr]_[A-Za-z0-9]{36,}\\b",
+        "enabled": true
+      },
+      {
+        "name": "slack_token",
+        "pattern": "\\bxox[baprs]-[A-Za-z0-9-]{10,}\\b",
+        "enabled": true
+      },
+      {
+        "name": "google_api_key",
+        "pattern": "\\bAIza[0-9A-Za-z\\-_]{35}\\b",
+        "enabled": true
+      },
+      {
+        "name": "jwt",
+        "pattern": "\\beyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}\\b",
+        "enabled": true
+      },
+      {
+        "name": "email_address",
+        "pattern": "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\\b",
+        "enabled": false,
+        "optional": true,
+        "note": "Off by default. Enable for logs that must not carry identities."
+      }
+    ]
+  }
+}

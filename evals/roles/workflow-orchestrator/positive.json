@@ -1,0 +1,50 @@
+{
+  "role_id": "workflow-orchestrator",
+  "label": "unrun",
+  "scenario": "Larkspur Support, Reply Assist. Root session via aipt-start, mode standard. Request: 'Turn these three documents into a feature proposal for Reply Assist.' Sources: src-policy-v3 (drafts only), src-deck-2025 (older deck: send automatically), src-runbook-v2. Case state: no current artifacts; one material conflict between the deck and the policy on sending. Capability report attests root.",
+  "input_refs": [
+    {
+      "kind": "source",
+      "title": "src-policy-v3 current policy: drafts only",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "src-deck-2025 older slide deck: send automatically",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "src-runbook-v2 support runbook",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "case brief: Reply Assist drafts support replies; a person sends them",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "W02",
+      "root_session",
+      "omitted_roles",
+      "experience-manager",
+      "contradiction-analyst",
+      "budget_check",
+      "fits"
+    ],
+    "must_not_include": [
+      "\"deep\"",
+      "re-run for consistency",
+      "human_action_request\": true"
+    ],
+    "checks": [
+      "workflow_id is W02 and mode is standard; planned_tasks is at or below 12 and fits is true.",
+      "Every omitted role has a reason; product-director is omitted because no cross-team tradeoff exists.",
+      "contradiction-analyst is added because material_conflict is true; the experience-manager review stage is included and not pruned.",
+      "root_session is true and actual_execution_metadata has one entry per dispatched task."
+    ]
+  }
+}

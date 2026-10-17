@@ -1,0 +1,61 @@
+{
+  "role_id": "systems-manager",
+  "label": "unrun",
+  "scenario": "Reply Assist at Larkspur Support, W03 review stage. Accepted requirements req-ra-003@v2 (drafts only, protected) and req-ra-007@v1 (workspace isolation, protected). Artifacts architecture.md@v3, tool-contracts.json@v2, authority-and-failure-policy.md@v1 and retrieval-contract.md@v1 are supplied. The no-send rule appears in the policy as a model instruction while tool-contracts.json exposes no send operation; one component serves no listed requirement; the draft contradiction step has an open block-or-annotate question.",
+  "input_refs": [
+    {
+      "kind": "requirement",
+      "title": "req-ra-003@v2 drafts only",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "req-ra-007@v1 workspace isolation",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "architecture.md@v3",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "tool-contracts.json@v2",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "authority-and-failure-policy.md@v1",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "retrieval-contract.md@v1",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "verdict: revise",
+      "requirement_map",
+      "req-ra-003@v2",
+      "requested_in_instructions",
+      "not an independent audit",
+      "not test execution",
+      "requested_followups"
+    ],
+    "must_not_include": [
+      "verdict: ready",
+      "tests passed",
+      "independently verified by the manager"
+    ],
+    "checks": [
+      "Every finding is bound to a requirement id and an artifact version id.",
+      "The protected no-send requirement is labelled requested_in_instructions and the absence of a send operation is named as the mechanism to record.",
+      "All five manager-contract items are present in the output.",
+      "Findings about guarantees, dependencies and failure behavior precede the component-count finding.",
+      "No observed_checks item appears without a receipt_id."
+    ]
+  }
+}

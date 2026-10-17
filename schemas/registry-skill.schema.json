@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/registry-skill",
+  "title": "Registry skill record",
+  "description": "One element of registry/skills.json 'skills'. The installed name is 'aipt-method-' + name, so name is capped at 52 characters to keep the total within 64.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "title",
+    "summary",
+    "provenance"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Skill id S01-S28.",
+      "pattern": "^S(0[1-9]|1[0-9]|2[0-8])$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Directory name under skills/; Agent Skills naming rules.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "minLength": 1,
+      "maxLength": 52
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "reuse",
+            "adapt",
+            "reference_only",
+            "newly_authored",
+            "hold",
+            "exclude",
+            "unresolved"
+          ]
+        },
+        "source_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Admitted source ids (registry/sources.public.json) the skill derives from.",
+          "uniqueItems": true
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "description": "Where the method came from and whether it may be reused."
+    }
+  }
+}

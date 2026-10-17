@@ -1,0 +1,36 @@
+{
+  "role_id": "latency-analyst",
+  "label": "unrun",
+  "scenario": "W08 'Map delay' for Reply Assist at Larkspur Support. Live per-request traces for 2,160 draft requests over one week, a dependency graph in which workspace-scope retrieval and ticket-history fetch run in parallel before serial draft generation and a drafts-only policy check, and named slices ws-alpha, ws-beta and long threads. The role must produce an end-to-end distribution with counts, a reconciled critical path, review delay separated from system waiting, slices with sample sufficiency, and optimization candidates stated as hypotheses.",
+  "input_refs": [
+    {"kind": "receipt", "title": "Reply Assist per-request span traces, week 41, label live", "synthetic": true},
+    {"kind": "artifact", "title": "arch:reply-assist@v3 dependency graph (parallel fetches, serial generation and policy check)", "synthetic": true},
+    {"kind": "proposal", "title": "Workload slices: ws-alpha, ws-beta, threads over 20 messages", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"execution_label\": \"live\"",
+      "end_to_end",
+      "\"n\": 2160",
+      "review_delay",
+      "critical_path",
+      "parallel_slowest",
+      "reconciliation",
+      "sufficient_sample",
+      "measurement_needed"
+    ],
+    "must_not_include": [
+      "\"p95\": 13.1",
+      "sum of stage p95",
+      "improvement observed"
+    ],
+    "checks": [
+      "end_to_end percentiles are computed from per-request values, and the reproduction block names the end-to-end span definition and percentile method.",
+      "Review delay (agent opening the draft) is reported in its own distribution and is not included in end_to_end.",
+      "The critical path marks the two fetch stages as parallel_slowest and the generation and policy stages as serial, and the reconciliation gap is reported.",
+      "The long-thread slice with 38 requests is reported with sufficient_sample false and no p95, not pooled or dropped.",
+      "The candidate that shortens the non-slowest parallel branch is given expected effect none on end-to-end."
+    ]
+  }
+}

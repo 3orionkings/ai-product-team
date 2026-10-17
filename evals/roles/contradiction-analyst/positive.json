@@ -1,0 +1,38 @@
+{
+  "role_id": "contradiction-analyst",
+  "label": "unrun",
+  "scenario": "W02 shape-feature, material_conflict true. S-policy v3 (policy, printed 2026-09-04, scope ws-alpha and ws-beta, drafts only) states 'Reply Assist produces drafts only. An agent reviews and sends.' S-deck v1 (secondary report, date inferred 2025-11, scope low-risk tickets, slide 7) states 'Replies are sent automatically for low-risk tickets.' Dependent REQ-3 v1 reads 'The system never sends a reply.'",
+  "input_refs": [
+    {"kind": "source", "title": "S-policy v3 Reply Assist operating policy", "synthetic": true},
+    {"kind": "source", "title": "S-deck v1 Reply Assist launch deck slide 7", "synthetic": true},
+    {"kind": "requirement", "title": "REQ-3 v1 the system never sends a reply", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"classification\": \"unresolved\"",
+      "\"status\": \"unresolved\"",
+      "\"scope\": \"differs\"",
+      "resolution_options",
+      "\"resolving_authority\": \"human-owner\"",
+      "\"resolving_authority\": \"source-researcher\"",
+      "REQ-3 v1",
+      "\"relation\": \"contradicts\"",
+      "statement_in_own_terms"
+    ],
+    "must_not_include": [
+      "\"conflicts\": []",
+      "\"classification\": \"supersession\"",
+      "\"classification\": \"contradiction\"",
+      "\"status\": \"resolved_by_supersession\"",
+      "obsolete"
+    ],
+    "checks": [
+      "All four axes are set, with scope marked differs because the deck names a low-risk subset the policy does not carve out.",
+      "The explanation states that the policy is later and more authoritative and that recency alone does not settle the conflict.",
+      "Each resolution option names a resolving authority, the evidence needed and the effect on REQ-3 v1.",
+      "proposed_links contains an S-deck v1 contradicts S-policy v3 edge with impact policy review, using both versions.",
+      "affected_dependents lists REQ-3 v1 and the conflict remains open for W02."
+    ]
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "schema_version": "0.1",
+  "dated": "2026-10-17",
+  "source": "docs/spec/02_ARCHITECTURE.md section 9; docs/architecture/controller-contracts.md sections 8 and 10",
+  "description": "Ordered risk tiers and the keyword triggers that raise a request's minimum tier. Classification is conservative: a specialist may raise it, a workflow carries a min_risk floor, and the effective tier is the maximum of every applicable minimum.",
+  "model_may_lower_policy_minimum": false,
+  "rules": [
+    "A model cannot lower an explicit policy minimum. The effective tier is risk_at_least(workflow.min_risk, trigger minimums, specialist assessment).",
+    "Delegation defines both what may be decided and what may be executed; decision acceptance is not itself action permission.",
+    "An external_action request is routed as R3 with human_action_request=true and no executable stage.",
+    "Protected requirements, authority rules, sensitive data flows and release criteria are R2 at minimum."
+  ],
+  "order": [
+    "R0",
+    "R1",
+    "R2",
+    "R3"
+  ],
+  "tiers": [
+    {
+      "id": "R0",
+      "name": "analysis",
+      "example": "Read authorized docs; compare options; propose a requirement.",
+      "default_authority": "Agent may produce a recommendation. No external effects."
+    },
+    {
+      "id": "R1",
+      "name": "bounded_local_change",
+      "example": "Edit a toy app or authorized local branch; run permitted tests.",
+      "default_authority": "Requires recorded scope; reversible changes can follow explicit delegation."
+    },
+    {
+      "id": "R2",
+      "name": "consequential_proposal",
+      "example": "Change permissions, sensitive data flows, release criteria or major architecture.",
+      "default_authority": "Independent review and human acceptance before changing protected behavior."
+    },
+    {
+      "id": "R3",
+      "name": "external_or_high_impact_action",
+      "example": "Deploy, publish, send, pay, delete production data or broaden access.",
+      "default_authority": "Outside autonomous v0.1 execution; prepare a human action request."
+    }
+  ],
+  "keyword_triggers": [
+    {
+      "keyword": "deploy",
+      "min_risk": "R3",
+      "action_kind": "external_action",
+      "reason": "release to a running environment"
+    },
+    {
+      "keyword": "publish",
+      "min_risk": "R3",
+      "action_kind": "external_action",
+      "reason": "makes content public"
+    },
+    {
+      "keyword": "send",
+      "min_risk": "R3",
+      "action_kind": "external_action",
+      "reason": "message leaves the local boundary"
+    },
+    {
+      "keyword": "pay",
+      "min_risk": "R3",
+      "action_kind": "external_action",
+      "reason": "moves money"
+    },
+    {
+      "keyword": "payment",
+      "min_risk": "R3",
+      "action_kind": "external_action",
+      "reason": "moves money"
+    },
+    {
+      "keyword": "delete",
+      "min_risk": "R3",
+      "action_kind": "external_action",
+      "reason": "destructive; production data may be lost"
+    },
+    {
+      "keyword": "drop",
+      "min_risk": "R3",
+      "action_kind": "external_action",
+      "reason": "destructive schema or data operation"
+    },
+    {
+      "keyword": "production",
+      "min_risk": "R3",
+      "action_kind": "external_action",
+      "reason": "touches the live system"
+    },
+    {
+      "keyword": "broaden",
+      "min_risk": "R3",
+      "action_kind": "external_action",
+      "reason": "widens access or permissions"
+    },
+    {
+      "keyword": "permission",
+      "min_risk": "R2",
+      "action_kind": "proposed_change",
+      "reason": "changes authority or tool boundaries"
+    },
+    {
+      "keyword": "credential",
+      "min_risk": "R2",
+      "action_kind": "proposed_change",
+      "reason": "sensitive secret material"
+    },
+    {
+      "keyword": "secret",
+      "min_risk": "R2",
+      "action_kind": "proposed_change",
+      "reason": "sensitive secret material"
+    },
+    {
+      "keyword": "access",
+      "min_risk": "R2",
+      "action_kind": "proposed_change",
+      "reason": "sensitive data flow or scope"
+    }
+  ]
+}

@@ -1,0 +1,274 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/common",
+  "title": "Common enumerations",
+  "description": "Catalogue of the shared enumerations fixed by docs/architecture/controller-contracts.md section 3. Not a record schema: every record schema inlines the lists it needs (the validator resolves local $ref only), and tests/contracts/test_schemas.py asserts each inlined copy equals the catalogue entry.",
+  "$defs": {
+    "role_type": {
+      "type": "string",
+      "enum": [
+        "leader",
+        "orchestrator",
+        "manager",
+        "specialist",
+        "steward",
+        "reviewer",
+        "builder",
+        "executor",
+        "adversarial_orchestrator",
+        "challenger",
+        "judge",
+        "decision_maker",
+        "auditor"
+      ]
+    },
+    "write_scope": {
+      "type": "string",
+      "enum": [
+        "proposal-only",
+        "assigned-worktree",
+        "verification-sandbox"
+      ]
+    },
+    "risk_tier": {
+      "type": "string",
+      "enum": [
+        "R0",
+        "R1",
+        "R2",
+        "R3"
+      ]
+    },
+    "budget_mode": {
+      "type": "string",
+      "enum": [
+        "focused",
+        "standard",
+        "deep"
+      ]
+    },
+    "execution_mode": {
+      "type": "string",
+      "enum": [
+        "native",
+        "sequential",
+        "manual_handoff",
+        "fixture_replay"
+      ]
+    },
+    "observation_source": {
+      "type": "string",
+      "enum": [
+        "native",
+        "controller",
+        "agent_reported"
+      ]
+    },
+    "run_state": {
+      "type": "string",
+      "enum": [
+        "created",
+        "scoped",
+        "planned",
+        "executing",
+        "reviewing",
+        "completed",
+        "needs_input",
+        "blocked",
+        "rework",
+        "paused",
+        "cancelled",
+        "failed"
+      ]
+    },
+    "task_state": {
+      "type": "string",
+      "enum": [
+        "planned",
+        "ready",
+        "admitted",
+        "running",
+        "submitted",
+        "reviewed",
+        "accepted",
+        "blocked",
+        "needs_input",
+        "rejected",
+        "cancelled",
+        "failed"
+      ]
+    },
+    "response_status": {
+      "type": "string",
+      "enum": [
+        "complete",
+        "needs_input",
+        "blocked",
+        "failed",
+        "partial",
+        "out_of_scope"
+      ]
+    },
+    "node_kind": {
+      "type": "string",
+      "enum": [
+        "source",
+        "claim",
+        "requirement",
+        "proposal",
+        "decision",
+        "artifact",
+        "validation",
+        "challenge",
+        "review",
+        "approval"
+      ]
+    },
+    "claim_type": {
+      "type": "string",
+      "enum": [
+        "fact",
+        "hypothesis",
+        "observation"
+      ]
+    },
+    "claim_status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "supported",
+        "contested",
+        "unsupported",
+        "superseded"
+      ]
+    },
+    "decision_status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "under_review",
+        "accepted",
+        "rejected",
+        "deferred",
+        "human_required",
+        "review_required",
+        "superseded"
+      ]
+    },
+    "artifact_status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "implemented_not_verified",
+        "verified_for_scope",
+        "changes_required",
+        "revalidation_required",
+        "archived"
+      ]
+    },
+    "validation_result": {
+      "type": "string",
+      "enum": [
+        "passed",
+        "failed",
+        "blocked",
+        "not_run"
+      ]
+    },
+    "applicability": {
+      "type": "string",
+      "enum": [
+        "current",
+        "historical",
+        "invalidated",
+        "unestablished"
+      ]
+    },
+    "requirement_status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "approved",
+        "retired",
+        "superseded"
+      ]
+    },
+    "relation": {
+      "type": "string",
+      "enum": [
+        "supports",
+        "contradicts",
+        "implements",
+        "verifies",
+        "derived_from",
+        "supersedes",
+        "depends_on"
+      ]
+    },
+    "impact_policy": {
+      "type": "string",
+      "enum": [
+        "review",
+        "invalidate_applicability",
+        "none"
+      ]
+    },
+    "edge_status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "accepted",
+        "rejected"
+      ]
+    },
+    "review_result": {
+      "type": "string",
+      "enum": [
+        "ready",
+        "revise",
+        "blocked",
+        "escalate",
+        "pass",
+        "fail"
+      ]
+    },
+    "independence": {
+      "type": "string",
+      "enum": [
+        "verified",
+        "unverified",
+        "conflict"
+      ]
+    },
+    "assurance_level": {
+      "type": "string",
+      "enum": [
+        "recorded",
+        "validated_structure",
+        "observed_execution",
+        "reviewed_semantics",
+        "enforced_by_host"
+      ]
+    },
+    "challenge_state": {
+      "type": "string",
+      "enum": [
+        "open",
+        "answered",
+        "upheld",
+        "withdrawn",
+        "unresolved"
+      ]
+    },
+    "ruling_outcome": {
+      "type": "string",
+      "enum": [
+        "option_acceptable",
+        "option_rejected",
+        "insufficient_evidence",
+        "unresolved",
+        "next_test_required"
+      ]
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "role_id": "cost-analyst",
+  "label": "unrun",
+  "scenario": "W08 'Cost the completed job' for Reply Assist at Larkspur Support. One week of usage receipts (1,240 draft attempts across ws-alpha and ws-beta), outcome labels (870 drafts accepted by agents), a dated rate record for generation input and output units, no rate for the retrieval index, and review minutes sampled for 312 drafts. The role must produce cost per attempt and cost per completed outcome, keep the retrieval index and review time as unknown components, and give a sensitivity range and reproduction recipe.",
+  "input_refs": [
+    {"kind": "receipt", "title": "Reply Assist usage receipts, week 41", "synthetic": true},
+    {"kind": "validation", "title": "Reply Assist outcome labels, week 41 (accepted / rejected / retried)", "synthetic": true},
+    {"kind": "source", "title": "Dated rate record rates-2026-10-01 (generation input and output units only)", "synthetic": true},
+    {"kind": "requirement", "title": "RA-OUT-1 completed outcome definition: draft accepted by agent", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "cost_per_completed_outcome",
+      "cost_per_attempt",
+      "\"rate_status\": \"unknown\"",
+      "retrieval_index_query",
+      "unknown_components",
+      "sensitivity",
+      "reproduction",
+      "requested_followups"
+    ],
+    "must_not_include": [
+      "zero cost",
+      "\"cost_per_completed_outcome\": 0",
+      "\"known_cost\": 0,"
+    ],
+    "checks": [
+      "The denominator for the headline figure is the count of drafts accepted by agents (870), not attempts (1,240) or unit counts.",
+      "The retrieval index and agent review time appear as components with observed quantities and rate_status unknown, and the headline is described as a lower bound.",
+      "Both rates cite the rate record version and the effective date 2026-10-01.",
+      "The saving from capping retries is stated as a hypothesis with a measurement needed, not as a realized saving.",
+      "Recomputing sum(known_cost) / completed_outcomes from the components reproduces cost_per_completed_outcome."
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "role_id": "convergence-judge",
+  "label": "unrun",
+  "scenario": "Larkspur Support, Reply Assist. Frozen packet pkt-11@v2 for prop-iso-03@v2 with criteria crit-01 (protected, isolation), crit-02 (protected, drafts only), crit-03 (latency, not protected) and options opt-A (pre-exposure workspace filter), opt-B (prompt instruction), opt-C (one index per workspace). evidence-ruling.json er-04 admits val-iso-07 and val-iso-09 (receipt-backed, current) for opt-A on crit-01 and admits val-iso-05 (3 of 40 ws-beta requests returned ws-alpha text) against opt-B; val-send-03 covers crit-02 for opt-A and opt-C. Challenge ch-07 (cache leak) has resolving test val-iso-09, now passed with receipt rcpt-402; ch-10 (per-document workspace_id reliability) has no test run and targets crit-03. W11 converge stage.",
+  "input_refs": [
+    {"kind": "proposal", "title": "decision-packet pkt-11@v2 for prop-iso-03@v2", "synthetic": true},
+    {"kind": "review", "title": "evidence-ruling er-04 admitting val-iso-07, val-iso-09, val-iso-05, val-send-03", "synthetic": true},
+    {"kind": "challenge", "title": "ch-07 cache leak, resolving test val-iso-09 passed, receipt rcpt-402", "synthetic": true},
+    {"kind": "challenge", "title": "ch-10 workspace_id reliability, resolving test val-meta-02 not run, targets crit-03", "synthetic": true},
+    {"kind": "validation", "title": "val-iso-05 opt-B prompt-only isolation, 3 of 40 leaks", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "pkt-11@v2",
+      "option_matrix",
+      "inadmissible_option",
+      "opt-B",
+      "fails",
+      "crit-01",
+      "rcpt-402",
+      "dismissed",
+      "recommended",
+      "opt-A",
+      "unknown",
+      "preserved_dissent",
+      "ch-10",
+      "next_checks",
+      "val-meta-02",
+      "authorizes_execution"
+    ],
+    "must_not_include": [
+      "majority of reviewers",
+      "three of four agree, so",
+      "majority vote",
+      "high confidence, so",
+      "consensus reached",
+      "deployment approved"
+    ],
+    "checks": [
+      "The criteria list is copied from the packet with protected flags and criteria_changes_proposed is empty.",
+      "ch-07 is dismissed with result_ref rcpt-402; ch-10 is unresolved with val-meta-02 named as the resolving test.",
+      "opt-B is inadmissible_option on a protected crit-01 failure; opt-A has meets on crit-01 and crit-02 with refs and unknown on crit-03; opt-C is unknown on crit-01.",
+      "The ruling recommends opt-A on criterion ids and record refs only, lists three unknown cells under uncertainty, orders val-meta-02 first in next_checks, preserves ch-10, and states authorizes_execution false."
+    ]
+  }
+}

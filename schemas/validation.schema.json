@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aipt.local/schemas/validation",
+  "title": "Validation",
+  "description": "An observed validation result bound to exact target versions. result other than not_run requires a receipt_id (checked in code); applicability is stored separately from result.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "method",
+    "target_refs",
+    "receipt_id",
+    "result",
+    "rubric",
+    "coverage",
+    "applicability"
+  ],
+  "properties": {
+    "method": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "An identifier minted by ids.new_id().",
+        "minLength": 1
+      },
+      "description": "Target, config, dataset and skill versions that were tested."
+    },
+    "receipt_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "result": {
+      "type": "string",
+      "enum": [
+        "passed",
+        "failed",
+        "blocked",
+        "not_run"
+      ]
+    },
+    "rubric": {
+      "type": [
+        "string",
+        "object",
+        "null"
+      ]
+    },
+    "coverage": {
+      "type": [
+        "string",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "applicability": {
+      "type": "string",
+      "enum": [
+        "current",
+        "historical",
+        "invalidated",
+        "unestablished"
+      ]
+    }
+  }
+}

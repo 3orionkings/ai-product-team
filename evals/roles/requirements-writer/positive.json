@@ -1,0 +1,59 @@
+{
+  "role_id": "requirements-writer",
+  "label": "unrun",
+  "scenario": "W02 specify for Reply Assist. answers.json ans-v1: C1 'scope retrieval to the ticket's workspace' answered yes and recorded as decision dec-011; C3 'automatic send for low-risk tickets' open. Sources: src-policy-2026-09 drafts only; src-deck-2026-03 slide 7 send automatically. journey.md jm-v3 with stations D1, D2, H1, H2 and exception rows. context-brief.md cb-v3 names the deck-versus-policy conflict. Produce requirements.json.",
+  "input_refs": [
+    {
+      "kind": "artifact",
+      "title": "answers.json ans-v1",
+      "synthetic": true
+    },
+    {
+      "kind": "decision",
+      "title": "dec-011 scope retrieval to the ticket's workspace",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "src-policy-2026-09 drafts only",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "src-deck-2026-03 slide 7 send automatically",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "journey.md jm-v3",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "context-brief.md cb-v3",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"status\": \"proposed\"",
+      "open_decisions",
+      "C3",
+      "EXC-RA-001",
+      "src-deck-2026-03",
+      "src-policy-2026-09",
+      "ws-alpha"
+    ],
+    "must_not_include": [
+      "\"status\": \"approved\"",
+      "sends the draft automatically"
+    ],
+    "checks": [
+      "Every requirement and exclusion has status proposed and cites a decision record, answered choice or source version.",
+      "C3 appears under open_decisions with both sources and a decider; no requirement exists for either side.",
+      "Exclusions state that the product does not send without confirmation and does not retrieve across workspaces.",
+      "The undefined term low-risk appears under assumptions with what it needs, not as a value filled in."
+    ]
+  }
+}

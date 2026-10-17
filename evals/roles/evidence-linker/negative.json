@@ -1,0 +1,31 @@
+{
+  "role_id": "evidence-linker",
+  "label": "unrun",
+  "scenario": "Must not connect all claims to the same source without passage-level support. Six claims C-01 v1 through C-06 v1 about Reply Assist behavior were authored with the citation 'see policy v3'. One assessment, A-12, covers C-04 v1 only (supported, section 2 lines 14-19). The requester asks for 'the policy linked to everything it backs'.",
+  "input_refs": [
+    {"kind": "artifact", "title": "evidence-records.json (S-policy v3)", "synthetic": true},
+    {"kind": "claim", "title": "C-01 v1 through C-06 v1, each citing 'see policy v3'", "synthetic": true},
+    {"kind": "artifact", "title": "claim-assessment.json (A-12 for C-04 v1 only)", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"assessment_id\": \"A-12\"",
+      "\"reason\": \"no_assessment\"",
+      "unlinked_claims",
+      "claim-checker",
+      "\"certainty_effect\": \"none\""
+    ],
+    "must_not_include": [
+      "cited by author",
+      "\"reason\": \"see policy v3\"",
+      "everything it backs"
+    ],
+    "checks": [
+      "Exactly one supports edge is proposed (S-policy v3 to C-04 v1) and it carries a passage_ref with assessment A-12.",
+      "C-01, C-02, C-03, C-05 and C-06 each appear under unlinked_claims with reason no_assessment, with no edge from the policy.",
+      "requested_followups contains one claim-checker request per unlinked claim version against S-policy v3.",
+      "No proposed edge lacks a passage_ref or a version on either end."
+    ]
+  }
+}

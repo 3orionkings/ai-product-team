@@ -1,0 +1,38 @@
+{
+  "role_id": "source-researcher",
+  "label": "unrun",
+  "scenario": "Answer the question 'Does the current Reply Assist policy allow automatic sending of drafted replies?' serving REC-1 v2 in a W01 opportunity comparison. Authorized scope is the case roots docs/reply-assist/ and decks/ with no public search. The policy body docs/reply-assist/policy-v3.md opens in full; the deck decks/launch-2025-11.pdf opens for slides 1-9 only and carries no printed date.",
+  "input_refs": [
+    {"kind": "proposal", "title": "REC-1 v2 opportunity comparison conclusion", "synthetic": true},
+    {"kind": "source", "title": "docs/reply-assist/policy-v3.md (Reply Assist operating policy v3, 2026-09-04)", "synthetic": true},
+    {"kind": "source", "title": "decks/launch-2025-11.pdf (Reply Assist launch deck, slides 1-9 readable)", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"read_depth\": \"full\"",
+      "\"read_depth\": \"partial\"",
+      "\"primary\": true",
+      "\"primary\": false",
+      "bounds",
+      "section 2",
+      "slide 7",
+      "content_hash",
+      "contradiction-analyst",
+      "evidence-curator"
+    ],
+    "must_not_include": [
+      "\"read_depth\": \"snippet\"",
+      "\"read_depth\": \"title_only\"",
+      "https://",
+      "\"date\": \"2025-11-12\""
+    ],
+    "checks": [
+      "The policy is marked primary and read in full before the deck, and its finding cites section 2 with a line range.",
+      "The deck finding records read_depth partial, sections_read slides 1-9, and bounds naming the unread slides, the missing policy version and the inferred date.",
+      "The deck's date field is null and the filename-derived date appears only in bounds or uncertainties.",
+      "No source outside docs/reply-assist/ and decks/ appears under sources[].",
+      "requested_followups names contradiction-analyst for the policy-versus-slide-7 disagreement and evidence-curator for indexing."
+    ]
+  }
+}

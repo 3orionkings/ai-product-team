@@ -1,0 +1,57 @@
+{
+  "role_id": "pre-mortem-analyst",
+  "label": "unrun",
+  "scenario": "W09 review-release before plan-release for Reply Assist at Larkspur Support. architecture.md@v4: retrieval from a shared index with a query-time workspace filter (enforced) plus a per-ticket summary cache; a draft step whose no-send rule is a prompt instruction (requested); a support agent who reviews, edits and sends by hand. journey.md@v2: agents are measured on tickets closed per hour. Protected: REQ-ISO-01, REQ-NOSEND-01. Rollout: stage 1 internal agents, stage 2 ws-alpha at 10%. Produce pre-mortem.json.",
+  "input_refs": [
+    {
+      "kind": "artifact",
+      "title": "architecture.md@v4",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "journey.md@v2",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "rollout-plan.md@v1 (draft)",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "REQ-ISO-01, REQ-NOSEND-01",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "horizon",
+      "mechanism_steps",
+      "links",
+      "silent_period",
+      "distinguishing_evidence",
+      "plausibility_grounds",
+      "severity_grounds",
+      "prevention_test",
+      "chain_can_start_if",
+      "chain_cannot_start_if",
+      "stop_condition",
+      "dropped_stories",
+      "rollout-planner"
+    ],
+    "must_not_include": [
+      "\"likelihood\": \"high\"",
+      "probability",
+      "all risks are high"
+    ],
+    "checks": [
+      "Each chain has five filled links and its mechanism_step_id matches a listed mechanism step.",
+      "The cached-summary cross-workspace chain is present with a not_instrumented signal and an instrumentation follow-up.",
+      "Plausibility and severity each carry grounds citing a design element, record or explicit absence; chains do not all share the same labels.",
+      "Non-speculative chains have a prevention test with both outcomes and a stop condition for rollout-planner.",
+      "Stories that violate no frozen criterion appear in dropped_stories with the reason."
+    ]
+  }
+}

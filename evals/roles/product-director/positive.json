@@ -1,0 +1,60 @@
+{
+  "role_id": "product-director",
+  "label": "unrun",
+  "scenario": "Larkspur Support, Reply Assist. The experience manager returned revise (every draft needs a preview-and-edit step before insertion) and the discovery manager returned escalate (agents asked for one-click insertion). The research manager's observed edit rate on 30 permitted draft records is supported: agents edited 26 of 30 drafts. req-012 (drafts only) is protected. The envelope asks for product direction on the insertion flow.",
+  "input_refs": [
+    {
+      "kind": "review",
+      "title": "rev-ex-07 experience review: revise",
+      "synthetic": true
+    },
+    {
+      "kind": "review",
+      "title": "rev-disc-04 discovery review: escalate",
+      "synthetic": true
+    },
+    {
+      "kind": "claim",
+      "title": "claim-edit-rate@v2: 26 of 30 drafts edited, supported",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "req-012 drafts only, protected",
+      "synthetic": true
+    },
+    {
+      "kind": "proposal",
+      "title": "prop-ux-02@v3 preview-and-edit flow",
+      "synthetic": true
+    },
+    {
+      "kind": "proposal",
+      "title": "prop-disc-01@v2 one-click insertion",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "outcome_hypothesis",
+      "classification",
+      "reversing_observation",
+      "req-012",
+      "followups",
+      "value"
+    ],
+    "must_not_include": [
+      "unanimous",
+      "managers agree",
+      "proceed to build",
+      "approved for build"
+    ],
+    "checks": [
+      "The direction rules on the value conflict against the stated outcome hypothesis and names the observation that would reverse it.",
+      "req-012 appears in protected_touched with action unchanged; no ruling changes it.",
+      "The reason for the ruling cites proposal, review, claim or requirement versions, not the number of teams or their confidence.",
+      "Each follow-up names a manager, a role, input versions, an expected output and a budget."
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "role_id": "dependency-steward",
+  "label": "unrun",
+  "scenario": "Larkspur Support, Reply Assist. Decision dec-11 accepted opt-A for prop-iso-03@v2. Requirements: req-iso-01@v1 (protected, approved: no ws-alpha text reaches the model for a ws-beta request) and req-send-01@v2 (protected, approved: drafts only; AC-1 draft control performs no send, AC-2 no send-capable tool is registered). Artifacts: patch-filter@v2 claims req-iso-01@v1; patch-draft-ui@v1 claims req-send-01@v2. Validations: val-iso-07@v1 passed on patch-filter@v1; val-iso-09@v1 passed on patch-filter@v2 (cached-summary path); val-send-03@v1 passed on patch-draft-ui@v1 for AC-1. AC-2 has no check. No depends_on edges exist yet.",
+  "input_refs": [
+    {"kind": "decision", "title": "decision-record dec-11, selected opt-A, prop-iso-03@v2", "synthetic": true},
+    {"kind": "requirement", "title": "req-iso-01@v1 protected approved, originating claim supported", "synthetic": true},
+    {"kind": "requirement", "title": "req-send-01@v2 protected approved, AC-1 and AC-2", "synthetic": true},
+    {"kind": "artifact", "title": "patch-filter@v2 claims req-iso-01@v1; patch-draft-ui@v1 claims req-send-01@v2", "synthetic": true},
+    {"kind": "validation", "title": "val-iso-07@v1 passed on patch-filter@v1; val-iso-09@v1 passed on patch-filter@v2; val-send-03@v1 passed on patch-draft-ui@v1", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "dec-11",
+      "links",
+      "depends_on",
+      "impact_policy",
+      "invalidate_applicability",
+      "coverage",
+      "requirement_status",
+      "coverage_state",
+      "justification",
+      "covered",
+      "uncovered",
+      "req-send-01@v2",
+      "AC-2",
+      "drift",
+      "applicability_unestablished",
+      "val-iso-07",
+      "queue",
+      "test-engineer",
+      "requirement_changes_proposed",
+      "proposed_links"
+    ],
+    "must_not_include": [
+      "retire req-iso-01",
+      "requirement retired",
+      "reword req-",
+      "all requirements covered",
+      "requirement met",
+      "certainty_effect\": \"increase"
+    ],
+    "checks": [
+      "links proposes requirement-to-decision edges with impact_policy review and artifact-to-requirement and validation-to-artifact and validation-to-requirement edges with impact_policy invalidate_applicability, each with a reason.",
+      "coverage shows req-iso-01@v1 covered via val-iso-09@v1 current on patch-filter@v2 and req-send-01@v2 uncovered because AC-2 has no validation; every row keeps requirement_status approved and protected true as separate fields from coverage_state.",
+      "drift lists val-iso-07@v1 as applicability_unestablished with tested version patch-filter@v1 and current version patch-filter@v2.",
+      "queue is ordered with protected requirements first and names test-engineer with a workflow for each item; requirement_changes_proposed is empty."
+    ]
+  }
+}

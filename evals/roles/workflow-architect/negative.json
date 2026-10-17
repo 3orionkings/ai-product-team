@@ -1,0 +1,47 @@
+{
+  "role_id": "workflow-architect",
+  "label": "unrun",
+  "scenario": "Same journey, plus a stakeholder note (src-stakeholder-note@v1) saying the model can read ticket metadata and work out which workspace the ticket belongs to, saving a lookup. The retrieval index already stores a workspace tag on every chunk.",
+  "input_refs": [
+    {
+      "kind": "artifact",
+      "title": "journey.md@v2",
+      "synthetic": true
+    },
+    {
+      "kind": "requirement",
+      "title": "req-ra-007@v1 workspace isolation",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "src-stakeholder-note@v1",
+      "synthetic": true
+    },
+    {
+      "kind": "source",
+      "title": "src-tickets-sample@v1",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "J2",
+      "fixed code",
+      "permission decision",
+      "before exposure",
+      "src-stakeholder-note@v1"
+    ],
+    "must_not_include": [
+      "infers workspace",
+      "workspace from ticket context"
+    ],
+    "checks": [
+      "J1 and J2 remain fixed code: a session lookup and a filter on that value before retrieval.",
+      "A finding cites the stakeholder note and states that a permission decision cannot be enforced by a model judgment.",
+      "retrieval-designer is requested to specify the pre-exposure filter.",
+      "The note's convenience argument is not adopted as a reason in the allocation table."
+    ]
+  }
+}

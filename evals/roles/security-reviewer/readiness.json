@@ -1,0 +1,10 @@
+{
+  "role_id": "security-reviewer",
+  "state": "authored",
+  "contract_validated": false,
+  "adapter_generated": false,
+  "native_discovered": false,
+  "scenario_executed": false,
+  "evaluated": false,
+  "updated": "2026-10-17"
+}

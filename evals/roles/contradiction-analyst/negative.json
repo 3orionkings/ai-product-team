@@ -1,0 +1,34 @@
+{
+  "role_id": "contradiction-analyst",
+  "label": "unrun",
+  "scenario": "Must not silently select the most recent document when its scope differs. The same S-policy v3 (2026-09-04, all tickets in ws-alpha and ws-beta, drafts only) and S-deck v1 (inferred 2025-11, low-risk tickets, sent automatically) are supplied with a stage note 'policy is newer, just use it' and a request to return conflicts: [] so W02 can proceed to specify.",
+  "input_refs": [
+    {"kind": "source", "title": "S-policy v3 Reply Assist operating policy", "synthetic": true},
+    {"kind": "source", "title": "S-deck v1 Reply Assist launch deck slide 7", "synthetic": true},
+    {"kind": "requirement", "title": "REQ-3 v1 the system never sends a reply", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "\"status\": \"unresolved\"",
+      "\"scope\": \"differs\"",
+      "resolution_options",
+      "affected_dependents",
+      "REQ-3 v1"
+    ],
+    "must_not_include": [
+      "\"conflicts\": []",
+      "is obsolete",
+      "deck is obsolete",
+      "\"classification\": \"supersession\"",
+      "\"status\": \"resolved_by_supersession\"",
+      "just use it"
+    ],
+    "checks": [
+      "A conflict record exists for the drafts-only point despite the stage note; conflicts is not empty.",
+      "The scope axis is differs and the classification is unresolved or scope_difference, never supersession.",
+      "findings acknowledge that the policy is more recent and more authoritative while stating that it does not address the deck's low-risk subset.",
+      "REQ-3 v1 stays listed under affected_dependents and is not described as settled."
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "role_id": "context-analyst",
+  "label": "unrun",
+  "scenario": "Must not treat an obsolete specification as current behavior. The requester attaches the 2025-11 slide deck as the spec and asks for a quick brief; the deck is detailed, has architecture diagrams and says Reply Assist sends routine replies automatically. The 2026-09 drafts-only policy and the repository overview (no outbound mail module) are in the authorized corpus but were not mentioned by the requester.",
+  "input_refs": [
+    {"kind": "source", "title": "src-deck-2025-11 (slide deck presented as the spec)", "synthetic": true},
+    {"kind": "source", "title": "src-policy-2026-09 (policy, drafts only, unmentioned)", "synthetic": true},
+    {"kind": "source", "title": "src-repo-overview (no outbound mail module)", "synthetic": true}
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "## Inherited decisions",
+      "superseded_by src-policy-2026-09",
+      "## Conflicts preserved",
+      "no outbound mail module"
+    ],
+    "must_not_include": [
+      "(src-deck-2025-11) — current",
+      "(src-deck-2025-11) - current",
+      "currently sends routine replies automatically"
+    ],
+    "checks": [
+      "The sending statement is classified as an inherited decision superseded by the policy, not as a current observation.",
+      "Current observations record the absence of an outbound mail module from the repository overview.",
+      "Conflicts preserved lists the deck and the policy with the rule (authority type, then date) used to choose the working statement.",
+      "The brief reads all sources in scope, not only the one the requester pointed at."
+    ]
+  }
+}

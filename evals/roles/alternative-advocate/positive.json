@@ -1,0 +1,58 @@
+{
+  "role_id": "alternative-advocate",
+  "label": "unrun",
+  "scenario": "Work order wo-c-102, W11 alternative, round 1. prop-rt-12@v3 option B: shared retrieval index across ws-alpha and ws-beta with a query-time filter for Reply Assist at Larkspur Support. Frozen criteria: REQ-ISO-01 (protected, zero cross-workspace content), Q1 draft-quality slice score (threshold 0.72; current system 0.61 per val-079), L1 p95 retrieval latency (threshold 800 ms). Author scored B: REQ-ISO-01 pass via clm-208 (hypothesis), Q1 0.78 via val-081, L1 640 ms via val-082. The packet compares B only with the current system. Produce alternative.json.",
+  "input_refs": [
+    {
+      "kind": "artifact",
+      "title": "decision-packet.json@v2",
+      "synthetic": true
+    },
+    {
+      "kind": "proposal",
+      "title": "prop-rt-12@v3",
+      "synthetic": true
+    },
+    {
+      "kind": "validation",
+      "title": "val-079, val-081, val-082",
+      "synthetic": true
+    },
+    {
+      "kind": "artifact",
+      "title": "architecture.md@v4",
+      "synthetic": true
+    }
+  ],
+  "expected": {
+    "status": "complete",
+    "must_include": [
+      "criteria_used",
+      "statement_verbatim",
+      "candidates_considered",
+      "Do nothing",
+      "allocation_table",
+      "preferred_evidence",
+      "no_evidence",
+      "discriminating_test",
+      "favors_preferred_if",
+      "favors_alternative_if",
+      "comparison_changes",
+      "costs",
+      "limits"
+    ],
+    "must_not_include": [
+      "per workspace",
+      "team recollection",
+      "C1 beats B",
+      "\"alternative_score\": \"0.75\""
+    ],
+    "checks": [
+      "criteria_used copies the three frozen criteria verbatim with versions; none is added, dropped or reworded.",
+      "candidates_considered starts with doing nothing and includes a no-model or narrower candidate, each scored or excluded by a named constraint.",
+      "The alternative is scored on all three criteria; unmeasured criteria carry no_evidence rather than an estimate.",
+      "The preferred option's scores and evidence refs are copied as the author gave them.",
+      "The discriminating test names one criterion, both outcomes and target versions, and is proposed as a work order."
+    ]
+  }
+}
