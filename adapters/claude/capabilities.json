@@ -1,0 +1,66 @@
+{
+  "host": "claude-code",
+  "display_name": "Claude Code",
+  "documentation_checked": "2026-10-17",
+  "documentation": [
+    "https://code.claude.com/docs/en/sub-agents",
+    "https://code.claude.com/docs/en/skills",
+    "https://agentskills.io/specification"
+  ],
+  "installed_version_observed": "2.1.257",
+  "role_discovery": {
+    "method": "project_directory",
+    "path": ".claude/agents/<name>.md",
+    "format": "markdown body with YAML frontmatter",
+    "identity_field": "name",
+    "required_fields": ["name", "description"],
+    "fields_emitted_by_adapter": ["name", "description", "tools", "disallowedTools", "maxTurns"],
+    "fields_deliberately_not_emitted": ["model", "permissionMode", "memory", "hooks", "mcpServers", "isolation", "effort", "background"],
+    "unknown_fields": "ignored silently by the host; the conformance test therefore checks each emitted key against this list"
+  },
+  "skills_discovery": {
+    "path": ".claude/skills/<name>/SKILL.md",
+    "format": "Agent Skills (SKILL.md with YAML frontmatter)",
+    "entry_skill_context": "inline; never context: fork",
+    "description_listing_limit_chars": 1536
+  },
+  "dispatch": {
+    "supported": true,
+    "mechanism": "Agent tool invoked from the root session",
+    "nesting_default": "up to 3 layers below the main conversation",
+    "nesting_control": "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH; the adapter also withholds the Agent tool from every generated role so dispatch stays flat",
+    "headless": "claude -p ... --agents '<inline JSON>' ; a file path for --agents requires 2.1.281 or later"
+  },
+  "receipt_observability": {
+    "child_identity": "observable: an agent id is returned to the parent on completion; transcripts are written under ~/.claude/projects/<project>/<session>/subagents/agent-<id>.jsonl",
+    "usage_and_cost": "not exposed to the controller; recorded as unknown",
+    "cancellation": "host-dependent; recorded only when observed"
+  },
+  "tool_restrictions": {
+    "per_role": true,
+    "mechanism": "tools allowlist and disallowedTools denylist in frontmatter",
+    "default": "subagents inherit the parent's tools, including MCP tools",
+    "always_removed_by_host": ["AskUserQuestion", "Workflow", "EnterPlanMode", "ScheduleWakeup"],
+    "write_scope_mapping": {
+      "proposal-only": {"tools": ["Read", "Grep", "Glob"], "disallowedTools": ["Write", "Edit", "NotebookEdit", "Bash", "Agent"]},
+      "assigned-worktree": {"tools": ["Read", "Grep", "Glob", "Write", "Edit", "Bash"], "disallowedTools": ["Agent"]},
+      "verification-sandbox": {"tools": ["Read", "Grep", "Glob", "Bash"], "disallowedTools": ["Write", "Edit", "NotebookEdit", "Agent"]}
+    }
+  },
+  "permission_behavior": {
+    "inherited_from_parent": true,
+    "per_role_override_exists": "permissionMode field; the adapter never sets bypass or auto modes",
+    "isolation_claim": "tool_allowlist_only",
+    "isolation_note": "A tools allowlist narrows what a role can call. It is not a sandbox and not a security boundary against a hostile user of the same machine."
+  },
+  "human_input_attestation": "not available to the controller; approvals recorded through the CLI are unattested",
+  "validation_command": "aipt doctor --host claude --project <scratch-dir>",
+  "unsupported": [
+    "per-role usage or cost telemetry",
+    "attested human identity",
+    "guaranteed cancellation observation"
+  ],
+  "test_status": "not_run",
+  "last_tested": null,
+  "notes": "Live validation is possible on the build machine. Results are recorded in docs/compatibility/claude-code.md only from actual runs."
+}

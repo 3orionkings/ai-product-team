@@ -1,0 +1,75 @@
+{
+  "host": "codex",
+  "display_name": "Codex (CLI, IDE extension, desktop app)",
+  "documentation_checked": "2026-10-17",
+  "documentation": [
+    "https://learn.chatgpt.com/docs/agent-configuration/subagents",
+    "https://learn.chatgpt.com/docs/build-skills",
+    "https://learn.chatgpt.com/docs/config-file/config-reference",
+    "https://agentskills.io/specification"
+  ],
+  "installed_version_observed": null,
+  "installed_version_note": "The Codex CLI binary on the build machine fails to start (missing vendored executable). No version could be observed and no live check was possible.",
+  "role_discovery": {
+    "method": "project_directory",
+    "path": ".codex/agents/<name>.toml",
+    "user_path": "~/.codex/agents/<name>.toml",
+    "format": "one TOML file per agent",
+    "identity_field": "name",
+    "required_fields": ["name", "description", "developer_instructions"],
+    "fields_emitted_by_adapter": ["name", "description", "developer_instructions"],
+    "optional_fields_available": ["model", "model_reasoning_effort", "model_reasoning_summary", "model_verbosity", "features.shell_tool", "features.apps", "features.plugins", "features.memories", "features.request_permissions_tool", "skills.config", "skills.bundled.enabled", "skills.include_instructions"],
+    "fields_not_overridable_per_agent": ["sandbox_mode", "approval_policy", "model_provider", "mcp_servers"],
+    "reserved_builtin_names": ["default", "worker", "explorer"]
+  },
+  "skills_discovery": {
+    "paths": ["$CWD/.agents/skills", "$CWD/../.agents/skills (inside a git repository)", "$REPO_ROOT/.agents/skills", "$HOME/.agents/skills", "/etc/codex/skills"],
+    "project_path_used_by_adapter": ".agents/skills/<name>/SKILL.md",
+    "format": "Agent Skills (SKILL.md with name and description)",
+    "explicit_invocation": "$<name> or /skills",
+    "implicit_invocation": "by description; policy.allow_implicit_invocation may disable it",
+    "symlinks_followed": true,
+    "not_a_scan_path": ".codex/skills"
+  },
+  "dispatch": {
+    "supported": true,
+    "mechanism": "subagents feature ([agents] enabled, default true); the root session asks for an agent by name or applicable instructions request delegation",
+    "nesting_default": "not documented",
+    "nesting_control": "not documented; the adapter keeps dispatch flat by instruction only",
+    "concurrency_config": "agents.max_concurrent_threads_per_session (legacy alias agents.max_threads)",
+    "headless": "not verified"
+  },
+  "receipt_observability": {
+    "child_identity": "unobserved: documentation shows spawned threads in a Subagents list and /subagents in the CLI but does not state that a thread id is returned to the parent; recorded as unknown until a conformance run shows otherwise",
+    "usage_and_cost": "not exposed to the controller; recorded as unknown",
+    "cancellation": "not documented"
+  },
+  "tool_restrictions": {
+    "per_role": false,
+    "mechanism": "none for sandbox or approvals; capability reduction only through features.* = false",
+    "write_scope_mapping": {
+      "proposal-only": {"features": {"shell_tool": false}, "instruction": "state the write scope in developer_instructions"},
+      "assigned-worktree": {"features": {}, "instruction": "state the authorized paths in developer_instructions"},
+      "verification-sandbox": {"features": {}, "instruction": "state read-only-plus-run intent in developer_instructions"}
+    },
+    "note": "Disabling shell_tool for proposal-only roles removes file reading through the shell as well; the adapter emits it only when the policy file enables it (default off), so by default roles rely on instructions and the parent sandbox."
+  },
+  "permission_behavior": {
+    "inherited_from_parent": true,
+    "per_role_override_exists": false,
+    "isolation_claim": "inherited_from_parent",
+    "isolation_note": "Official documentation: a custom agent file cannot replace the parent's sandbox or approval policy, and instructions asking an agent to avoid edits do not create a separate read-only sandbox. The adapter therefore never presents a role as isolated on this host."
+  },
+  "human_input_attestation": "not available to the controller; approvals recorded through the CLI are unattested",
+  "validation_command": "aipt doctor --host codex --project <scratch-dir>",
+  "unsupported": [
+    "per-role sandbox or approval policy",
+    "observed child identity (pending conformance run)",
+    "per-role usage or cost telemetry",
+    "attested human identity"
+  ],
+  "test_status": "blocked",
+  "blocked_reason": "Codex CLI binary missing on the build machine; reinstall required before any live validation.",
+  "last_tested": null,
+  "notes": "Generated from documentation only. A third-party article claims sandbox_mode can be lowered per agent; the official page says it cannot. The adapter follows the official page and the conformance run records what the installed version actually does."
+}
