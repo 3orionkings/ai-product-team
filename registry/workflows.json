@@ -1,0 +1,250 @@
+{
+  "schema_version": "0.1",
+  "package": "ai-product-team",
+  "reconstruction_note": "registry/workflows.json was not supplied with the package; this file is transcribed from 07_WORKFLOWS.md (v0.1, 16 October 2026). Stage ids, predicate names and the predicates list are builder additions needed to make the recipes machine-checkable; everything else follows the source text.",
+  "entry_skills": {
+    "general": "aipt-start",
+    "note": "Thirteen entry wrappers (aipt-start plus one per workflow) load the orchestration contract into the current root session. They are separate from the 28 shared method skills and must never run in a forked context."
+  },
+  "budget_modes": {
+    "focused": {"max_worker_tasks": 4, "concurrent_workers": 2, "max_challenge_rounds": 0, "target_use": "Narrow research or a single-role output."},
+    "standard": {"max_worker_tasks": 12, "concurrent_workers": 3, "max_challenge_rounds": 1, "target_use": "Typical feature analysis or bounded prototype stage."},
+    "deep": {"max_worker_tasks": 24, "concurrent_workers": 3, "max_challenge_rounds": 2, "target_use": "Explicitly requested cross-team design or disputed decision."}
+  },
+  "predicates": {
+    "missing_current_artifact": "No accepted, currently applicable artifact of the stage's output type exists in the case.",
+    "requires_retrieval": "The accepted requirements or architecture include retrieval of external or stored information.",
+    "changes_protected_scope": "The proposed change touches a protected requirement, authority rule, sensitive data flow or release criterion.",
+    "material_conflict": "Two or more admissible records in the case contradict each other on a point that affects the requested output.",
+    "independent_review_required": "The risk tier or the acceptance map requires a reviewer who did not author the artifact.",
+    "consequential_or_disputed": "The recommendation is R2 or higher, or a recorded challenge or dissent is unresolved.",
+    "evidence_points_to_code": "The validated symptom and discriminating cuts implicate a specific code path, tool or retrieval component.",
+    "rework_required": "The accepted correction invalidates applicability of at least one implementation or specification artifact.",
+    "revalidation_required": "At least one validation record has applicability invalidated by the accepted change.",
+    "improvement_needs_evaluation": "The proposed method change affects behavior that has evaluation fixtures or held-out cases."
+  },
+  "common_rules": [
+    "A workflow plan is a DAG of work orders; nodes are tasks, not departments.",
+    "Every node declares role, input versions, output type, dependencies, write scope, risk, budget and review requirement.",
+    "On needs_input, request the exact missing decision and retain progress. On blocked, report the unavailable capability or evidence and continue only independent work. On failed, preserve receipts and investigate within budget. On partial, keep completed artifacts but do not promote the workflow to completed.",
+    "A current accepted artifact satisfies a prerequisite without another model call. Required independence and authority gates cannot be pruned.",
+    "The root Workflow Orchestrator performs native dispatch; managers and directors return assignments and assessments.",
+    "A risk-triggered challenge that does not fit the current budget requires explicit replanning or human approval to expand it.",
+    "Stop at material missing user input, unavailable required evidence, unauthorized action, independent-review conflict or exhausted budget. Return a useful packet identifying what is known and the next resolving action. No fresh authority is created by a manager's favorable review."
+  ],
+  "workflows": [
+    {
+      "id": "W01", "name": "assess-opportunity", "entry_skill": "aipt-assess-opportunity",
+      "title": "Should we add AI to this workflow?",
+      "manager": "discovery-manager", "min_risk": "R0", "core_cross_host": true,
+      "inputs": ["Problem", "Current workflow", "Users", "Constraints", "Existing alternatives"],
+      "outputs": ["Opportunity brief", "Option comparison", "Decision or next-test recommendation"],
+      "stages": [
+        {"id": "frame", "title": "Frame", "role": "context-analyst", "work": "Reconstruct the current job, constraints and evidence.", "artifact": "context-brief.md"},
+        {"id": "resolve-unknowns", "title": "Resolve material unknowns", "role": "discovery-interviewer", "work": "Ask only questions whose answers change the options; wait for the user where needed.", "artifact": "questions-and-decisions.md", "may_return": ["needs_input"]},
+        {"id": "compare", "title": "Compare", "role": "opportunity-analyst", "work": "Assess the proposed AI intervention, simpler alternatives and doing nothing using the same outcome criteria.", "artifact": "opportunity-comparison.md"},
+        {"id": "review", "title": "Review", "role": "discovery-manager", "work": "Check source support and whether the recommendation follows. Request targeted research when it does not.", "artifact": "problem-review.json", "review": true},
+        {"id": "decide-or-test", "title": "Decide or test", "role": "decision-authority", "conditional": "consequential_or_disputed", "work": "Use W11 for consequential or disputed choices. Otherwise return an advisory recommendation or next-test request.", "artifact": "recommendation.md", "delegates_to": "W11"}
+      ],
+      "conditional_specialists": ["customer-researcher", "source-researcher", "prioritization-analyst", "alternative-advocate", "product-director"],
+      "acceptance": ["No invented demand or outcomes", "A viable non-AI option receives a fair comparison", "Consequential recommendation records uncertainty and authority"],
+      "fixture": {"scenario": "A team asks for an AI assistant to approve every support credit automatically, but supplies only one complaint.", "expected_behavior": "The result must not infer demand or automatic financial authority. It should compare draft assistance and ordinary rules, identify necessary evidence and preserve the approval question."}
+    },
+    {
+      "id": "W02", "name": "shape-feature", "entry_skill": "aipt-shape-feature",
+      "title": "Turn these documents into a feature proposal.",
+      "manager": "experience-manager", "min_risk": "R0", "core_cross_host": true,
+      "inputs": ["Authorized corpus", "Problem", "Answers to material questions"],
+      "outputs": ["Source-linked requirements", "Journey", "Acceptance map", "Unresolved decisions"],
+      "stages": [
+        {"id": "reconstruct", "title": "Reconstruct", "role": "context-analyst", "work": "Identify controlling sources, conflicts, earlier decisions and existing behavior.", "artifact": "context-brief.md"},
+        {"id": "clarify", "title": "Clarify", "role": "discovery-interviewer", "work": "Resolve only open choices that materially change the feature.", "artifact": "answers.json", "may_return": ["needs_input"]},
+        {"id": "design-job", "title": "Design the job", "role": "journey-designer", "work": "Map entry, successful completion, exceptions, controls and recovery.", "artifact": "journey.md"},
+        {"id": "specify", "title": "Specify", "role": "requirements-writer", "work": "Translate accepted choices into atomic requirements without promoting open questions.", "artifact": "requirements.json"},
+        {"id": "define-evidence", "title": "Define evidence", "role": "acceptance-designer", "work": "Map each requirement to an observable check and negative case.", "artifact": "acceptance-map.json"},
+        {"id": "review", "title": "Review", "role": "experience-manager", "work": "Check consistency between the customer job, requirements and acceptance map.", "artifact": "experience-review.json", "review": true}
+      ],
+      "conditional_specialists": ["interaction-designer", "accessibility-reviewer", "contradiction-analyst", "evidence-linker"],
+      "acceptance": ["Conflicts preserved", "Requirements remain linked to source decisions", "Missing authority remains open"],
+      "fixture": {"scenario": "One document says drafts only; an older slide says send messages automatically.", "expected_behavior": "The source conflict remains visible. Requirements cannot silently authorize sending. The acceptance map includes no-send behavior until a human resolves the authority change."}
+    },
+    {
+      "id": "W03", "name": "design-system", "entry_skill": "aipt-design-system",
+      "title": "Design how this AI feature should work.",
+      "manager": "systems-manager", "min_risk": "R1", "core_cross_host": false,
+      "inputs": ["Accepted requirements", "Data and tool constraints", "Repository context"],
+      "outputs": ["Architecture", "Component contracts", "Permissions", "Failure and evaluation plan"],
+      "stages": [
+        {"id": "allocate", "title": "Allocate responsibilities", "role": "workflow-architect", "work": "Choose fixed code, model inference, adaptive investigation and human decisions per step.", "artifact": "architecture.md"},
+        {"id": "specify-tools", "title": "Specify tools", "role": "tool-integration-designer", "work": "Define typed inputs/results, idempotency, timeouts and error handling.", "artifact": "tool-contracts.json"},
+        {"id": "constrain-authority", "title": "Constrain authority", "role": "safety-boundary-designer", "work": "Bind execution to permissions; specify escalation, budgets and termination.", "artifact": "authority-and-failure-policy.md"},
+        {"id": "retrieval", "title": "Extend only when relevant", "role": "retrieval-designer", "conditional": "requires_retrieval", "work": "Specify source acquisition, access filtering, freshness and context assembly when retrieval is part of the feature.", "artifact": "retrieval-contract.md"},
+        {"id": "review", "title": "Review", "role": "systems-manager", "work": "Check requirements, invariants, failure cases and unresolved design choices.", "artifact": "architecture-review.json", "review": true}
+      ],
+      "conditional_specialists": ["retrieval-designer", "model-selection-analyst", "security-reviewer", "privacy-reviewer", "engineering-director"],
+      "acceptance": ["Deterministic authority stays outside model judgment", "Failure and recovery behavior specified", "Architecture tradeoffs linked to requirements"],
+      "fixture": {"scenario": "Retrieved documents have workspace-specific access, and the proposed prompt tells the model to hide unauthorized text.", "expected_behavior": "The architecture rejects prompt-only isolation and specifies pre-exposure filtering plus a negative access test."}
+    },
+    {
+      "id": "W04", "name": "build-prototype", "entry_skill": "aipt-build-prototype",
+      "title": "Build a bounded version we can test.",
+      "manager": "engineering-manager", "min_risk": "R1", "core_cross_host": true,
+      "inputs": ["Accepted scope", "Architecture", "Target repository", "Write authorization"],
+      "outputs": ["Implemented prototype", "Observed test receipts", "Independent audit", "Handoff"],
+      "stages": [
+        {"id": "map", "title": "Map", "role": "repository-mapper", "work": "Read actual entry points, dependencies and commands. Identify protected paths and the target snapshot.", "artifact": "repository-map.md"},
+        {"id": "plan", "title": "Plan", "role": "implementation-planner", "work": "Issue bounded work orders with write sets, dependency order and exact check requirements.", "artifact": "work-orders.json"},
+        {"id": "build", "title": "Build", "role": "prototype-engineer", "work": "Implement authorized behavior in a scratch branch/worktree, preserving existing code unless change is authorized.", "artifact": "patch.diff", "write_scope": "assigned-worktree"},
+        {"id": "check", "title": "Check", "role": "test-engineer", "work": "Run or implement checks for positive, negative, boundary and regression behavior; retain raw receipts.", "artifact": "verification-results.json"},
+        {"id": "review-integration", "title": "Review integration", "role": "engineering-manager", "work": "Check scope, interface compatibility and missing evidence; integrate accepted patches serially.", "artifact": "engineering-review.json", "review": true},
+        {"id": "audit", "title": "Audit independently", "role": "independent-auditor", "work": "Reproduce the important checks against the frozen integrated snapshot in a fresh review context.", "artifact": "audit.json", "review": true, "independence_required": true},
+        {"id": "handoff", "title": "Handoff", "role": "workflow-orchestrator", "work": "Generate a run summary, setup steps, remaining failures and exact readiness claims.", "artifact": "handoff.md"}
+      ],
+      "conditional_specialists": ["integration-engineer", "refactoring-engineer", "operations-engineer", "acceptance-designer"],
+      "acceptance": ["No builder self-approval", "Unexecuted checks remain untested", "Approved code state and tested code state match"],
+      "fixture": {"scenario": "A builder implements a scope filter and cites a test that was never executed.", "expected_behavior": "The auditor returns not_run/blocked, not passed. After actual execution and independent review, evidence is bound to the tested version."}
+    },
+    {
+      "id": "W05", "name": "evaluate-feature", "entry_skill": "aipt-evaluate-feature",
+      "title": "Evaluate this feature against its actual task.",
+      "manager": "evaluation-manager", "min_risk": "R1", "core_cross_host": true,
+      "inputs": ["Task cases", "Expected behaviors", "Candidate configurations", "Budget"],
+      "outputs": ["Evaluation plan", "Versioned dataset", "Results by failure slice", "Review"],
+      "stages": [
+        {"id": "define-test", "title": "Define the test", "role": "evaluation-designer", "work": "Freeze task metrics, failure slices, acceptance thresholds and baseline before candidate results.", "artifact": "evaluation-plan.json"},
+        {"id": "curate", "title": "Curate", "role": "dataset-curator", "work": "Build authorized representative cases; separate development and held-out data.", "artifact": "dataset-manifest.json"},
+        {"id": "execute", "title": "Execute", "role": "evaluation-runner", "work": "Run actual candidate configurations within approved limits. Record all versions and unavailable observations.", "artifact": "results.json", "write_scope": "verification-sandbox"},
+        {"id": "analyze-failures", "title": "Analyze failures", "role": "failure-analyst", "work": "Group error modes and investigate discriminating explanations without fitting claims to a favored candidate.", "artifact": "failure-analysis.md"},
+        {"id": "review", "title": "Review", "role": "evaluation-manager", "work": "Distinguish what is established, what is narrowly demonstrated and what needs more evidence.", "artifact": "evaluation-review.json", "review": true}
+      ],
+      "conditional_specialists": ["test-engineer", "evidence-judge", "cost-analyst", "latency-analyst"],
+      "acceptance": ["Hold-out separation", "Actual execution receipts", "Criteria frozen before results"],
+      "fixture": {"scenario": "A high average score hides failures on cross-workspace questions; the proposed threshold is changed after results.", "expected_behavior": "The report preserves the failing slice and original criteria. A new threshold is a disclosed decision proposal, not a retroactive pass."}
+    },
+    {
+      "id": "W06", "name": "investigate-failure", "entry_skill": "aipt-investigate-failure",
+      "title": "Find out why this feature is failing.",
+      "manager": "evaluation-manager", "min_risk": "R0", "core_cross_host": false,
+      "inputs": ["Failure reports", "Authorized traces", "Recent changes", "Outcome definitions"],
+      "outputs": ["Validated symptom", "Hypotheses", "Discriminating tests", "Repair recommendation"],
+      "stages": [
+        {"id": "validate-report", "title": "Validate the report", "role": "context-analyst", "work": "Check definitions, time range, cohorts, recent changes and whether the symptom is reproduced.", "artifact": "incident-brief.md"},
+        {"id": "discriminating-cuts", "title": "Find discriminating cuts", "role": "failure-analyst", "work": "Distinguish volume, rate, data quality and task outcome; form a prior and a confirming/killing test.", "artifact": "hypotheses.json"},
+        {"id": "reconcile", "title": "Reconcile evidence", "role": "contradiction-analyst", "work": "Explain conflicts between traces, source statements, requirements and observed output.", "artifact": "conflicts.json"},
+        {"id": "targeted-causes", "title": "Investigate targeted causes", "role": "repository-mapper", "conditional": "evidence_points_to_code", "work": "Inspect the relevant code path or ask the relevant retrieval/tool specialist only where the evidence points.", "artifact": "diagnostic-evidence.json"},
+        {"id": "review-contain", "title": "Review and contain", "role": "evaluation-manager", "work": "Review the diagnosis and propose a bounded containment or remediation task; no unapproved production action.", "artifact": "remediation-recommendation.md", "review": true}
+      ],
+      "conditional_specialists": ["repository-mapper", "retrieval-designer", "tool-integration-designer", "outcome-analyst", "test-engineer"],
+      "acceptance": ["Validate the failure definition first", "Differentiate model, retrieval, tool, UI and data failures", "Repair requires a separate scoped work order"],
+      "fixture": {"scenario": "Support complaints fall after the reporting interface becomes harder to find.", "expected_behavior": "The analysis distinguishes reporting volume from actual task quality and asks for a discriminating measure before crediting the AI feature."}
+    },
+    {
+      "id": "W07", "name": "compare-models", "entry_skill": "aipt-compare-models",
+      "title": "Would another model improve this feature?",
+      "manager": "systems-manager", "min_risk": "R1", "core_cross_host": false,
+      "inputs": ["Current and candidate models", "Frozen cases", "Quality, latency and cost limits"],
+      "outputs": ["Like-for-like comparison", "Uncertainty", "Migration or retention recommendation"],
+      "stages": [
+        {"id": "select-candidates", "title": "Select candidates", "role": "model-selection-analyst", "work": "Check task suitability, availability and dated provider facts; preserve the current candidate as baseline.", "artifact": "candidates.json"},
+        {"id": "freeze-comparison", "title": "Freeze comparison", "role": "evaluation-designer", "work": "Use common cases and criteria; disclose settings that differ and why.", "artifact": "comparison-plan.json"},
+        {"id": "run", "title": "Run", "role": "evaluation-runner", "work": "Execute real comparisons; do not mix replay results into live scores.", "artifact": "candidate-results.json", "write_scope": "verification-sandbox"},
+        {"id": "economics", "title": "Measure economics", "role": "cost-analyst", "work": "Use observed workload and dated rates; leave unknown billing unknown.", "artifact": "cost-comparison.json"},
+        {"id": "waiting", "title": "Measure waiting", "role": "latency-analyst", "work": "Compare end-to-end distributions and relevant slices, with sample counts.", "artifact": "latency-comparison.json"},
+        {"id": "review", "title": "Review", "role": "systems-manager", "work": "Recommend retain, migrate, narrow deployment or obtain more evidence. Invoke W11 only if needed.", "artifact": "model-decision-proposal.md", "review": true}
+      ],
+      "conditional_specialists": ["dataset-curator", "evidence-judge", "alternative-advocate"],
+      "acceptance": ["Same cases and disclosed settings", "Rates are dated or cost is unknown", "No recommendation based solely on model reputation"],
+      "fixture": {"scenario": "Candidate B looks cheaper per input token but retries more and fails the protected slice.", "expected_behavior": "The recommendation uses task-level results and stated constraints, not a superficial rate comparison. Unknown charges remain unknown."}
+    },
+    {
+      "id": "W08", "name": "optimize-cost-latency", "entry_skill": "aipt-optimize-cost-latency",
+      "title": "Reduce cost or waiting without losing required quality.",
+      "manager": "operations-manager", "min_risk": "R0", "core_cross_host": false,
+      "inputs": ["Measured usage and traces", "Rates", "Outcome floor", "Workload slices"],
+      "outputs": ["Bottleneck and cost model", "Candidate changes", "Quality-preserving experiment plan"],
+      "stages": [
+        {"id": "cost-job", "title": "Cost the completed job", "role": "cost-analyst", "work": "Include repeated calls, retries, retrieval, tool charges and stated review costs when data exists.", "artifact": "cost-model.json"},
+        {"id": "map-delay", "title": "Map delay", "role": "latency-analyst", "work": "Measure the critical path and distinguish serial, parallel, queued and user-review delay.", "artifact": "latency-model.json"},
+        {"id": "candidate-changes", "title": "Design candidate changes", "role": "workflow-architect", "conditional": "missing_current_artifact", "work": "Propose narrower routing, caching, batching, context reduction or model alternatives where justified.", "artifact": "optimization-options.md"},
+        {"id": "preserve-floor", "title": "Preserve the floor", "role": "evaluation-designer", "conditional": "missing_current_artifact", "work": "Define quality and safety constraints that each optimization must retain.", "artifact": "optimization-test-plan.json"},
+        {"id": "review", "title": "Review", "role": "operations-manager", "work": "State potential benefit, uncertainty and next measurement; implementation is a separate authorized W04 task.", "artifact": "optimization-review.md", "review": true}
+      ],
+      "conditional_specialists": ["workflow-architect", "retrieval-designer", "outcome-analyst", "evaluation-designer", "alternative-advocate"],
+      "acceptance": ["No fabricated prices or token totals", "Quality constraints remain fixed", "Savings are hypotheses until measured"],
+      "fixture": {"scenario": "Trace spans run in parallel and only per-stage percentile numbers are supplied.", "expected_behavior": "The analyst does not add p95s and call the result end-to-end p95. It identifies the measurement missing before claiming a latency improvement."}
+    },
+    {
+      "id": "W09", "name": "review-release", "entry_skill": "aipt-review-release",
+      "title": "Is this feature ready for the proposed release?",
+      "manager": "audit-manager", "min_risk": "R2", "core_cross_host": false,
+      "inputs": ["Frozen build", "Acceptance map", "Real results", "Proposed rollout scope"],
+      "outputs": ["Pass/fail/blocked release review", "Unresolved risks", "Human approval request"],
+      "stages": [
+        {"id": "freeze-scope", "title": "Freeze release scope", "role": "audit-manager", "work": "Identify the exact artifact, proposed cohort, acceptance criteria and prior author/reviewer identities.", "artifact": "release-scope.json"},
+        {"id": "reproduce", "title": "Reproduce requirements", "role": "independent-auditor", "work": "Rerun critical checks and inspect acceptance coverage rather than only CI color.", "artifact": "release-audit.json", "review": true, "independence_required": true},
+        {"id": "boundaries", "title": "Review boundaries", "role": "security-reviewer", "work": "Inspect real authorization, injection and data-exposure controls. Add privacy/accessibility review when triggered.", "artifact": "security-review.json", "review": true},
+        {"id": "plan-release", "title": "Plan bounded release", "role": "rollout-planner", "work": "Define cohort, observations, stopping conditions, rollback and ownership. No deployment.", "artifact": "rollout-plan.md"},
+        {"id": "readiness", "title": "Decide readiness", "role": "audit-manager", "work": "Return ready-for-human-review, changes-required or blocked, preserving all outstanding findings.", "artifact": "release-readiness.md", "review": true}
+      ],
+      "conditional_specialists": ["privacy-reviewer", "accessibility-reviewer", "operations-manager", "red-team-tester", "evidence-judge"],
+      "acceptance": ["Never deploy or publish", "Current-version acceptance evidence", "Blocking findings cannot be waived by voting"],
+      "fixture": {"scenario": "All happy-path tests pass but there is no exercised rollback and isolation remains untested.", "expected_behavior": "Readiness is blocked or conditional for human review. The workflow neither deploys nor converts missing evidence into a pass."}
+    },
+    {
+      "id": "W10", "name": "process-change", "entry_skill": "aipt-process-change",
+      "title": "Something changed. What must we revisit?",
+      "manager": "audit-manager", "min_risk": "R1", "core_cross_host": true,
+      "inputs": ["Old and new source or artifact", "Intended changes", "Dependency graph"],
+      "outputs": ["Impact queue", "Revised proposal", "Targeted work orders", "Revalidation results"],
+      "stages": [
+        {"id": "preserve-versions", "title": "Preserve versions", "role": "change-impact-analyst", "work": "Compare before/after, intended deltas and the new evidence. Do not overwrite the baseline.", "artifact": "change-assessment.json"},
+        {"id": "map-affected", "title": "Map affected work", "role": "dependency-steward", "work": "Reverse-traverse declared dependencies through the controller and flag missing linkage for semantic review.", "artifact": "impact-queue.json"},
+        {"id": "assess-contradictions", "title": "Assess contradictions", "role": "contradiction-analyst", "work": "Review whether changed evidence actually defeats an existing premise or only changes its scope.", "artifact": "correction-proposal.json"},
+        {"id": "authorize", "title": "Authorize the correction", "role": "audit-manager", "work": "Review correction and impact; protected requirement/authority changes use W11 and human acceptance.", "artifact": "change-review.json", "review": true, "delegates_to": "W11"},
+        {"id": "rework", "title": "Rework selectively", "role": "implementation-planner", "conditional": "rework_required", "work": "Create only relevant specification, implementation or retest tasks using W02/W04/W05.", "artifact": "targeted-work-orders.json"},
+        {"id": "revalidate", "title": "Revalidate", "role": "independent-auditor", "conditional": "revalidation_required", "work": "Review current outcomes against the new versions; preserve old results as historical.", "artifact": "revalidation.json", "review": true, "independence_required": true}
+      ],
+      "conditional_specialists": ["evidence-curator", "claim-checker", "requirements-writer", "refactoring-engineer", "test-engineer", "decision-recorder"],
+      "acceptance": ["Only declared affected dependencies are automatically queued", "Constraints survive failed implementations", "Historical test outcomes are preserved"],
+      "fixture": {"scenario": "A negative test disproves an isolation assumption after a positive test passed.", "expected_behavior": "The requirement remains mandatory; the release decision is reviewed; the old result remains historical; only relevant implementation/checks are requeued."}
+    },
+    {
+      "id": "W11", "name": "resolve-decision", "entry_skill": "aipt-resolve-decision",
+      "title": "Challenge this proposal and resolve the disagreement.",
+      "manager": "review-manager", "min_risk": "R1", "core_cross_host": true,
+      "inputs": ["Versioned proposal", "Options", "Criteria", "Evidence", "Delegation record"],
+      "outputs": ["Challenge responses", "Admissibility and convergence rulings", "Decision or escalation"],
+      "stages": [
+        {"id": "freeze", "title": "Freeze common ground", "role": "review-manager", "work": "Set the objective, criteria, alternatives, evidence, delegation and author identities.", "artifact": "decision-packet.json"},
+        {"id": "choose-challenges", "title": "Choose challenges", "role": "adversarial-orchestrator", "work": "Select independent material objections and the smallest useful test set.", "artifact": "challenge-plan.json"},
+        {"id": "test-premise", "title": "Test the premise", "role": "assumption-challenger", "work": "Identify a consequential premise and a falsification test.", "artifact": "assumption-challenge.json"},
+        {"id": "alternative", "title": "Develop the alternative", "role": "alternative-advocate", "work": "Present the strongest viable alternative under the same criteria.", "artifact": "alternative.json"},
+        {"id": "respond", "title": "Respond", "role": "proposal-owner", "role_binding": "runtime: the role that authored the frozen proposal version", "work": "Answer challenges using evidence or revise the proposal. Preserve previous versions.", "artifact": "challenge-response.json"},
+        {"id": "judge-sufficiency", "title": "Judge sufficiency", "role": "evidence-judge", "conditional": "material_conflict", "work": "Resolve contested support; return insufficient where evidence cannot carry the claim.", "artifact": "evidence-ruling.json", "review": true},
+        {"id": "converge", "title": "Converge", "role": "convergence-judge", "work": "Resolve each material issue and identify acceptable choices or a discriminating next test.", "artifact": "judgment.json", "review": true},
+        {"id": "apply-authority", "title": "Apply authority", "role": "decision-authority", "work": "Accept only within delegation; otherwise ask the human or defer.", "artifact": "decision.json"},
+        {"id": "record", "title": "Record", "role": "decision-recorder", "work": "Preserve rationale, versions, authority, dissent and revisit conditions.", "artifact": "decision-brief.md"}
+      ],
+      "conditional_specialists": ["evidence-judge", "pre-mortem-analyst", "red-team-tester", "dissent-recorder", "product-director"],
+      "acceptance": ["Maximum two challenge rounds by default", "No majority-vote truth", "Unresolved and defer are valid outcomes", "Judgment and approval are distinct"],
+      "fixture": {"scenario": "Three agents prefer option A, one points to a decisive violation of a protected constraint.", "expected_behavior": "The judge rules on the violation rather than votes. If the evidence remains inconclusive, it defers and identifies the next test."}
+    },
+    {
+      "id": "W12", "name": "learn-from-outcomes", "entry_skill": "aipt-learn-from-outcomes",
+      "title": "Use verified outcomes to improve the product or team.",
+      "manager": "audit-manager", "min_risk": "R0", "core_cross_host": false,
+      "inputs": ["Audited runs", "Outcomes", "Failed approaches", "Current versions"],
+      "outputs": ["Improvement proposal", "Test and evaluation plan", "Versioned change and rollback path"],
+      "stages": [
+        {"id": "measure-outcome", "title": "Measure outcome", "role": "outcome-analyst", "work": "Evaluate actual results and confounding explanations.", "artifact": "outcome-review.md"},
+        {"id": "propose-learning", "title": "Propose learning", "role": "learning-steward", "work": "Identify a repeated supported failure; propose a versioned method change and rollback.", "artifact": "improvement-proposal.json"},
+        {"id": "scope-drift", "title": "Check scope and drift", "role": "change-impact-analyst", "work": "Identify affected methods, retained invariants and likely regressions.", "artifact": "improvement-impact.json"},
+        {"id": "test", "title": "Test", "role": "evaluation-designer", "conditional": "improvement_needs_evaluation", "work": "Compare existing and candidate behavior on development and held-out cases.", "artifact": "improvement-evaluation-plan.json"},
+        {"id": "review-promotion", "title": "Review promotion", "role": "audit-manager", "work": "Accept only a supported, authorized improvement; protected policy changes require human approval.", "artifact": "promotion-review.json", "review": true}
+      ],
+      "conditional_specialists": ["evidence-curator", "evaluation-designer", "dataset-curator", "independent-auditor", "dissent-recorder"],
+      "acceptance": ["No automatic policy self-modification", "No private traces in public fixtures", "Compare on held-out examples before promoting"],
+      "fixture": {"scenario": "A new prompt fixes the one example from which it was written but fails held-out negative cases.", "expected_behavior": "The candidate is not promoted. The old version and evaluation results remain available, and no authority rule is weakened."}
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+dist/
+build/
+*.egg-info/
+.aipt/cases/
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+.DS_Store
+scratch/

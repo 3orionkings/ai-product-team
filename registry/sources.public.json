@@ -1,0 +1,30 @@
+{
+  "schema_version": "0.1",
+  "package": "ai-product-team",
+  "note": "Sanitized provenance record. It identifies the author's own earlier material that this package adapts, by content hash, without disclosing the author's private filesystem. The complete private manifest, including paths and read notes, is kept outside the repository.",
+  "attribution": "All listed sources were written by Emmanuel Benami in February and March 2026, with drafting assistance from LLM tools, from the author's own specifications. They were not previously published. The AI Product Team package adapts them; the adapted bodies and all newly authored material carry the repository license once it is cleared (see LICENSE_PENDING.md).",
+  "sources": [
+    {"id": "A00", "title": "Universal Skill Pack for Codex - README", "dated": "2026-03-26", "sha256": "ebafa7512e65a3d876bbae2a61f9cb99a5a13ea35e1533a2e196f3332b4aef87", "decision": "reference_only", "destination": [], "reason": "Describes intent and usage order; its install directions are obsolete and it names a private project."},
+    {"id": "AINST", "title": "Universal Skill Pack for Codex - install guide", "dated": "2026-03-26", "sha256": "a326c1916975366c7e76703f48d9ea7f16fdc47c2218a103ae3e89185e03ba01", "decision": "reference_only", "destination": [], "reason": "Historical install directions superseded by this package's installer."},
+    {"id": "A01", "title": "Skill: Discovery Interrogator", "dated": "2026-03-26", "sha256": "7882cc952a85344c33c61925fbda000136111e05898e7d76a1d58b564c071aa2", "decision": "adapt", "destination": ["S01"]},
+    {"id": "A02", "title": "Skill: Corpus-Grounded Onboarding Synthesizer", "dated": "2026-03-26", "sha256": "e6e33541fece1cb27913dc38b92e8f2e1394efcf541358d0b16eb08b4eef0cfb", "decision": "adapt", "destination": ["S02"]},
+    {"id": "A03", "title": "Skill: UX Direction Synthesizer", "dated": "2026-03-26", "sha256": "ae17552bd3d81d7024420e65dccc871b97a599f9fcd0c4282d5bd9ebc041ab89", "decision": "adapt", "destination": ["S03"]},
+    {"id": "A04", "title": "Skill: Universal Context Files Architect", "dated": "2026-03-26", "sha256": "83e2f1e26213c6a0a25c061ed6d3994c6c498b63cec12c63070537a189e69e04", "decision": "adapt", "destination": ["S04"]},
+    {"id": "A05", "title": "Skill: Structural Audit / Integrity Checker", "dated": "2026-03-26", "sha256": "cd2e1c795db57837a4feed04e34f87ea7d378b54f8775374014538aa581082cc", "decision": "adapt", "destination": ["S05"]},
+    {"id": "A06", "title": "Skill: Research and Consolidation Orchestrator", "dated": "2026-03-26", "sha256": "6cfa4b62a8f3ab1b00d95acde69c0b875499d018f0e44bd6afc3b639005acd0c", "decision": "adapt", "destination": ["S06"]},
+    {"id": "A07", "title": "Skill: Non-Regression / Drift Auditor", "dated": "2026-03-26", "sha256": "28ee1ad590b3d0346e5373bc3827b5e40f4c2c35e1986284e75f80edaf7faa6c", "decision": "adapt", "destination": ["S07"]},
+    {"id": "B-PLAN", "title": "Plan.md runbook v1.0", "dated": "2026-03-06", "sha256": "e3d06b219f16b2160563531c5f9be045c14be303b6f664cfebe7b7ae07e36d95", "decision": "adapt", "destination": ["S08"]},
+    {"id": "B-IMPL", "title": "Implement.md runbook v1.0", "dated": "2026-03-06", "sha256": "5b450cd6c6602c39b2db61dfe49bc0b83a29d38a2282d0eefdc521272d7f4fd8", "decision": "adapt", "destination": ["S09"]},
+    {"id": "B-AUDIT", "title": "Audit.md runbook v1.0", "dated": "2026-03-06", "sha256": "99f5100c6343aaa8019818ccdaf1d89ef25833e37e7e406b83d4b2b9afce1d18", "decision": "adapt", "destination": ["S10"]},
+    {"id": "B-DOC11", "title": "Documentation.md runbook v1.1", "dated": "2026-03-24", "sha256": "3056c73b8b2327205bbab21da2f459d6cda98bb63280fbe7594be3a2aae37471", "decision": "adapt", "destination": ["S11"]},
+    {"id": "B-DOC10", "title": "Documentation.md runbook v1.0", "dated": "2026-03-06", "sha256": "07702cf7ce34ba8e9fdb6d223ba13ac83f28fe69c4008fd22105880fb0a0f701", "decision": "reference_only", "destination": ["S11"], "reason": "Superseded by v1.1; its validation-history section informed the handoff method."},
+    {"id": "B-AGENTS", "title": "AGENTS.md router template v1.2", "dated": "2026-03-06", "sha256": "2ff135d1ddc58df6e68cba392d731e4c48658fbfacea53e0cfb868e316caf980", "decision": "reference_only", "destination": [], "reason": "Informs the separation of root guidance, adapters and overlays only. Its references to core/ and .claude/commands/audit-pack.md do not resolve, so it is not imported."},
+    {"id": "B-CLAUDE", "title": "CLAUDE.md wrapper template v1.2", "dated": "2026-03-06", "sha256": "1617ededde9baf4284814a27dd657ad81a0d9d6f0dac54becc46729719d7d322", "decision": "reference_only", "destination": [], "reason": "Same as B-AGENTS."}
+  ],
+  "not_used": [
+    "The author's Memory Steward prompts and templates (optional reference in the build prompt; not read, not needed by this architecture).",
+    "The author's UNIVERSAL_PACK v2.2 and earlier agent/skill packs (contain third-party-derived material; not read for this build).",
+    "Installed personal skill copies (one frontmatter inspected only to confirm it matched the archive body; not a source).",
+    "Everything listed under hard exclusions in the build prompt."
+  ]
+}
