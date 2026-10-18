@@ -1,7 +1,7 @@
 ---
 name: aipt-review-release
 description: "W09 Is this feature ready for the proposed release? Inputs: Frozen build; Acceptance map; Real results; Proposed rollout scope. Returns: Pass/fail/blocked release review; Unresolved risks; Human approval request. Runs the AI Product Team review-release workflow from this session."
-license: See LICENSE_PENDING.md in the ai-product-team repository.
+license: MIT
 metadata:
   aipt_entry: "W09"
   aipt_version: "0.1.0"

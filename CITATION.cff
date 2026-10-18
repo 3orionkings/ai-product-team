@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use or adapt this work, please cite it."
+title: "AI Product Team: specialist agents, shared methods and workflows for Claude Code and Codex"
+authors:
+  - family-names: Benami
+    given-names: Emmanuel
+version: 0.1.0
+date-released: 2026-10-18
+license: MIT
+repository-code: "https://github.com/3orionkings/ai-product-team"
+url: "https://3orionkings.github.io/ai-product-team/directory/"
+keywords: [ai-agents, claude-code, codex, subagents, agent-skills, product-management, multi-agent]

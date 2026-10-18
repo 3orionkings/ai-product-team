@@ -1,7 +1,7 @@
 ---
 name: aipt-method-adversarial-challenge
 description: Challenge, objection, counterargument, falsification test, stress-test an assumption, pre-mortem, red-team a proposal, devil's advocate. Write material challenges to a frozen decision packet. Each names the contested premise, the counterevidence or gap, the consequence under the frozen criteria and the resolving test. Keep challenges independent and materially different within a bounded round budget (default two). Use when a consequential proposal rests on uncertain evidence or disputed alternatives. Not for ruling on challenges (aipt-method-evidentiary-adjudication) or applying delegation.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S23"
   aipt_provenance: "newly_authored"

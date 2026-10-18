@@ -1,7 +1,7 @@
 ---
 name: aipt-method-evidentiary-adjudication
 description: Adjudicate, rule on evidence, judge sufficiency, resolve a disagreement, converge, compare options against criteria, admissible evidence, insufficient evidence, unresolved. Rule on whether admissible evidence carries a stated claim and how options compare against frozen criteria, with a finding per objection and one outcome: option_acceptable, option_rejected, insufficient_evidence, unresolved or next_test_required. Never decide by vote count or confidence rhetoric. Not for writing challenges (aipt-method-adversarial-challenge) or applying delegation (aipt-method-delegated-authority).
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S24"
   aipt_provenance: "newly_authored"

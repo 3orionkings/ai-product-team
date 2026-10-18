@@ -1,7 +1,7 @@
 ---
 name: aipt-method-requirements-and-acceptance
 description: Requirements, acceptance criteria, protected requirement, requirement-to-check map, negative case, correct refusal, unknown outcome. Use when turning accepted scope and decisions into atomic versioned requirements, deciding whether a requirement is protected, writing the observable checks that would show a requirement met or violated, or when someone offers "a response exists" as proof. Produces requirement records, an open-decisions list and an acceptance map; a failed implementation never retires a protected requirement.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S13"
   aipt_provenance: "newly_authored"

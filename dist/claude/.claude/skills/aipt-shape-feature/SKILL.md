@@ -1,7 +1,7 @@
 ---
 name: aipt-shape-feature
 description: "W02 Turn these documents into a feature proposal. Inputs: Authorized corpus; Problem; Answers to material questions. Returns: Source-linked requirements; Journey; Acceptance map; Unresolved decisions. Runs the AI Product Team shape-feature workflow from this session."
-license: See LICENSE_PENDING.md in the ai-product-team repository.
+license: MIT
 metadata:
   aipt_entry: "W02"
   aipt_version: "0.1.0"

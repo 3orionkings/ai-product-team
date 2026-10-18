@@ -1,7 +1,7 @@
 ---
 name: aipt-compare-models
 description: "W07 Would another model improve this feature? Inputs: Current and candidate models; Frozen cases; Quality, latency and cost limits. Returns: Like-for-like comparison; Uncertainty; Migration or retention recommendation. Runs the AI Product Team compare-models workflow from this session."
-license: See LICENSE_PENDING.md in the ai-product-team repository.
+license: MIT
 metadata:
   aipt_entry: "W07"
   aipt_version: "0.1.0"

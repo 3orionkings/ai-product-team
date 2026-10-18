@@ -1,7 +1,7 @@
 ---
 name: aipt-optimize-cost-latency
 description: "W08 Reduce cost or waiting without losing required quality. Inputs: Measured usage and traces; Rates; Outcome floor; Workload slices. Returns: Bottleneck and cost model; Candidate changes; Quality-preserving experiment plan. Runs the AI Product Team optimize-cost-latency workflow from this session."
-license: See LICENSE_PENDING.md in the ai-product-team repository.
+license: MIT
 metadata:
   aipt_entry: "W08"
   aipt_version: "0.1.0"

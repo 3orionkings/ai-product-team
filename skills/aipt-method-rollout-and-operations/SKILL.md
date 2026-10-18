@@ -1,7 +1,7 @@
 ---
 name: aipt-method-rollout-and-operations
 description: Staged rollout, release plan, cohort, canary, stopping conditions, rollback, kill switch, alert ownership, runbook, operational readiness. Use when a validated artifact version needs a plan for reaching users in stages, saying who is in each cohort, what is observed, what stops the stage, how the change is reverted and who owns each alert. Produces the plan and readiness conditions only; deployment and publication stay outside autonomous scope, and rollback counts as available only after it has been exercised in a synthetic environment with a receipt.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S21"
   aipt_provenance: "newly_authored"

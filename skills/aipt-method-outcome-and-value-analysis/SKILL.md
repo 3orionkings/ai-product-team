@@ -1,7 +1,7 @@
 ---
 name: aipt-method-outcome-and-value-analysis
 description: Outcome hypothesis, value analysis, option comparison, doing nothing, non-AI alternative, baseline, association versus effect, denominators, confounders, reporting changes, complaints versus harms. Use before building to state the outcome that matters as a falsifiable hypothesis and compare options, including doing nothing and non-AI options, on one fixed set of criteria; use after release to judge whether observed outcomes show an effect rather than an association. Checks denominators and reporting changes, and never reads fewer complaints as fewer harms.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S22"
   aipt_provenance: "newly_authored"

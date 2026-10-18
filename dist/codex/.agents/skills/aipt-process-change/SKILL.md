@@ -1,7 +1,7 @@
 ---
 name: aipt-process-change
 description: "W10 Something changed. What must we revisit? Inputs: Old and new source or artifact; Intended changes; Dependency graph. Returns: Impact queue; Revised proposal; Targeted work orders; Revalidation results. Runs the AI Product Team process-change workflow from this session."
-license: See LICENSE_PENDING.md in the ai-product-team repository.
+license: MIT
 metadata:
   aipt_entry: "W10"
   aipt_version: "0.1.0"

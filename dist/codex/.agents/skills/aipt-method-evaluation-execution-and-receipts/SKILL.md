@@ -1,7 +1,7 @@
 ---
 name: aipt-method-evaluation-execution-and-receipts
 description: Run evaluations, execution receipts, exit status, frozen versions, fixture_replay vs live, timeout vs failure, skipped vs passed, command logs. Use to execute checks or evaluations against frozen plan, dataset and candidate versions and to record for each command the arguments, working directory, snapshot, data and configuration versions, exit status, timeout state, skipped counts and log locations. A receipt proves the command's exit status only. Replay is never labeled live. A command mentioned is not a command run.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S19"
   aipt_provenance: "newly_authored"

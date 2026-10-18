@@ -1,7 +1,7 @@
 ---
 name: aipt-evaluate-feature
 description: "W05 Evaluate this feature against its actual task. Inputs: Task cases; Expected behaviors; Candidate configurations; Budget. Returns: Evaluation plan; Versioned dataset; Results by failure slice; Review. Runs the AI Product Team evaluate-feature workflow from this session."
-license: See LICENSE_PENDING.md in the ai-product-team repository.
+license: MIT
 metadata:
   aipt_entry: "W05"
   aipt_version: "0.1.0"

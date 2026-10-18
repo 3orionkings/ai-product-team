@@ -1,7 +1,7 @@
 ---
 name: aipt-method-cost-and-latency-analysis
 description: Cost per completed task, latency distribution, p95, critical path, retries, dated rates, unknown rates, tokens versus outcomes. Use when a role must state what a feature costs per task that actually completed, or how long users wait end to end, from observed usage, timed traces and dated rate sources. Counts retries, retrieval, tool charges and review time; keeps unknown rates unknown instead of zero; reports latency as a measured end-to-end distribution; never sums parallel stage percentiles; separates critical-path, queued and user-review delay.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S20"
   aipt_provenance: "newly_authored"

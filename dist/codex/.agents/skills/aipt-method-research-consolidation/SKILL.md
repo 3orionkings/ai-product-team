@@ -1,7 +1,7 @@
 ---
 name: aipt-method-research-consolidation
 description: Research consolidation, staged research, source inventory, extraction, synthesis, verification, provenance, conflicting evidence, coverage statement. Run research over a multi-source corpus in five gated phases (inventory, extraction, consolidation, synthesis, verification) so that every claim keeps its sources, conflicts stay visible and uncertainty is stated rather than smoothed over. Use when the result will become need findings, a comparison, a shortlist, a specification, a plan or a governance artifact. Not for quick lookups, light summaries or brainstorming.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S06"
   aipt_provenance: "adapt"

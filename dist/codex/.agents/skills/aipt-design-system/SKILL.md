@@ -1,7 +1,7 @@
 ---
 name: aipt-design-system
 description: "W03 Design how this AI feature should work. Inputs: Accepted requirements; Data and tool constraints; Repository context. Returns: Architecture; Component contracts; Permissions; Failure and evaluation plan. Runs the AI Product Team design-system workflow from this session."
-license: See LICENSE_PENDING.md in the ai-product-team repository.
+license: MIT
 metadata:
   aipt_entry: "W03"
   aipt_version: "0.1.0"

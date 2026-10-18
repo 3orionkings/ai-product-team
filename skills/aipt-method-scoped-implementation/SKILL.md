@@ -1,7 +1,7 @@
 ---
 name: aipt-method-scoped-implementation
 description: Scoped implementation, builder loop, smallest safe diff, work order, targeted checks, receipts, files changed. Use when one authorized work order with a write set, acceptance criteria and a pinned snapshot must be turned into a verified change. Inspects before editing, keeps the diff inside the write set, runs the targeted checks under receipts and reports exact files, checks, receipts and residual risks. Not for planning the work, auditing it, or running an evaluation campaign.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S09"
   aipt_provenance: "adapt"

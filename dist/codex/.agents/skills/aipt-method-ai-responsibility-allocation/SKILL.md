@@ -1,7 +1,7 @@
 ---
 name: aipt-method-ai-responsibility-allocation
 description: Responsibility allocation, step ownership, fixed code versus model inference versus adaptive investigation versus human decision, loop budget, termination rule, permission check placement. Use when designing or reviewing a feature or workflow step by step to decide which mechanism is responsible for each step, to justify any adaptive behavior with a named unknown, to keep deterministic permission checks in code, and to bound every loop with a budget and a termination rule. Produces an allocation table as a proposal artifact.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S14"
   aipt_provenance: "newly_authored"

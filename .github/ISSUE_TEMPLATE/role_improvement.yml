@@ -1,0 +1,15 @@
+name: Role or method improvement
+description: A role or method produced the wrong output, or could do better.
+labels: ["improvement"]
+body:
+  - type: input
+    id: target
+    attributes: {label: Role or method, placeholder: "aipt-claim-checker or aipt-method-evidence-and-lineage"}
+    validations: {required: true}
+  - type: textarea
+    id: failure
+    attributes: {label: The failure, description: "Input, the output you got, and the output you expected. Synthetic material only."}
+    validations: {required: true}
+  - type: textarea
+    id: change
+    attributes: {label: Proposed change, description: "Which section of the body or skill, and what it should say."}

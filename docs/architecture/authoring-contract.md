@@ -72,7 +72,7 @@ The directory name equals the `name` field (Agent Skills spec). Length 120–300
 ---
 name: aipt-method-<name>
 description: <What it does and when to use it. Trigger words first. ≤ 600 characters; hard limit 1024.>
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S0x"
   aipt_provenance: "adapt" | "newly_authored"

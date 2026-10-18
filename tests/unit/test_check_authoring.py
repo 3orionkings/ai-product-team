@@ -26,7 +26,7 @@ import check_authoring as ca  # noqa: E402  (import after sys.path tweak)
 # Fixture material
 # --------------------------------------------------------------------------------------------------
 
-LICENSE_LINE = "See LICENSE_PENDING.md in the repository root."
+LICENSE_LINE = "MIT"
 
 VOCAB = (
     "record version proposal review requirement claim source receipt artifact finding evidence "

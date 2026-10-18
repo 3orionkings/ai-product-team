@@ -1,7 +1,7 @@
 ---
 name: aipt-build-prototype
 description: "W04 Build a bounded version we can test. Inputs: Accepted scope; Architecture; Target repository; Write authorization. Returns: Implemented prototype; Observed test receipts; Independent audit; Handoff. Runs the AI Product Team build-prototype workflow from this session."
-license: See LICENSE_PENDING.md in the ai-product-team repository.
+license: MIT
 metadata:
   aipt_entry: "W04"
   aipt_version: "0.1.0"

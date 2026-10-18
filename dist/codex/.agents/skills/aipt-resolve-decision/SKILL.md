@@ -1,7 +1,7 @@
 ---
 name: aipt-resolve-decision
 description: "W11 Challenge this proposal and resolve the disagreement. Inputs: Versioned proposal; Options; Criteria; Evidence; Delegation record. Returns: Challenge responses; Admissibility and convergence rulings; Decision or escalation. Runs the AI Product Team resolve-decision workflow from this session."
-license: See LICENSE_PENDING.md in the ai-product-team repository.
+license: MIT
 metadata:
   aipt_entry: "W11"
   aipt_version: "0.1.0"

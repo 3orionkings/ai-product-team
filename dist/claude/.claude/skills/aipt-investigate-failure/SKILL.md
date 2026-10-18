@@ -1,7 +1,7 @@
 ---
 name: aipt-investigate-failure
 description: "W06 Find out why this feature is failing. Inputs: Failure reports; Authorized traces; Recent changes; Outcome definitions. Returns: Validated symptom; Hypotheses; Discriminating tests; Repair recommendation. Runs the AI Product Team investigate-failure workflow from this session."
-license: See LICENSE_PENDING.md in the ai-product-team repository.
+license: MIT
 metadata:
   aipt_entry: "W06"
   aipt_version: "0.1.0"

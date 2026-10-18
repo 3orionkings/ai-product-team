@@ -1,7 +1,7 @@
 ---
 name: aipt-method-discovery-interrogation
 description: Discovery questions, problem reconstruction, decision-critical gaps, consequential questions before design. Use when a request is underspecified, touches workflows, trust, permissions, architecture or operating model, and solving the wrong problem is expensive. Reconstructs the problem from supplied sources, sorts gaps by what they would change, and returns only questions whose answers would change direction, scope, risk handling or success measures. Not for complete specs, trivial gaps, or when the requester has declined questions.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S01"
   aipt_provenance: "adapt"

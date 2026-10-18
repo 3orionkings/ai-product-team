@@ -26,7 +26,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 VERSION = "0.1.0"
-LICENSE_LINE = "See LICENSE_PENDING.md in the ai-product-team repository."
+LICENSE_LINE = "MIT"
 
 # Claude Code per-role tool allowlists by write scope. Mirrors adapters/claude/capabilities.json.
 CLAUDE_TOOLS = {

@@ -1,7 +1,7 @@
 ---
 name: aipt-method-ux-direction-synthesis
 description: UX direction, product direction, mental model, information architecture, surface map, priority flows, design principles, trust and control posture. Use after discovery answers exist to turn them and the source context into a coherent product shape for a new interface, major redesign, onboarding or workflow shell. Derives the primary user and job, defines the mental model, maps surfaces, objects, states and approval moments, ranks P0, secondary, deferred and high-risk flows, and states principles with open tradeoffs. Not for shallow discovery or purely technical work.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S03"
   aipt_provenance: "adapt"

@@ -1,7 +1,7 @@
 ---
 name: aipt-method-evaluation-data-curation
 description: Evaluation dataset, split manifest, development vs held-out, sampling frame, slice coverage, permissioned sources, synthetic data labeling, public fixture allowlist. Use to build the versioned case set a frozen evaluation plan needs: representative cases from permitted sources, a deterministic development/held-out split, per-slice counts against the plan's minimums, stated sampling limits, and no confidential record in any public fixture. Synthetic cases are always labeled synthetic.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S18"
   aipt_provenance: "newly_authored"

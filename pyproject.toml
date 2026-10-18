@@ -7,7 +7,14 @@ name = "ai-product-team"
 version = "0.1.0"
 description = "Experimental record-keeping library for the AI Product Team agents (validation, storage, lineage, decisions, routing, receipts)."
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
+license = "MIT"
+authors = [{name = "Emmanuel Benami"}]
+keywords = ["ai-agents", "claude-code", "codex", "subagents", "agent-skills", "product-management", "multi-agent"]
+
+[project.urls]
+Repository = "https://github.com/3orionkings/ai-product-team"
+Directory = "https://3orionkings.github.io/ai-product-team/directory/"
 dependencies = []
 
 

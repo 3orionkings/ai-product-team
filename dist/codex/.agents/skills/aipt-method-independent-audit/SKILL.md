@@ -1,7 +1,7 @@
 ---
 name: aipt-method-independent-audit
 description: Independent audit, verification, frozen artifact, acceptance criteria, re-run checks, pass fail blocked, reviewer independence. Use when a delivered artifact with a pinned version must be verified against its actual acceptance criteria by someone who did not produce it, in a fresh context. Re-runs or replays the checks under receipts, inspects the files directly, and returns a review record with pass, fail or blocked and the evidence for each criterion. Not for drift comparison, structural audits, evaluation campaigns or ruling on disputed evidence.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S10"
   aipt_provenance: "adapt"

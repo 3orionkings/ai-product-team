@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Browse the agent directory
+    url: https://3orionkings.github.io/ai-product-team/directory/
+    about: Find a role by its job, team or type before filing.

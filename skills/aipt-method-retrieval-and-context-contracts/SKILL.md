@@ -1,7 +1,7 @@
 ---
 name: aipt-method-retrieval-and-context-contracts
 description: Retrieval contract, context assembly, authorization before exposure, scope inheritance, workspace isolation, freshness, negative access test, prompt-only hiding. Use when specifying or reviewing how an AI feature acquires information: which sources it may read, how permission is checked before any content reaches the model, how scope survives summaries, embeddings, indexes and caches, how stale content is handled, how retrieved items are ordered and sized in context, and which denial tests prove each scope boundary. Produces a retrieval contract artifact and a negative test list.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S15"
   aipt_provenance: "newly_authored"

@@ -1,0 +1,26 @@
+name: Run report
+description: You ran a workflow or a role. Tell us what happened.
+labels: ["run-report"]
+body:
+  - type: input
+    id: host
+    attributes: {label: Host and version, placeholder: "Claude Code 2.x / Codex CLI 0.x"}
+    validations: {required: true}
+  - type: input
+    id: entry
+    attributes: {label: Entry skill or role, placeholder: "aipt-shape-feature"}
+    validations: {required: true}
+  - type: textarea
+    id: request
+    attributes: {label: Your request and inputs, description: "What you asked and which files you pointed it at. Synthetic or redacted material only."}
+    validations: {required: true}
+  - type: textarea
+    id: route
+    attributes: {label: Route plan, description: "Which roles it said it would run or skip, and which actually ran (native subagents or sequential)."}
+  - type: textarea
+    id: result
+    attributes: {label: What matched and what did not, description: "Compare with the recipe's Gates and Fixture sections, or the role's Negative case and Review rubric."}
+    validations: {required: true}
+  - type: textarea
+    id: ledger
+    attributes: {label: Ledger excerpt (optional), description: "A few lines from aipt-cases/<case>/ledger.jsonl, redacted.", render: json}

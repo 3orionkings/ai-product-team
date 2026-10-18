@@ -1,7 +1,7 @@
 ---
 name: aipt-method-milestone-planning
 description: Milestone planning, work orders, execution order, write sets, dependencies, acceptance checks. Use when approved requirements and an authorizing decision exist and the work must be split into bounded controller work orders that a builder can implement and verify in one loop. Produces a dependency-ordered plan in which each order declares scope, write set, prerequisites, acceptance checks and the receipts it must produce. Not for writing requirements, implementing a change or staging a release.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S08"
   aipt_provenance: "adapt"

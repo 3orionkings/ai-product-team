@@ -1,7 +1,7 @@
 ---
 name: aipt-method-status-handoff
 description: Status handoff, status brief, current state, resume, blockers, next queue, latest validated progress. Use when a human or a fresh session must resume a case quickly and needs a short, current brief derived from controller state: run state, active work orders, latest validated progress with applicability, blockers with next actions and the immediate queue. The controller renders the brief; this method decides what goes in and in what order. Not for the evidence ledger, research synthesis, outcome analysis or the full case report.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S11"
   aipt_provenance: "adapt"

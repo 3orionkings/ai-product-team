@@ -1,7 +1,7 @@
 ---
 name: aipt-method-corpus-grounded-onboarding
 description: Onboarding, handoff absorption, corpus reading, codebase or document-set orientation, mental model, invariants, readiness check. Use when taking over a project, repository, document pack or handoff from a person or another agent and you must understand purpose, workflows, architecture, invariants and gaps before acting. Builds a structured product and system model, separates stated facts from strong inferences and unverified assumptions, marks operational boundaries, and states readiness honestly. Not for quick summaries or when no real corpus exists.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S02"
   aipt_provenance: "adapt"

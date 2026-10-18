@@ -1,7 +1,7 @@
 ---
 name: aipt-start
 description: Route a product or AI-feature request to the right AI Product Team workflow or specialist and run it from this session. Use for questions like should we add AI here, turn these documents into a feature proposal, design or build a bounded AI feature, evaluate it, find out why it fails, compare models, cut cost or waiting, review a release, work out what a change affects, resolve a disputed decision, or learn from outcomes. Runs only the roles the request needs and keeps a case ledger.
-license: See LICENSE_PENDING.md in the ai-product-team repository.
+license: MIT
 metadata:
   aipt_entry: "start"
   aipt_version: "0.1.0"

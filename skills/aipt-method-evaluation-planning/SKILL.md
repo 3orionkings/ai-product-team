@@ -1,7 +1,7 @@
 ---
 name: aipt-method-evaluation-planning
 description: Evaluation plan, prespecified metrics, failure slices, pass thresholds, baseline, freeze before results. Use before any candidate result exists to write and freeze what an evaluation measures, on which slices, against which threshold and baseline, and how the analysis runs. A later change is a disclosed amendment proposal reported beside the original criteria, never a retroactive pass. Average accuracy does not establish safety on a protected slice.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S17"
   aipt_provenance: "newly_authored"

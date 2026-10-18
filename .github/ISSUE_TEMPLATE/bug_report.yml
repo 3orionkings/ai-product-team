@@ -1,0 +1,15 @@
+name: Bug (installer, generator, checks)
+description: Something in install.py, tools/ or the tests is broken.
+labels: ["bug"]
+body:
+  - type: input
+    id: command
+    attributes: {label: Command you ran}
+    validations: {required: true}
+  - type: textarea
+    id: output
+    attributes: {label: Output, render: shell}
+    validations: {required: true}
+  - type: input
+    id: env
+    attributes: {label: OS and Python version, placeholder: "macOS 15, Python 3.13"}

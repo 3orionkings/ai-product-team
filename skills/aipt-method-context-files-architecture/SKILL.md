@@ -1,7 +1,7 @@
 ---
 name: aipt-method-context-files-architecture
 description: Context files, agent operating files, root guidance, host-specific guidance, specialist role files, command files, skill files, layering, maintainability. Use when a repository or personal workflow needs better operating context for coding assistants, when existing files are vague, stale or bloated, or when universal guidance must be separated from project-specific guidance. Distinguishes file roles, decides what belongs where, keeps files concise and runnable, and proposes a minimal expandable file set. Not for one-off prompt wording or files nobody will maintain.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S04"
   aipt_provenance: "adapt"

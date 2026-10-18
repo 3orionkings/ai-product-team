@@ -1,7 +1,7 @@
 ---
 name: aipt-assess-opportunity
 description: "W01 Should we add AI to this workflow? Inputs: Problem; Current workflow; Users; Constraints; Existing alternatives. Returns: Opportunity brief; Option comparison; Decision or next-test recommendation. Runs the AI Product Team assess-opportunity workflow from this session."
-license: See LICENSE_PENDING.md in the ai-product-team repository.
+license: MIT
 metadata:
   aipt_entry: "W01"
   aipt_version: "0.1.0"

@@ -1,7 +1,7 @@
 ---
 name: aipt-method-security-and-privacy-review
 description: Security review, privacy review, permission enforcement, trust boundary, injection exposure, scope inheritance, egress, retention and removal, enforced control versus requested compliance, export ruling. Use when reviewing an AI feature's design or code for where permissions are enforced, where untrusted content enters model input, where scoped data travels and leaves, and whether removal works, or ruling on whether a private record may be published. Produces a review with an assurance level per control, findings with verification requirements; escalates legal questions and never certifies.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S26"
   aipt_provenance: "newly_authored"

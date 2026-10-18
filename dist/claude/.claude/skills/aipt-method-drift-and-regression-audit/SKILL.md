@@ -1,7 +1,7 @@
 ---
 name: aipt-method-drift-and-regression-audit
 description: Drift audit, regression check, parity, baseline versus changed, invariants, allowed deltas, hidden drift, migration, refactor, rewrite, consolidation. Compare a baseline version and a changed version of an artifact or behavior against declared invariants and allowed deltas; classify each difference as exact parity, intentional change, ambiguous, regression or hidden drift; root-cause regressions and name the minimum repair or the decision that would bless the deviation. Use after a migration, refactor or rewrite when parity matters. Not for greenfield work with no baseline.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S07"
   aipt_provenance: "adapt"

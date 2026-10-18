@@ -1,7 +1,7 @@
 ---
 name: aipt-method-structural-integrity-audit
 description: Structural audit, integrity check, duplication, contradiction, bloat, filler, portability, readiness verdict. Audit a set of artifacts (role bodies, skills, guidance files, prompts, templates, docs, scaffolding) for role clarity, scope discipline, duplication, conflicting rules and precedence, portability, maintainability and operational usefulness; return prioritized structural fixes, a recommended end state and a readiness verdict. Use before a set is installed or published, or when generated variants need cleanup. Not for single-file edits or baseline-versus-change comparison.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S05"
   aipt_provenance: "adapt"

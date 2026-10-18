@@ -1,7 +1,7 @@
 ---
 name: aipt-method-tool-and-permission-boundaries
 description: Tool contract, permission boundary, idempotency key, timeout, retry policy, proposed action versus executed action, enforceable boundary versus requested compliance. Use when defining or reviewing the tools an AI feature may call: typed inputs, results and errors; idempotency keys for non-idempotent effects; timeouts and retry rules; separating actions the model proposes from actions the system executes; binding each effect to target identifiers and versions; and labeling each boundary as enforced by code or merely requested of the model. Produces tool contract and action record artifacts.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S16"
   aipt_provenance: "newly_authored"

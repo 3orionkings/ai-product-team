@@ -1,7 +1,7 @@
 ---
 name: aipt-method-controlled-learning
 description: Controlled learning, skill change proposal, workflow change proposal, repeated failure, verified outcomes, held-out tests, rollback version, protected policy, separate version, anecdote is not a rule. Use when audited results show the same failure recurring across independent cases and a change to a skill, role body or workflow recipe is proposed to address it. Produces a learning proposal on its own version with the failure statement, affected invariants, expected improvement, held-out tests and rollback; blocks any change to protected authority, exclusions, privacy boundaries or thresholds.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S27"
   aipt_provenance: "newly_authored"

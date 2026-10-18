@@ -1,7 +1,7 @@
 ---
 name: aipt-method-delegated-authority
 description: Delegation, approval, accept a proposal, authority check, who may approve, request human approval, expiry, revocation, version binding, self-authorization. Apply a recorded human delegation to one versioned proposal and return accepted, rejected, deferred or human_required, binding any acceptance to the exact proposal version, hash, scope and expiry. Acceptance is not execution permission; a role cannot grant itself authority; a same-user local approval file is a claim, not proof. Not for ruling on evidence (aipt-method-evidentiary-adjudication) or writing the decision record afterward.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S25"
   aipt_provenance: "newly_authored"

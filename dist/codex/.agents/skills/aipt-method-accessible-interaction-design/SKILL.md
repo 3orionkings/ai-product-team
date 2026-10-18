@@ -1,7 +1,7 @@
 ---
 name: aipt-method-accessible-interaction-design
 description: Accessible interaction design, draft versus preview versus confirmation versus executed action, keyboard operation, non-color status, perceivable feedback, correction path, undo, handoff back to people, observed check versus untested claim. Use when specifying or reviewing how people see, operate and correct an AI feature, including the task before and after the AI exchange. Produces an interaction specification with a control inventory, four-state actions, feedback and correction paths, handoffs, and reproducible checks each labeled observed or untested.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S28"
   aipt_provenance: "newly_authored"

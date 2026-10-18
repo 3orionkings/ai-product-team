@@ -1,7 +1,7 @@
 ---
 name: aipt-method-evidence-and-lineage
 description: Evidence records, source scope, claim typing, lineage links, contested claims, impact policy, immutable versions. Use when recording a source, stating or assessing a claim, linking evidence to a requirement, decision, artifact or validation, handling a contradiction, or working out what a changed version affects. Produces source, claim and link records whose scope and limitations every summary inherits; a contradiction becomes a contested assessment and a review task, never a status flip.
-license: See LICENSE_PENDING.md in the repository root.
+license: MIT
 metadata:
   aipt_skill_id: "S12"
   aipt_provenance: "newly_authored"

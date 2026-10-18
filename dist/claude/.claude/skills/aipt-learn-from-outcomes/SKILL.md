@@ -1,7 +1,7 @@
 ---
 name: aipt-learn-from-outcomes
 description: "W12 Use verified outcomes to improve the product or team. Inputs: Audited runs; Outcomes; Failed approaches; Current versions. Returns: Improvement proposal; Test and evaluation plan; Versioned change and rollback path. Runs the AI Product Team learn-from-outcomes workflow from this session."
-license: See LICENSE_PENDING.md in the ai-product-team repository.
+license: MIT
 metadata:
   aipt_entry: "W12"
   aipt_version: "0.1.0"
