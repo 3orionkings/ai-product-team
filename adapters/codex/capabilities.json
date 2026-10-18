@@ -107,7 +107,7 @@
     "isolation_claim": "inherited_from_parent",
     "isolation_note": "Official documentation: a custom agent file cannot replace the parent's sandbox or approval policy, and instructions asking an agent to avoid edits do not create a separate read-only sandbox. The adapter therefore never presents a role as isolated on this host."
   },
-  "human_input_attestation": "not available to the controller; approvals recorded through the CLI are unattested",
+  "human_input_attestation": "not available; approvals are taken only from the user's own messages in the session and cannot be attested by the files",
   "validation_command": "python3 install.py --target <scratch-dir> --host codex, then in Codex run /subagents (blocked on the build machine)",
   "unsupported": [
     "per-role sandbox or approval policy",

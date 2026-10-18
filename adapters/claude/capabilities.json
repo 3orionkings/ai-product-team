@@ -116,7 +116,7 @@
     "isolation_claim": "tool_allowlist_only",
     "isolation_note": "A tools allowlist narrows what a role can call. It is not a sandbox and not a security boundary against a hostile user of the same machine."
   },
-  "human_input_attestation": "not available to the controller; approvals recorded through the CLI are unattested",
+  "human_input_attestation": "not available; approvals are taken only from the user's own messages in the session and cannot be attested by the files",
   "validation_command": "python3 install.py --target <scratch-dir> --host claude, then open the scratch project in Claude Code and run /agents",
   "unsupported": [
     "per-role usage or cost telemetry",
