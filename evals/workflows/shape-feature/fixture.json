@@ -1,0 +1,15 @@
+{
+  "workflow_id": "W02",
+  "workflow": "shape-feature",
+  "label": "unrun",
+  "scenario": "One document says drafts only; an older slide says send messages automatically.",
+  "expected_behavior": "The source conflict remains visible. Requirements cannot silently authorize sending. The acceptance map includes no-send behavior until a human resolves the authority change.",
+  "acceptance": [
+    "Conflicts preserved",
+    "Requirements remain linked to source decisions",
+    "Missing authority remains open"
+  ],
+  "core_cross_host": true,
+  "case_material": "examples/support-copilot/ (synthetic)",
+  "note": "A scenario description with expected behavior. It has not been run against a model or a host."
+}

@@ -35,7 +35,7 @@ When something is missing, the run returns `needs_input` and retains progress:
 | `hypotheses.json` | `{symptom_ref, cuts: [{dimension: volume/rate/data_quality/task_outcome, finding, evidence_refs}], hypotheses: [{id, statement, component: model/retrieval/tool/interface/data/process, prior: low/medium/high, confirming_test, killing_test, evidence_refs}], retained_alternatives: []}` | `artifact` node, kind `hypotheses`; each hypothesis proposed as a `claim` of type `hypothesis` |
 | `conflicts.json` | `{conflicts: [{id, records: [refs], kind: context_difference/actual_contradiction, explanation, resolution_options: [], status: open/explained}]}` | `artifact` node, kind `conflicts`; `contradicts` edges proposed between the records, which mark the affected claim `contested`, not false |
 | `diagnostic-evidence.json` | `{snapshot, code_paths: [{path, symbol, observation, receipt_id}], commands_observed: [{command, receipt_id}], specialist_requests: [], finding: implicated/cleared/inconclusive}` | `artifact` node, kind `diagnostic-evidence`; each command a `receipt` |
-| `remediation-recommendation.md` | Headings: Diagnosis reviewed · Confidence and what remains untested · Containment proposal · Remediation work order request · Not authorized here · Next discriminating measure. | `review` node via `aipt review submit`, with the recommendation body stored as an `artifact` of kind `remediation-recommendation` |
+| `remediation-recommendation.md` | Headings: Diagnosis reviewed · Confidence and what remains untested · Containment proposal · Remediation work order request · Not authorized here · Next discriminating measure. | `review` record in the case ledger, with the recommendation body stored as an `artifact` of kind `remediation-recommendation` |
 
 The registry outputs map as follows: validated symptom is `incident-brief.md`; hypotheses and discriminating tests are `hypotheses.json`, with `conflicts.json` and `diagnostic-evidence.json` as supporting evidence; repair recommendation is `remediation-recommendation.md`.
 
@@ -63,7 +63,7 @@ Read `agents/failure-analyst.md`. Apply `aipt-method-evaluation-planning` to def
 Read `agents/contradiction-analyst.md`. Apply `aipt-method-evidence-and-lineage` to record which records disagree and to propose `contradicts` edges, `aipt-method-structural-integrity-audit` to separate an actual contradiction from a scope or context difference, and `aipt-method-corpus-grounded-onboarding` to anchor each record in its own time and audience. Input refs: `hypotheses.json`, the report and trace sources, the requirement versions, the recent-change list. For Reply Assist, the older slide saying "send automatically" and the current policy saying "drafts only" is a scope difference with a date, not a live contradiction, and the brief must not pick the newer record silently when its scope differs. Accepted when every conflict is typed, explained and either resolved with evidence or left open with resolution options, and no record is discarded.
 
 ### `targeted-causes` — repository-mapper
-Read `agents/repository-mapper.md`. Runs only under `evidence_points_to_code`. Apply `aipt-method-corpus-grounded-onboarding` to follow the implicated execution path from the actual entry point, and `aipt-method-structural-integrity-audit` to spot duplicated or diverging code paths that could explain cohort differences. Input refs: `hypotheses.json`, `conflicts.json`, the repository root and snapshot from the case. Inspect only the paths the evidence names, run read-only commands through `aipt receipt run`, and raise the risk tier to R1 when any command executes. Where the evidence points at retrieval filtering or a tool contract, request `retrieval-designer` or `tool-integration-designer` instead of guessing. Accepted when every observation cites a file and snapshot or a receipt, the finding is `implicated`, `cleared` or `inconclusive` per hypothesis, and no entry point is invented.
+Read `agents/repository-mapper.md`. Runs only under `evidence_points_to_code`. Apply `aipt-method-corpus-grounded-onboarding` to follow the implicated execution path from the actual entry point, and `aipt-method-structural-integrity-audit` to spot duplicated or diverging code paths that could explain cohort differences. Input refs: `hypotheses.json`, `conflicts.json`, the repository root and snapshot from the case. Inspect only the paths the evidence names, run read-only commands as recorded commands with receipts in the case ledger, and raise the risk tier to R1 when any command executes. Where the evidence points at retrieval filtering or a tool contract, request `retrieval-designer` or `tool-integration-designer` instead of guessing. Accepted when every observation cites a file and snapshot or a receipt, the finding is `implicated`, `cleared` or `inconclusive` per hypothesis, and no entry point is invented.
 
 ### `review-contain` — evaluation-manager
 Read `agents/evaluation-manager.md`. Apply `aipt-method-independent-audit` to check that each hypothesis status traces to a test that ran or is marked untested, `aipt-method-outcome-and-value-analysis` to judge whether the outcome measure actually tracks task quality, and `aipt-method-evaluation-planning` to specify the next discriminating measure. Input refs: all upstream artifacts. The manager states which component is implicated and at what confidence, proposes a bounded, reversible containment where one exists, and writes the remediation as a work-order request for `build-prototype` with its own checks. Nothing in the recommendation changes production. Accepted when `result` is set, confidence is tied to executed tests, the containment is reversible and inside authorized scope, and the work-order request names the requirement it serves.
@@ -98,7 +98,7 @@ Budget guidance: focused (4 tasks) fits a definition check and one cut with the 
 
 ## Status handling and recovery
 
-- `needs_input`: the exact question is preserved in the run record; the accepted brief and any accepted hypotheses stay accepted; the run returns to `planned` when `aipt decision record-user-input` supplies the answer.
+- `needs_input`: the exact question is preserved in the run record; the accepted brief and any accepted hypotheses stay accepted; the run returns to `planned` when the user's answer is recorded in the case ledger.
 - `blocked`: the task records the trace, log or tool that is unavailable; stages that do not need it continue; the recommendation lists what access would unblock the rest. The user receives the blocker, the diagnosis so far and the next resolving action.
 - `failed`: receipts from a failed command are preserved with exit status and logs; a timeout is distinguished from a failing exit; retries stay within the work order's budget; a failed inspection never becomes a `cleared` finding.
 - `partial`: cuts and conflicts that completed stay accepted; the run cannot complete while an implicated component has no finding; the recommendation names the components left `inconclusive`.
@@ -115,29 +115,22 @@ This workflow never deploys, publishes, sends a message, pays, deletes data, rol
 
 Scenario: Support complaints fall after the reporting interface becomes harder to find. Expected behavior: the analysis distinguishes reporting volume from actual task quality, records the interface change as a data-quality cut, types "the feature improved drafts" as a hypothesis with a prior and a killing test, and asks for a discriminating measure such as draft acceptance rate on a fixed cohort before crediting the AI feature.
 
-Fixture path: `evals/workflows/investigate-failure/fixture.json`. A replay of this fixture is labeled `fixture_replay` and is not a live run.
+Fixture: `evals/workflows/investigate-failure/fixture.json` records this scenario, its expected behavior and the acceptance lines. It has not been run against a model or a host.
 
 ## Invocation
 
-Entry skill: `aipt-investigate-failure`, loaded in the root session only.
+Entry skill: `aipt-investigate-failure`. It runs in your current session, never a forked one, and that session acts as the root orchestrator.
 
-- `aipt run start --case CASE --workflow investigate-failure --mode standard` records a run in state `created` then `scoped`, with the case, workflow version, mode, risk floor R0 and the host when observable.
-- `aipt run plan --run RUN` records the route plan: selected and omitted roles with reasons, the `evidence_points_to_code` evaluation, satisfied-by versions and the budget check.
-- `aipt task next --run RUN` lists the ready tasks whose dependencies are accepted, in dependency order.
-- `aipt task admit --task TASK` runs the admission checks (dependencies, budget, write scope, author-as-reviewer, source scope, wall clock) and mints the work order with a reserved slot.
-- `aipt task attach --task TASK --native-child-id CHILD` records the native child identity and execution mode; without it, a native claim is downgraded to `sequential` with `observed_by=agent_reported`.
-- `aipt task submit --task TASK --response response.json` validates the envelope, stores the brief, hypotheses, conflicts and diagnostic evidence as proposed nodes, records proposed claims and `contradicts` edges as proposals, and moves the task to `submitted`.
-- `aipt receipt run --task TASK -- <command>` executes a read-only inspection and stores the receipt with command, snapshot, exit status and log locations.
-- `aipt review submit --run RUN --record review.json` records the manager review with its conflict check; the controller refuses a reviewer who authored an artifact under review.
-- `aipt decision propose --run RUN --record decision.json` records an R2 containment or a disputed diagnosis as a proposal for `resolve-decision`; `aipt decision record-user-input --run RUN --record user-input.json` records the user's answer with `channel=cli` and `attested=false`.
-- `aipt case report --case CASE --format markdown` renders the derived report, including contested claims, open questions and the requested remediation work order.
+- Claude Code: `/aipt-investigate-failure` followed by your request and the files or folders to use.
+- Codex: `$aipt-investigate-failure` followed by the same.
+- Either host: describe the request in plain language; the `aipt-start` entry skill routes it here when it fits.
+
+Example request: "Draft acceptance dropped last week. Find out why, using these traces and the changelog."
+
+Before dispatching any role, the session states the route plan: the stages it will run, the stages it will skip and why, the artifacts it will write, any missing input, and anything it will not do. Artifacts and the case ledger go under `aipt-cases/<case-id>/` in your project, as the `aipt-start` skill describes.
+
+This release has no command-line controller. The record-keeping rules in this recipe (version binding, review independence, receipts, impact tracing) are followed by the orchestrating session as instructions; nothing enforces them in code. The experimental controller library in `src/` implements several of these rules in tested code, but it is not connected to either host.
 
 ## Live coverage
 
-| Host | fixture_replay | native | Last run |
-|---|---|---|---|
-| first native host (see `docs/compatibility/`) | not yet run | not yet run | — |
-| second native host (see `docs/compatibility/`) | not yet run | not yet run | — |
-| fixture runner, no host | not yet run | — | — |
-
-This table is updated only from recorded runs; no cell is inferred from parsed files or from a run on another host. This workflow is not in the core cross-host matrix; its live coverage is reported here exactly and is never implied by the core six.
+Per-host status is recorded in `docs/compatibility/`. As of this release, no workflow has been run end to end on either host, and this recipe's fixture is unrun.

@@ -16,14 +16,50 @@
     "user_path": "~/.codex/agents/<name>.toml",
     "format": "one TOML file per agent",
     "identity_field": "name",
-    "required_fields": ["name", "description", "developer_instructions"],
-    "fields_emitted_by_adapter": ["name", "description", "developer_instructions"],
-    "optional_fields_available": ["model", "model_reasoning_effort", "model_reasoning_summary", "model_verbosity", "features.shell_tool", "features.apps", "features.plugins", "features.memories", "features.request_permissions_tool", "skills.config", "skills.bundled.enabled", "skills.include_instructions"],
-    "fields_not_overridable_per_agent": ["sandbox_mode", "approval_policy", "model_provider", "mcp_servers"],
-    "reserved_builtin_names": ["default", "worker", "explorer"]
+    "required_fields": [
+      "name",
+      "description",
+      "developer_instructions"
+    ],
+    "fields_emitted_by_adapter": [
+      "name",
+      "description",
+      "developer_instructions"
+    ],
+    "optional_fields_available": [
+      "model",
+      "model_reasoning_effort",
+      "model_reasoning_summary",
+      "model_verbosity",
+      "features.shell_tool",
+      "features.apps",
+      "features.plugins",
+      "features.memories",
+      "features.request_permissions_tool",
+      "skills.config",
+      "skills.bundled.enabled",
+      "skills.include_instructions"
+    ],
+    "fields_not_overridable_per_agent": [
+      "sandbox_mode",
+      "approval_policy",
+      "model_provider",
+      "mcp_servers"
+    ],
+    "reserved_builtin_names": [
+      "default",
+      "worker",
+      "explorer"
+    ]
   },
   "skills_discovery": {
-    "paths": ["$CWD/.agents/skills", "$CWD/../.agents/skills (inside a git repository)", "$REPO_ROOT/.agents/skills", "$HOME/.agents/skills", "/etc/codex/skills"],
+    "paths": [
+      "$CWD/.agents/skills",
+      "$CWD/../.agents/skills (inside a git repository)",
+      "$REPO_ROOT/.agents/skills",
+      "$HOME/.agents/skills",
+      "/etc/codex/skills"
+    ],
     "project_path_used_by_adapter": ".agents/skills/<name>/SKILL.md",
     "format": "Agent Skills (SKILL.md with name and description)",
     "explicit_invocation": "$<name> or /skills",
@@ -48,9 +84,20 @@
     "per_role": false,
     "mechanism": "none for sandbox or approvals; capability reduction only through features.* = false",
     "write_scope_mapping": {
-      "proposal-only": {"features": {"shell_tool": false}, "instruction": "state the write scope in developer_instructions"},
-      "assigned-worktree": {"features": {}, "instruction": "state the authorized paths in developer_instructions"},
-      "verification-sandbox": {"features": {}, "instruction": "state read-only-plus-run intent in developer_instructions"}
+      "proposal-only": {
+        "features": {
+          "shell_tool": false
+        },
+        "instruction": "state the write scope in developer_instructions"
+      },
+      "assigned-worktree": {
+        "features": {},
+        "instruction": "state the authorized paths in developer_instructions"
+      },
+      "verification-sandbox": {
+        "features": {},
+        "instruction": "state read-only-plus-run intent in developer_instructions"
+      }
     },
     "note": "Disabling shell_tool for proposal-only roles removes file reading through the shell as well; the adapter emits it only when the policy file enables it (default off), so by default roles rely on instructions and the parent sandbox."
   },
@@ -61,7 +108,7 @@
     "isolation_note": "Official documentation: a custom agent file cannot replace the parent's sandbox or approval policy, and instructions asking an agent to avoid edits do not create a separate read-only sandbox. The adapter therefore never presents a role as isolated on this host."
   },
   "human_input_attestation": "not available to the controller; approvals recorded through the CLI are unattested",
-  "validation_command": "aipt doctor --host codex --project <scratch-dir>",
+  "validation_command": "python3 install.py --target <scratch-dir> --host codex, then in Codex run /subagents (blocked on the build machine)",
   "unsupported": [
     "per-role sandbox or approval policy",
     "observed child identity (pending conformance run)",

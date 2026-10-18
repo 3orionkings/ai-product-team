@@ -99,7 +99,7 @@ Budget guidance: focused (4 tasks, zero rounds) cannot run this workflow; a risk
 
 ## Status handling and recovery
 
-`needs_input`: the task and run move to `needs_input` with the exact question preserved, for example "Does the owner's delegation cover changing the reply policy from drafts only, or is that reserved to the owner?" Completed stages stay accepted; the run returns to `planned` when `aipt decision record-user-input` stores the answer.
+`needs_input`: the task and run move to `needs_input` with the exact question preserved, for example "Does the owner's delegation cover changing the reply policy from drafts only, or is that reserved to the owner?" Completed stages stay accepted; the run returns to `planned` when the answer is recorded in the case ledger as user input.
 
 `blocked`: the task names the unavailable capability or evidence, such as a cited evaluation with no receipt or a host that cannot create a fresh judge context, and the run continues only the stages that do not depend on it. The user receives the packet, the challenges so far and the blocker.
 
@@ -119,28 +119,22 @@ Scenario: three agents prefer option A, one points to a decisive violation of a 
 
 Expected behavior: the convergence-judge rules on the violation under the constraint criterion and does not count preferences; option A is `option_rejected`, or the question is `deferred` with the superseding record as the next check if the policy's status is itself unclear. The decision-authority does not accept A under any delegation. The dissent and the three preferences are recorded verbatim.
 
-Path: `evals/workflows/resolve-decision/fixture.json`. A replay of this fixture through the controller is labeled `fixture_replay` and is not a live run.
+Fixture: `evals/workflows/resolve-decision/fixture.json` records this scenario, its expected behavior and the acceptance lines. It has not been run against a model or a host.
 
 ## Invocation
 
-Entry skill: `aipt-resolve-decision`, loaded in the root session; it never runs in a forked context.
+Entry skill: `aipt-resolve-decision`. It runs in your current session, never a forked one, and that session acts as the root orchestrator.
 
-- `aipt run start --case CASE --workflow resolve-decision --mode standard` creates the run in `scoped` with one challenge round and twelve worker tasks available.
-- `aipt run plan --run RUN` stores the route plan with the frozen proposal version, the included and omitted challenge kinds and the predicate values.
-- `aipt task next --run RUN` lists ready tasks whose dependencies are accepted; `test-premise` and `alternative` appear together.
-- `aipt task admit --task TASK` runs the admission checks, including the author check for judges and challengers and the round budget for challenge stages, and mints the work order; for `respond` the role is the proposal's `author_role`.
-- `aipt task attach --task TASK --native-child-id CHILD` records the fresh child id used to show judge and challenger independence.
-- `aipt task submit --task TASK --response response.json` validates the envelope and stores challenges, responses and rulings as proposed versions.
-- `aipt review submit --run RUN --record review.json` records the evidence ruling or the judgment as a review node with its conflict check.
-- `aipt decision propose --run RUN --record decision.json` stores the decision in status `proposed` for the decision-authority.
-- `aipt decision record-user-input --run RUN --record user-input.json` records the human owner's acceptance or answer with `channel` and an `attested` flag set by the controller, never by the caller.
-- `aipt case report --case CASE --format markdown` renders active decisions with dissent, unresolved questions and the next action from stored state.
+- Claude Code: `/aipt-resolve-decision` followed by your request and the files or folders to use.
+- Codex: `$aipt-resolve-decision` followed by the same.
+- Either host: describe the request in plain language; the `aipt-start` entry skill routes it here when it fits.
+
+Example request: "Challenge the proposal to use a shared index with a query-time filter, and resolve it against the per-workspace alternative."
+
+Before dispatching any role, the session states the route plan: the stages it will run, the stages it will skip and why, the artifacts it will write, any missing input, and anything it will not do. Artifacts and the case ledger go under `aipt-cases/<case-id>/` in your project, as the `aipt-start` skill describes.
+
+This release has no command-line controller. The record-keeping rules in this recipe (version binding, review independence, receipts, impact tracing) are followed by the orchestrating session as instructions; nothing enforces them in code. The experimental controller library in `src/` implements several of these rules in tested code, but it is not connected to either host.
 
 ## Live coverage
 
-| host | fixture_replay | native | last run |
-|---|---|---|---|
-| host adapter A | not yet run | not yet run | — |
-| host adapter B | not yet run | not yet run | — |
-
-Rows are keyed by the adapter id recorded on the run. This table is updated only from recorded runs.
+Per-host status is recorded in `docs/compatibility/`. As of this release, no workflow has been run end to end on either host, and this recipe's fixture is unrun.

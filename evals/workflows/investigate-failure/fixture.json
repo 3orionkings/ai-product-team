@@ -1,0 +1,15 @@
+{
+  "workflow_id": "W06",
+  "workflow": "investigate-failure",
+  "label": "unrun",
+  "scenario": "Support complaints fall after the reporting interface becomes harder to find.",
+  "expected_behavior": "The analysis distinguishes reporting volume from actual task quality and asks for a discriminating measure before crediting the AI feature.",
+  "acceptance": [
+    "Validate the failure definition first",
+    "Differentiate model, retrieval, tool, UI and data failures",
+    "Repair requires a separate scoped work order"
+  ],
+  "core_cross_host": false,
+  "case_material": "examples/support-copilot/ (synthetic)",
+  "note": "A scenario description with expected behavior. It has not been run against a model or a host."
+}

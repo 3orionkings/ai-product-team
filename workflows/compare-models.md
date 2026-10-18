@@ -57,7 +57,7 @@ The evaluation-designer (`agents/evaluation-designer.md`) applies `aipt-method-e
 
 ### run
 
-The evaluation-runner (`agents/evaluation-runner.md`) applies `aipt-method-evaluation-execution-and-receipts` to execute each candidate on the frozen cases inside the verification sandbox through `aipt receipt run`, and `aipt-method-cost-and-latency-analysis` to record token and timing observations per call. Input refs: accepted `comparison-plan.json`, the dataset version, the candidate configurations, the approved budget. Accept when every candidate has a receipt-bound validation record, `actual_configuration_observed` is filled or marked unobservable, and no replay or fixture output appears in a live score.
+The evaluation-runner (`agents/evaluation-runner.md`) applies `aipt-method-evaluation-execution-and-receipts` to execute each candidate on the frozen cases inside the verification sandbox as recorded commands with receipts in the case ledger, and `aipt-method-cost-and-latency-analysis` to record token and timing observations per call. Input refs: accepted `comparison-plan.json`, the dataset version, the candidate configurations, the approved budget. Accept when every candidate has a receipt-bound validation record, `actual_configuration_observed` is filled or marked unobservable, and no replay or fixture output appears in a live score.
 
 ### economics
 
@@ -109,28 +109,22 @@ This workflow never changes the model configuration of the feature, never edits 
 
 Registry scenario: candidate B looks cheaper per input token but retries more and fails the protected slice. Expected behavior: the recommendation uses task-level results and the stated constraints, not a superficial rate comparison, so candidate B is not recommended for the cross-workspace slice and the per-completed-task cost reflects its retries. Any billing component without a dated rate stays `unknown`.
 
-Fixture path: `evals/workflows/compare-models/fixture.json`. A replay of this fixture is labeled `fixture_replay` and is not a live run.
+Fixture: `evals/workflows/compare-models/fixture.json` records this scenario, its expected behavior and the acceptance lines. It has not been run against a model or a host.
 
 ## Invocation
 
-Entry skill: `aipt-compare-models`.
+Entry skill: `aipt-compare-models`. It runs in your current session, never a forked one, and that session acts as the root orchestrator.
 
-- `aipt run start --case CASE --workflow compare-models --mode standard` records a run bound to the case, this workflow version and the `standard` budget.
-- `aipt run plan --run RUN_ID` records the route plan: selected stages, pruned stages with their satisfying versions, and the budget check.
-- `aipt task next --run RUN_ID` lists the ready tasks whose dependencies are accepted, in dependency order.
-- `aipt task admit --task TASK_ID` records the admission checks and reserves a worker slot.
-- `aipt task attach --task TASK_ID --native-child-id CHILD_ID` records which native child executes the task so the execution mode is observed rather than claimed.
-- `aipt receipt run --task TASK_ID -- <evaluation command>` records a command receipt for the `run` stage.
-- `aipt task submit --task TASK_ID --response response.json` records the response envelope and stores its artifacts as proposed versions.
-- `aipt review submit --run RUN_ID --record review.json` records the systems-manager review against the exact versions reviewed.
-- `aipt decision propose --run RUN_ID --record decision.json` records a migration proposal with its requested authority.
-- `aipt decision record-user-input --run RUN_ID --record user-input.json` records the user's answer or acceptance with `attested: false`, since the CLI cannot attest identity.
-- `aipt case report --case CASE --format markdown` renders the case state, including the recommendation and its limitations.
+- Claude Code: `/aipt-compare-models` followed by your request and the files or folders to use.
+- Codex: `$aipt-compare-models` followed by the same.
+- Either host: describe the request in plain language; the `aipt-start` entry skill routes it here when it fits.
+
+Example request: "Would a different model configuration improve Reply Assist? Compare it with the current one on the frozen cases."
+
+Before dispatching any role, the session states the route plan: the stages it will run, the stages it will skip and why, the artifacts it will write, any missing input, and anything it will not do. Artifacts and the case ledger go under `aipt-cases/<case-id>/` in your project, as the `aipt-start` skill describes.
+
+This release has no command-line controller. The record-keeping rules in this recipe (version binding, review independence, receipts, impact tracing) are followed by the orchestrating session as instructions; nothing enforces them in code. The experimental controller library in `src/` implements several of these rules in tested code, but it is not connected to either host.
 
 ## Live coverage
 
-| host | fixture_replay | native | last run |
-|---|---|---|---|
-| `adapters/<host>` (one row per host directory) | not yet run | not yet run | — |
-
-This table is updated only from recorded runs.
+Per-host status is recorded in `docs/compatibility/`. As of this release, no workflow has been run end to end on either host, and this recipe's fixture is unrun.

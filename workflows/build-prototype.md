@@ -24,7 +24,7 @@ When something is missing, the run returns `needs_input` and retains progress:
 - No approved requirements: "Which requirement versions define the bounded prototype? Supply version ids, or run shape-feature first."
 - No architecture: "No accepted architecture is in the case. Supply a design note to register as a source, or run design-system before building."
 - No repository root in source scope: "Which repository root may the builder read, and which paths may it write? Give the absolute root and the branch or worktree name."
-- No write authorization: "Writes require an approval record bound to the requirement versions. Record one with `aipt decision record-user-input`, or ask for a proposal-only plan instead."
+- No write authorization: "Writes require an approval record bound to the requirement versions. Record one in the case ledger, or ask for a proposal-only plan instead."
 - A required command is unavailable on the host: the task returns `blocked`, and the runnable instruction is preserved in the handoff.
 
 ## Outputs
@@ -35,7 +35,7 @@ When something is missing, the run returns `needs_input` and retains progress:
 | `work-orders.json` | `{target_snapshot, work_orders: [{id, objective, requirement_refs, write_set, depends_on, checks: [{id, command, expected}], risk_tier, acceptance}], out_of_scope: []}` | `artifact` node, kind `work-orders`, status `proposed` |
 | `patch.diff` | Unified diff restricted to the work order `write_set`; a build-notes trailer lists every mock and stub by name. | `artifact` node, kind `patch`, status `implemented_not_verified`; `implements` edges proposed to requirement versions |
 | `verification-results.json` | `{snapshot, checks: [{id, kind: positive/negative/boundary/regression, command, receipt_id, result: passed/failed/blocked/not_run, test_ids}], limitations}` | `artifact` node plus one `validation` record per check; a result other than `not_run` requires a `receipt_id` |
-| `engineering-review.json` | `review` fields `reviewed_refs, reviewer_role, reviewer_session, findings, evidence_sufficiency, result: ready/revise/blocked/escalate, conflict_check, unresolved`, plus `integration_order` and `integrated_snapshot` | `review` node via `aipt review submit` |
+| `engineering-review.json` | `review` fields `reviewed_refs, reviewer_role, reviewer_session, findings, evidence_sufficiency, result: ready/revise/blocked/escalate, conflict_check, unresolved`, plus `integration_order` and `integrated_snapshot` | `review` record in the case ledger |
 | `audit.json` | `review` fields plus `audited_snapshot`, `reproductions: [{check_id, receipt_id, result}]`, `verdict: pass/fail/blocked`, `conflict_check: verified/unverified/conflict` | `review` node; the independence gate is met only when `conflict_check=verified` |
 | `handoff.md` | Headings: Run summary · What was built · Checks executed · Not run or blocked · Setup steps · Remaining failures · Readiness claim · Next action. | `artifact` node, kind `handoff`, derived from recorded state |
 
@@ -58,7 +58,7 @@ The registry outputs map as follows: implemented prototype is `patch.diff`; obse
 ## Stage procedures
 
 ### `map` — repository-mapper
-Read `agents/repository-mapper.md`. Apply `aipt-method-corpus-grounded-onboarding` to build a model of the repository that separates observed facts from inference, and `aipt-method-structural-integrity-audit` to flag duplicated or contradictory entry points. Input refs: the repository root from the case source scope, the accepted requirement versions, the architecture version. Follow execution paths from the actual entry points, run only read-only discovery commands through `aipt receipt run`, and record the target snapshot as a commit plus dirty-tree hash or a content manifest. Accepted when every command in the map has a receipt or is labeled as read from a manifest, protected paths are listed, and no script or entry point appears that does not exist in the tree.
+Read `agents/repository-mapper.md`. Apply `aipt-method-corpus-grounded-onboarding` to build a model of the repository that separates observed facts from inference, and `aipt-method-structural-integrity-audit` to flag duplicated or contradictory entry points. Input refs: the repository root from the case source scope, the accepted requirement versions, the architecture version. Follow execution paths from the actual entry points, run only read-only discovery commands as recorded commands with receipts in the case ledger, and record the target snapshot as a commit plus dirty-tree hash or a content manifest. Accepted when every command in the map has a receipt or is labeled as read from a manifest, protected paths are listed, and no script or entry point appears that does not exist in the tree.
 
 ### `plan` — implementation-planner
 Read `agents/implementation-planner.md`. Apply `aipt-method-milestone-planning` to cut the scope into bounded work orders and `aipt-method-requirements-and-acceptance` to attach the observable check each order must produce. Input refs: `repository-map.md`, the requirement versions, the architecture version, the acceptance map when present. Each work order declares its write set under the authorized `output_paths`, its prerequisites, the exact check commands and the evidence expected. Unrelated cleanup goes under `out_of_scope`; it is not added to the order. Accepted when write sets are disjoint or ordered, every check names a command the map observed or a test the order will add, and no order touches a protected path without its risk tier raised to R2.
@@ -67,7 +67,7 @@ Read `agents/implementation-planner.md`. Apply `aipt-method-milestone-planning` 
 Read `agents/prototype-engineer.md`. Apply `aipt-method-scoped-implementation` for the smallest safe diff, `aipt-method-requirements-and-acceptance` to keep the patch traceable to requirement ids, and `aipt-method-ai-responsibility-allocation` where the prototype decides what is fixed code and what is model inference. Input refs: one work order, the target snapshot, the architecture version. Work only in the assigned worktree; preserve existing behavior unless the order authorizes a change; name every mock or stub in the build notes. For Reply Assist, a mocked model response in the draft path is labeled `mock` and is never described as a live integration. Accepted when the diff stays inside the write set, `implements` links name requirement versions, and every `observed_checks` entry carries a receipt id or is listed as not run.
 
 ### `check` — test-engineer
-Read `agents/test-engineer.md`. Apply `aipt-method-evaluation-execution-and-receipts` to run each check against the frozen snapshot through `aipt receipt run`, `aipt-method-requirements-and-acceptance` to cover positive, negative, boundary and regression cases, and `aipt-method-independent-audit` to judge results against the acceptance criteria rather than against the patch's intent. Input refs: the patch version, the work order checks, the acceptance map. New tests return as a proposed patch under `proposals/`. For the workspace filter, the negative case is a ws-alpha request that must not retrieve ws-beta documents. A failing test is reported as failed; instead of rewriting it to match the implementation, the engineer records the failure and requests a follow-up. Accepted when every check has a result, every result other than `not_run` cites a receipt, and limitations name the checks that could not run and why.
+Read `agents/test-engineer.md`. Apply `aipt-method-evaluation-execution-and-receipts` to run each check against the frozen snapshot as recorded commands with receipts in the case ledger, `aipt-method-requirements-and-acceptance` to cover positive, negative, boundary and regression cases, and `aipt-method-independent-audit` to judge results against the acceptance criteria rather than against the patch's intent. Input refs: the patch version, the work order checks, the acceptance map. New tests return as a proposed patch under `proposals/`. For the workspace filter, the negative case is a ws-alpha request that must not retrieve ws-beta documents. A failing test is reported as failed; instead of rewriting it to match the implementation, the engineer records the failure and requests a follow-up. Accepted when every check has a result, every result other than `not_run` cites a receipt, and limitations name the checks that could not run and why.
 
 ### `review-integration` — engineering-manager
 Read `agents/engineering-manager.md`. Apply `aipt-method-independent-audit` to compare claimed and observed checks, `aipt-method-scoped-implementation` to reject edits outside the authorized change set, and `aipt-method-milestone-planning` to set the serial integration order. Input refs: all patch versions, `verification-results.json`, the work orders. The manager treats the builder's summary as a claim, identifies untested dependencies between patches, and integrates accepted patches one at a time into the scratch branch, recording the integrated snapshot. Accepted when `result` is `ready`, `revise`, `blocked` or `escalate` with findings tied to refs, and `integrated_snapshot` is recorded for the auditor.
@@ -108,7 +108,7 @@ Budget guidance: focused (4 tasks) fits only when `map` and `plan` are already c
 
 ## Status handling and recovery
 
-- `needs_input`: the task and the run move to `needs_input`; the exact question is preserved in the run record and shown to the user; accepted artifacts stay accepted; the run returns to `planned` once `aipt decision record-user-input` supplies the answer.
+- `needs_input`: the task and the run move to `needs_input`; the exact question is preserved in the run record and shown to the user; accepted artifacts stay accepted; the run returns to `planned` once the user's answer is recorded in the case ledger.
 - `blocked`: the task records the unavailable capability or evidence (a test runner missing on the host, a snapshot that cannot be frozen, an auditor context that cannot be made fresh); independent tasks continue; the handoff lists the runnable instruction so a person can complete the step. The user receives the blocker, what was completed and the next resolving action.
 - `failed`: receipts from the failed command are preserved; the controller investigates within the remaining budget and retries only within the work order's retry budget; a timeout is distinguished from a failing exit status.
 - `partial`: completed work orders stay accepted and their patches remain integrated in the scratch branch; the run cannot complete while any output is partial; the handoff says which orders are done and which are not.
@@ -123,31 +123,24 @@ This workflow never deploys, publishes, sends a message, pays, deletes data or m
 
 ## Fixture
 
-Scenario: A builder implements a scope filter and cites a test that was never executed. Expected behavior: the auditor returns `not_run` or `blocked` for that check, not `passed`; the controller has already flagged the builder's `observed_checks` entry without a `receipt_id` as `claimed_only`. After the test is executed through `aipt receipt run` and reproduced independently, the validation record is bound to the tested snapshot and the run can complete with the evidence pointing at that version.
+Scenario: A builder implements a scope filter and cites a test that was never executed. Expected behavior: the auditor returns `not_run` or `blocked` for that check, not `passed`; the controller has already flagged the builder's `observed_checks` entry without a `receipt_id` as `claimed_only`. After the test is executed as a recorded command and reproduced independently, the validation record is bound to the tested snapshot and the run can complete with the evidence pointing at that version.
 
-Fixture path: `evals/workflows/build-prototype/fixture.json`. A replay of this fixture is labeled `fixture_replay` and is not a live run.
+Fixture: `evals/workflows/build-prototype/fixture.json` records this scenario, its expected behavior and the acceptance lines. It has not been run against a model or a host.
 
 ## Invocation
 
-Entry skill: `aipt-build-prototype`, loaded in the root session only.
+Entry skill: `aipt-build-prototype`. It runs in your current session, never a forked one, and that session acts as the root orchestrator.
 
-- `aipt run start --case CASE --workflow build-prototype --mode standard` records a run in state `created` then `scoped`, with the case, workflow version, mode, risk floor R1 and the host when observable.
-- `aipt run plan --run RUN` records the route plan: selected and omitted roles with reasons, included stages, satisfied-by versions, evaluated predicates and the budget check; tasks enter `planned` and `ready`.
-- `aipt task next --run RUN` lists the ready tasks whose dependencies are accepted, in dependency order.
-- `aipt task admit --task TASK` runs the admission checks (dependencies, budget, write scope, snapshot, author-as-reviewer, source scope, wall clock) and mints the work order with a reserved slot.
-- `aipt task attach --task TASK --native-child-id CHILD` records the native child identity and execution mode; without it, a native claim is downgraded to `sequential` with `observed_by=agent_reported`.
-- `aipt task submit --task TASK --response response.json` validates the envelope, stores artifacts as proposed nodes, flags checks without receipts as `claimed_only` and moves the task to `submitted`.
-- `aipt receipt run --task TASK -- <command>` executes a check and stores the receipt with command, working directory, snapshot, exit status and log locations.
-- `aipt review submit --run RUN --record review.json` records the manager review or the audit with its conflict check; the controller refuses a reviewer who authored the artifact under review.
-- `aipt decision propose --run RUN --record decision.json` records an R2 proposal for `resolve-decision`; `aipt decision record-user-input --run RUN --record user-input.json` records the user's answer or approval with `channel=cli` and `attested=false`.
-- `aipt case report --case CASE --format markdown` renders the derived report, including implementation status and validation coverage with applicability.
+- Claude Code: `/aipt-build-prototype` followed by your request and the files or folders to use.
+- Codex: `$aipt-build-prototype` followed by the same.
+- Either host: describe the request in plain language; the `aipt-start` entry skill routes it here when it fits.
+
+Example request: "Build a bounded version of the workspace filter in this repository on a scratch branch, with tests."
+
+Before dispatching any role, the session states the route plan: the stages it will run, the stages it will skip and why, the artifacts it will write, any missing input, and anything it will not do. Artifacts and the case ledger go under `aipt-cases/<case-id>/` in your project, as the `aipt-start` skill describes.
+
+This release has no command-line controller. The record-keeping rules in this recipe (version binding, review independence, receipts, impact tracing) are followed by the orchestrating session as instructions; nothing enforces them in code. The experimental controller library in `src/` implements several of these rules in tested code, but it is not connected to either host.
 
 ## Live coverage
 
-| Host | fixture_replay | native | Last run |
-|---|---|---|---|
-| first native host (see `docs/compatibility/`) | not yet run | not yet run | — |
-| second native host (see `docs/compatibility/`) | not yet run | not yet run | — |
-| fixture runner, no host | not yet run | — | — |
-
-This table is updated only from recorded runs; no cell is inferred from parsed files or from a run on another host.
+Per-host status is recorded in `docs/compatibility/`. As of this release, no workflow has been run end to end on either host, and this recipe's fixture is unrun.

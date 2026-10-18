@@ -24,7 +24,7 @@ The case must already contain a case brief with protected constraints and a sour
 | Tool documentation | Proceed with a limitation: contracts are written only for documented tools, and the rest are listed under `tools_undocumented` with the question to answer. |
 | Access scopes for retrieved data | `needs_input` from the `retrieval` stage: "Which access scope applies to each source the feature retrieves, and who assigns it?" Retrieval is not designed on assumed scopes. |
 | Repository context | Proceed as a design against a stated greenfield assumption; the review records that W04's `map` stage must run before any work order is issued. |
-| Capability report | `blocked`: the design cannot bind tools to what the host supplies; the resolving action is `aipt doctor` for the target host. |
+| Capability report | `blocked`: the design cannot bind tools to what the host supplies; the resolving action is to check the host's entry in `docs/compatibility/`. |
 
 ## Outputs
 
@@ -99,7 +99,7 @@ Budget modes: `focused` (4 tasks, 2 concurrent, 0 challenge rounds) fits exactly
 
 ## Status handling and recovery
 
-`needs_input`: the question (which requirements version, which access scope) is preserved verbatim and the run moves to `needs_input`; accepted artifacts are kept. The user receives the exact question and the design decision it unblocks. The answer is recorded with `aipt decision record-user-input`, the run returns to `planned`, and the waiting stage is re-planned with the answer as an input ref.
+`needs_input`: the question (which requirements version, which access scope) is preserved verbatim and the run moves to `needs_input`; accepted artifacts are kept. The user receives the exact question and the design decision it unblocks. The answer is recorded in the case ledger as user input, the run returns to `planned`, and the waiting stage is re-planned with the answer as an input ref.
 
 `blocked`: a tool's documentation or the capability report is unavailable, or a source's scope cannot be determined. The task records the unavailable item, and independent stages continue; `constrain-authority` can proceed for documented tools while the undocumented one is listed. The user receives the unavailable capability or evidence and the resolving action.
 
@@ -123,29 +123,22 @@ Scenario: "Retrieved documents have workspace-specific access, and the proposed 
 
 In the Larkspur Support case Reply Assist retrieves tickets and articles scoped to `ws-alpha` or `ws-beta`, and the supplied design asks the model to ignore the other workspace. The expected run allocates the access check to fixed code before retrieval results reach the model, writes a retrieval contract in which every summary and cache entry inherits the scope of its source, classifies the prompt instruction as a request for compliance rather than an enforceable boundary, and adds a negative test: a `ws-alpha` request against a corpus containing `ws-beta` documents must return no `ws-beta` text, with the check recorded as `not_run` until W04 executes it. The review returns `ready` with the test listed under unresolved evidence.
 
-Fixture path: `evals/workflows/design-system/fixture.json`. A replay of this fixture is labeled `fixture_replay` and is not a live run; it checks the controller's transitions with predetermined outputs and demonstrates nothing about a model's judgment or a host's execution.
+Fixture: `evals/workflows/design-system/fixture.json` records this scenario, its expected behavior and the acceptance lines. It has not been run against a model or a host.
 
 ## Invocation
 
-The entry skill is `aipt-design-system`. It loads the orchestration contract into the current root session and never runs in a forked context.
+Entry skill: `aipt-design-system`. It runs in your current session, never a forked one, and that session acts as the root orchestrator.
 
-- `aipt run start --case CASE --workflow design-system --mode standard` creates the run, binds it to the case, the workflow version and the mode, sets the risk floor to R1, and moves it from `created` to `scoped`.
-- `aipt run plan --run RUN_ID` records the route plan: whether `requires_retrieval` included the `retrieval` stage, which stages are satisfied by current artifacts, omitted roles with reasons, and the budget check.
-- `aipt task next --run RUN_ID` lists the ready tasks in dependency order: `allocate` first, then `specify-tools` and `retrieval` together.
-- `aipt task admit --task TASK_ID` runs the admission checks (dependencies, budget, role and write scope, source permissions, wall clock), reserves a slot and mints the work order.
-- `aipt task attach --task TASK_ID --native-child-id CHILD_ID` records the native child that executes the task; without it, a response claiming `native` is stored as `sequential` with `claimed_native_unobserved=true`.
-- `aipt task submit --task TASK_ID --response response.json` validates the agent response, stores the design artifact as `proposed`, stores proposed validations and links as proposed records and edges, and preserves any `needs_input` question.
-- `aipt review submit --run RUN_ID --record review.json` records the Systems Manager's review with its result and conflict check; the author of a reviewed artifact is refused as its reviewer.
-- `aipt decision propose --run RUN_ID --record decision.json` records the architecture's `requested_authority` as a proposed decision for W11 when the design touches a protected boundary.
-- `aipt decision record-user-input --run RUN_ID --record user-input.json` records the owner's answer or acceptance with channel `cli` and `attested=false`; it resolves `needs_input` and cannot complete a protected transition.
-- `aipt case report --case CASE --format markdown` renders the derived report: objective, requirements addressed, active decisions, validation coverage (every design test still `not_run`) and the next action.
+- Claude Code: `/aipt-design-system` followed by your request and the files or folders to use.
+- Codex: `$aipt-design-system` followed by the same.
+- Either host: describe the request in plain language; the `aipt-start` entry skill routes it here when it fits.
+
+Example request: "Design how Reply Assist should retrieve knowledge articles and call the ticket tool, given the accepted requirements."
+
+Before dispatching any role, the session states the route plan: the stages it will run, the stages it will skip and why, the artifacts it will write, any missing input, and anything it will not do. Artifacts and the case ledger go under `aipt-cases/<case-id>/` in your project, as the `aipt-start` skill describes.
+
+This release has no command-line controller. The record-keeping rules in this recipe (version binding, review independence, receipts, impact tracing) are followed by the orchestrating session as instructions; nothing enforces them in code. The experimental controller library in `src/` implements several of these rules in tested code, but it is not connected to either host.
 
 ## Live coverage
 
-| Host | fixture_replay | native | Last run |
-|---|---|---|---|
-| native host 1 (adapter record in `docs/compatibility/`) | not yet run | not yet run | — |
-| native host 2 (adapter record in `docs/compatibility/`) | not yet run | not yet run | — |
-| sequential fallback (no native dispatch) | not yet run | — | — |
-
-This table is updated only from recorded runs: a `fixture_replay` result from `aipt eval fixtures`, or a native run whose dispatch rows carry a recorded child id. No cell changes on the basis of a description, a parsed file or a self-report.
+Per-host status is recorded in `docs/compatibility/`. As of this release, no workflow has been run end to end on either host, and this recipe's fixture is unrun.

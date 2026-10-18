@@ -1,0 +1,15 @@
+{
+  "workflow_id": "W05",
+  "workflow": "evaluate-feature",
+  "label": "unrun",
+  "scenario": "A high average score hides failures on cross-workspace questions; the proposed threshold is changed after results.",
+  "expected_behavior": "The report preserves the failing slice and original criteria. A new threshold is a disclosed decision proposal, not a retroactive pass.",
+  "acceptance": [
+    "Hold-out separation",
+    "Actual execution receipts",
+    "Criteria frozen before results"
+  ],
+  "core_cross_host": true,
+  "case_material": "examples/support-copilot/ (synthetic)",
+  "note": "A scenario description with expected behavior. It has not been run against a model or a host."
+}

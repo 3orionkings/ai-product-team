@@ -27,7 +27,7 @@ When something is missing, the run does not fill the blank:
 | Users | The Context Analyst records the gap; the Discovery Interviewer asks "Who performs this work and who receives its result?" only if the answer changes which option is viable. |
 | Constraints | Proceed with an explicit limitation; the comparison lists constraints as unknown and names which option each unknown would disqualify. |
 | Existing alternatives | The Opportunity Analyst constructs doing nothing and at least one non-AI alternative from the workflow itself and labels them reconstructed, not supplied. |
-| Source scope empty | `blocked`: no authorized sources; the resolving action is `aipt case init` with a brief that names the scope. |
+| Source scope empty | `blocked`: no authorized sources; the resolving action is a case brief that names the scope. |
 
 ## Outputs
 
@@ -100,7 +100,7 @@ Budget modes: `focused` (4 tasks, 2 concurrent, 0 challenge rounds) fits the fou
 
 ## Status handling and recovery
 
-`needs_input`: the Interviewer's question is preserved verbatim on the task and the run moves to `needs_input`; accepted artifacts are kept. The user receives the exact question and, for each, the choice its answer changes. The answer is recorded with `aipt decision record-user-input`, the run returns to `planned`, and `resolve-unknowns` is re-planned with the answer as an input ref.
+`needs_input`: the Interviewer's question is preserved verbatim on the task and the run moves to `needs_input`; accepted artifacts are kept. The user receives the exact question and, for each, the choice its answer changes. The answer is recorded in the case ledger as user input, the run returns to `planned`, and `resolve-unknowns` is re-planned with the answer as an input ref.
 
 `blocked`: a required source or capability is unavailable (a source outside scope, a document that cannot be read). The task records the reason, and only independent work continues; for example, the comparison of options that do not depend on the missing source proceeds with the gap stated under `## Evidence required`. The user receives the unavailable capability or evidence and the action that would resolve it.
 
@@ -124,29 +124,22 @@ Scenario: "A team asks for an AI assistant to approve every support credit autom
 
 In the Larkspur Support case this is Reply Assist asked to approve credits on its own. The expected run produces a brief whose demand evidence is one complaint typed `observation`, an Interviewer question asking for credit volume and the current approval path, a comparison in which draft assistance with human approval and a fixed credit rule are scored beside the automatic approver, a review that returns `revise` or `ready` with a Customer Researcher follow-up, and a proposal with `requested_authority` R2 whose recommendation is a next test, not approval. The approval question stays open.
 
-Fixture path: `evals/workflows/assess-opportunity/fixture.json`. A replay of this fixture is labeled `fixture_replay` and is not a live run; it checks the controller's transitions with predetermined outputs and demonstrates nothing about a model's judgment or a host's execution.
+Fixture: `evals/workflows/assess-opportunity/fixture.json` records this scenario, its expected behavior and the acceptance lines. It has not been run against a model or a host.
 
 ## Invocation
 
-The entry skill is `aipt-assess-opportunity`. It loads the orchestration contract into the current root session and never runs in a forked context.
+Entry skill: `aipt-assess-opportunity`. It runs in your current session, never a forked one, and that session acts as the root orchestrator.
 
-- `aipt run start --case CASE --workflow assess-opportunity --mode standard` creates the run, binds it to the case, the workflow version and the mode, and moves it from `created` to `scoped`.
-- `aipt run plan --run RUN_ID` records the route plan: selected and omitted roles with reasons, predicate results, pruned stages with `satisfied_by_version_id`, and the budget check.
-- `aipt task next --run RUN_ID` lists the ready tasks whose dependencies are accepted, in dependency order.
-- `aipt task admit --task TASK_ID` runs the admission checks (dependencies, budget, role and write scope, source permissions, wall clock), reserves a slot and mints the work order.
-- `aipt task attach --task TASK_ID --native-child-id CHILD_ID` records the native child that executes the task; without it, a response claiming `native` is stored as `sequential` with `claimed_native_unobserved=true`.
-- `aipt task submit --task TASK_ID --response response.json` validates the agent response, stores artifacts as `proposed`, stores proposed links as proposed edges, and preserves any `needs_input` question.
-- `aipt review submit --run RUN_ID --record review.json` records the Discovery Manager's review with its result and conflict check; the author of a reviewed artifact is refused as its reviewer.
-- `aipt decision propose --run RUN_ID --record decision.json` records the comparison's recommendation as a proposed decision when `decide-or-test` runs.
-- `aipt decision record-user-input --run RUN_ID --record user-input.json` records the user's answers or acceptance with channel `cli` and `attested=false`.
-- `aipt case report --case CASE --format markdown` renders the derived report: objective, evidence limitations, unresolved questions, active decisions with dissent and the next action.
+- Claude Code: `/aipt-assess-opportunity` followed by your request and the files or folders to use.
+- Codex: `$aipt-assess-opportunity` followed by the same.
+- Either host: describe the request in plain language; the `aipt-start` entry skill routes it here when it fits.
+
+Example request: "Should we add an AI assistant that approves support credits automatically? Here is the complaint log and our credit policy."
+
+Before dispatching any role, the session states the route plan: the stages it will run, the stages it will skip and why, the artifacts it will write, any missing input, and anything it will not do. Artifacts and the case ledger go under `aipt-cases/<case-id>/` in your project, as the `aipt-start` skill describes.
+
+This release has no command-line controller. The record-keeping rules in this recipe (version binding, review independence, receipts, impact tracing) are followed by the orchestrating session as instructions; nothing enforces them in code. The experimental controller library in `src/` implements several of these rules in tested code, but it is not connected to either host.
 
 ## Live coverage
 
-| Host | fixture_replay | native | Last run |
-|---|---|---|---|
-| native host 1 (adapter record in `docs/compatibility/`) | not yet run | not yet run | — |
-| native host 2 (adapter record in `docs/compatibility/`) | not yet run | not yet run | — |
-| sequential fallback (no native dispatch) | not yet run | — | — |
-
-This table is updated only from recorded runs: a `fixture_replay` result from `aipt eval fixtures`, or a native run whose dispatch rows carry a recorded child id. No cell changes on the basis of a description, a parsed file or a self-report.
+Per-host status is recorded in `docs/compatibility/`. As of this release, no workflow has been run end to end on either host, and this recipe's fixture is unrun.

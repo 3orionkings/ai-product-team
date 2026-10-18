@@ -50,7 +50,7 @@ The audit-manager (`agents/audit-manager.md`) applies `aipt-method-structural-in
 
 ### reproduce
 
-The independent-auditor (`agents/independent-auditor.md`) applies `aipt-method-independent-audit` to rerun the critical checks in a fresh context through `aipt receipt run`, `aipt-method-requirements-and-acceptance` to map every in-scope requirement to a check and a negative case, and `aipt-method-drift-and-regression-audit` to compare the current snapshot with the one the offered results were bound to. Input refs: accepted `release-scope.json`, the acceptance map, the runnable checks. Accept when every check in `release-audit.json` carries a receipt or the result `blocked` or `not_run`, every uncovered requirement is listed, `conflict_check` is `verified`, and no result is copied from a historical record.
+The independent-auditor (`agents/independent-auditor.md`) applies `aipt-method-independent-audit` to rerun the critical checks in a fresh context as recorded commands with receipts in the case ledger, `aipt-method-requirements-and-acceptance` to map every in-scope requirement to a check and a negative case, and `aipt-method-drift-and-regression-audit` to compare the current snapshot with the one the offered results were bound to. Input refs: accepted `release-scope.json`, the acceptance map, the runnable checks. Accept when every check in `release-audit.json` carries a receipt or the result `blocked` or `not_run`, every uncovered requirement is listed, `conflict_check` is `verified`, and no result is copied from a historical record.
 
 ### boundaries
 
@@ -104,28 +104,22 @@ This workflow never deploys, publishes, sends, pays, deletes, flips a feature fl
 
 Registry scenario: all happy-path tests pass but there is no exercised rollback and isolation remains untested. Expected behavior: `release-audit.json` records the isolation requirement as `not_run` with coverage uncovered, `rollout-plan.md` records rollback as untested, and `release-readiness.md` returns `blocked` or `changes_required` for human review. The workflow neither deploys nor converts the missing evidence into a pass, and the happy-path passes remain recorded as passes with limited coverage.
 
-Fixture path: `evals/workflows/review-release/fixture.json`. A replay of this fixture is labeled `fixture_replay` and is not a live run.
+Fixture: `evals/workflows/review-release/fixture.json` records this scenario, its expected behavior and the acceptance lines. It has not been run against a model or a host.
 
 ## Invocation
 
-Entry skill: `aipt-review-release`.
+Entry skill: `aipt-review-release`. It runs in your current session, never a forked one, and that session acts as the root orchestrator.
 
-- `aipt run start --case CASE --workflow review-release --mode standard` records a run bound to the case, this workflow version, risk R2 and the `standard` budget.
-- `aipt run plan --run RUN_ID` records the route plan with the three unprunable review gates and any triggered specialist.
-- `aipt task next --run RUN_ID` lists the ready tasks, which after `freeze-scope` are `reproduce` and `boundaries` together.
-- `aipt task admit --task TASK_ID` records the admission checks, including that the reviewer is not an author of the artifact under review, and reserves a worker slot.
-- `aipt task attach --task TASK_ID --native-child-id CHILD_ID` records the fresh native child for the auditor so independence can be verified rather than claimed.
-- `aipt receipt run --task TASK_ID -- <check command>` records a receipt for each rerun check against the frozen snapshot.
-- `aipt task submit --task TASK_ID --response response.json` records the response envelope and stores its artifacts as proposed versions.
-- `aipt review submit --run RUN_ID --record review.json` records each review gate's result against the exact versions reviewed.
-- `aipt decision propose --run RUN_ID --record decision.json` records the human approval request with status `human_required`, bound to the snapshot and cohort.
-- `aipt decision record-user-input --run RUN_ID --record user-input.json` records the human's answer with `attested: false`; a protected transition still needs the approval provenance the architecture defines.
-- `aipt case report --case CASE --format markdown` renders the case state, including readiness, outstanding findings and coverage.
+- Claude Code: `/aipt-review-release` followed by your request and the files or folders to use.
+- Codex: `$aipt-review-release` followed by the same.
+- Either host: describe the request in plain language; the `aipt-start` entry skill routes it here when it fits.
+
+Example request: "Is Reply Assist 0.9 ready for a pilot with ten agents in ws-alpha?"
+
+Before dispatching any role, the session states the route plan: the stages it will run, the stages it will skip and why, the artifacts it will write, any missing input, and anything it will not do. Artifacts and the case ledger go under `aipt-cases/<case-id>/` in your project, as the `aipt-start` skill describes.
+
+This release has no command-line controller. The record-keeping rules in this recipe (version binding, review independence, receipts, impact tracing) are followed by the orchestrating session as instructions; nothing enforces them in code. The experimental controller library in `src/` implements several of these rules in tested code, but it is not connected to either host.
 
 ## Live coverage
 
-| host | fixture_replay | native | last run |
-|---|---|---|---|
-| `adapters/<host>` (one row per host directory) | not yet run | not yet run | — |
-
-This table is updated only from recorded runs.
+Per-host status is recorded in `docs/compatibility/`. As of this release, no workflow has been run end to end on either host, and this recipe's fixture is unrun.

@@ -1,0 +1,15 @@
+{
+  "workflow_id": "W07",
+  "workflow": "compare-models",
+  "label": "unrun",
+  "scenario": "Candidate B looks cheaper per input token but retries more and fails the protected slice.",
+  "expected_behavior": "The recommendation uses task-level results and stated constraints, not a superficial rate comparison. Unknown charges remain unknown.",
+  "acceptance": [
+    "Same cases and disclosed settings",
+    "Rates are dated or cost is unknown",
+    "No recommendation based solely on model reputation"
+  ],
+  "core_cross_host": false,
+  "case_material": "examples/support-copilot/ (synthetic)",
+  "note": "A scenario description with expected behavior. It has not been run against a model or a host."
+}

@@ -1,5 +1,16 @@
 # Controller contracts (M1 build specification)
 
+> **Status (v0.1 release): experimental, partly built.** This document specifies the controller that the design package called for. In the v0.1 release the product is the agent, skill and workflow files; the controller is not connected to either host and has no command-line interface.
+>
+> | Module | State |
+> |---|---|
+> | `validation`, `storage`, `registry`, `policies`, `lineage`, `decisions`, `routing`, `receipts` | implemented, unit-tested (512 tests at release) |
+> | `controller` | incomplete: `case_init`, `run_start`, `run_plan` only; untested |
+> | `reporting`, `cli`, `fixture_runner`, `doctor` | not built |
+> | `adapter_compiler`, `installer` | replaced by `tools/build_adapters.py` and `install.py` |
+>
+> Adversarial acceptance reviews (AT-06 to AT-16) and host conformance runs were not performed.
+
 This document fixes the module boundaries, data model, schemas, state machines and policy checks that `src/ai_product_team/` implements. It is derived from `docs/spec/02_ARCHITECTURE.md` §§5–16 and `docs/spec/01_INITIAL_PRD.md` §§8–10, and it is the authority for M1 code. Where this document is silent, follow the architecture. Where the two disagree, this document wins and the disagreement is logged in `divergences.md`.
 
 **Non-negotiables for every module**

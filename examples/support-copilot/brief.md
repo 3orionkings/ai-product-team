@@ -1,6 +1,6 @@
 # Case brief — Reply Assist for Larkspur Support
 
-This is the case brief for the synthetic support-copilot demonstration. It is the `brief` payload that `aipt case init` records, written out in prose first and as a machine-readable block at the end. Every name in it is fictional; see `README.md`.
+This is the case brief for the synthetic support-copilot demonstration. It is the brief the orchestrating session reads when a case starts, written out in prose first and as a machine-readable block at the end. Every name in it is fictional; see `README.md`.
 
 ## Objective
 

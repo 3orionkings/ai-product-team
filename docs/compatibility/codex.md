@@ -1,17 +1,13 @@
-# codex — conformance record
+# Codex — conformance record
 
-No conformance run has been recorded yet. This file is updated only from actual runs (host version, settings, commands, observed results, unavailable fields). See `adapters/codex/capabilities.json` for the declared capabilities and `README.md` for the matrix.
+**Live validation: blocked.** The Codex CLI on the build machine does not start (its vendored executable is missing), and the owner chose to leave it blocked for v0.1. The Codex files were generated from the official documentation only (links in `README.md`).
 
-| Check | Status | Host version | Date | Evidence |
-|---|---|---|---|---|
-| Install into scratch repository | not_run | — | — | — |
-| Catalog discovery (64 roles) | not_run | — | — | — |
-| Skills discovery (28 methods + 13 entries) | not_run | — | — | — |
-| Invoke a specialist; capture child identity | not_run | — | — | — |
-| Out-of-scope action request behavior | not_run | — | — | — |
-| Manager review path | not_run | — | — | — |
-| Challenge and judge path (W11) | not_run | — | — | — |
-| Target-version binding | not_run | — | — | — |
-| Interruption and resume | not_run | — | — | — |
-| Uninstall preserves preexisting files | not_run | — | — | — |
-| Core workflows W01, W02, W04, W05, W10, W11 end to end | not_run | — | — | — |
+| Check | Status | Evidence |
+|---|---|---|
+| Each role is one TOML file with exactly `name`, `description`, `developer_instructions`, and it parses | passed (static) | `tests/unit/test_build_and_install.py` |
+| No role uses a reserved built-in name (`default`, `worker`, `explorer`) | passed (static) | same |
+| Skills are placed under `.agents/skills/`, a documented scan path | passed (static) | same |
+| Install, idempotent reinstall, conflict refusal, uninstall | passed | same |
+| Discovery, dispatch, child identity, permissions, workflows | **blocked** | Codex CLI unavailable |
+
+Codex documentation says a custom agent cannot narrow its own sandbox or approval policy, so on Codex every role runs with the parent session's permissions. The write-scope rules are instructions in each role's text, not an enforced boundary.

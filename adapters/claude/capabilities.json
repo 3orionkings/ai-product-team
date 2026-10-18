@@ -13,10 +13,30 @@
     "path": ".claude/agents/<name>.md",
     "format": "markdown body with YAML frontmatter",
     "identity_field": "name",
-    "required_fields": ["name", "description"],
-    "fields_emitted_by_adapter": ["name", "description", "tools", "disallowedTools", "maxTurns"],
-    "fields_deliberately_not_emitted": ["model", "permissionMode", "memory", "hooks", "mcpServers", "isolation", "effort", "background"],
-    "unknown_fields": "ignored silently by the host; the conformance test therefore checks each emitted key against this list"
+    "required_fields": [
+      "name",
+      "description"
+    ],
+    "fields_emitted_by_adapter": [
+      "name",
+      "description",
+      "tools",
+      "disallowedTools",
+      "skills"
+    ],
+    "fields_deliberately_not_emitted": [
+      "model",
+      "permissionMode",
+      "memory",
+      "hooks",
+      "mcpServers",
+      "isolation",
+      "effort",
+      "background",
+      "maxTurns"
+    ],
+    "unknown_fields": "ignored silently by the host; the conformance test therefore checks each emitted key against this list",
+    "skills_field": "preloads each role's shared method skills into the subagent"
   },
   "skills_discovery": {
     "path": ".claude/skills/<name>/SKILL.md",
@@ -40,11 +60,54 @@
     "per_role": true,
     "mechanism": "tools allowlist and disallowedTools denylist in frontmatter",
     "default": "subagents inherit the parent's tools, including MCP tools",
-    "always_removed_by_host": ["AskUserQuestion", "Workflow", "EnterPlanMode", "ScheduleWakeup"],
+    "always_removed_by_host": [
+      "AskUserQuestion",
+      "Workflow",
+      "EnterPlanMode",
+      "ScheduleWakeup"
+    ],
     "write_scope_mapping": {
-      "proposal-only": {"tools": ["Read", "Grep", "Glob"], "disallowedTools": ["Write", "Edit", "NotebookEdit", "Bash", "Agent"]},
-      "assigned-worktree": {"tools": ["Read", "Grep", "Glob", "Write", "Edit", "Bash"], "disallowedTools": ["Agent"]},
-      "verification-sandbox": {"tools": ["Read", "Grep", "Glob", "Bash"], "disallowedTools": ["Write", "Edit", "NotebookEdit", "Agent"]}
+      "proposal-only": {
+        "tools": [
+          "Read",
+          "Grep",
+          "Glob"
+        ],
+        "disallowedTools": [
+          "Write",
+          "Edit",
+          "NotebookEdit",
+          "Bash",
+          "Agent"
+        ]
+      },
+      "assigned-worktree": {
+        "tools": [
+          "Read",
+          "Grep",
+          "Glob",
+          "Write",
+          "Edit",
+          "Bash"
+        ],
+        "disallowedTools": [
+          "Agent"
+        ]
+      },
+      "verification-sandbox": {
+        "tools": [
+          "Read",
+          "Grep",
+          "Glob",
+          "Bash"
+        ],
+        "disallowedTools": [
+          "Write",
+          "Edit",
+          "NotebookEdit",
+          "Agent"
+        ]
+      }
     }
   },
   "permission_behavior": {
@@ -54,13 +117,13 @@
     "isolation_note": "A tools allowlist narrows what a role can call. It is not a sandbox and not a security boundary against a hostile user of the same machine."
   },
   "human_input_attestation": "not available to the controller; approvals recorded through the CLI are unattested",
-  "validation_command": "aipt doctor --host claude --project <scratch-dir>",
+  "validation_command": "python3 install.py --target <scratch-dir> --host claude, then open the scratch project in Claude Code and run /agents",
   "unsupported": [
     "per-role usage or cost telemetry",
     "attested human identity",
     "guaranteed cancellation observation"
   ],
-  "test_status": "not_run",
+  "test_status": "static_checks_passed_live_not_run",
   "last_tested": null,
-  "notes": "Live validation is possible on the build machine. Results are recorded in docs/compatibility/claude-code.md only from actual runs."
+  "notes": "Generated files are checked by tests/unit/test_build_and_install.py against the documented fields. A headless discovery run on 2026-10-17 failed to authenticate (expired OAuth session in the CLI), so live discovery is not verified."
 }

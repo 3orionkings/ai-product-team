@@ -6,7 +6,7 @@ The controller checks structure, references, versions, authority, independence a
 
 ## Setup common to both parts
 
-- `aipt case init` with `brief.md`: objective, two protected constraints, source scope = `corpus/01` through `corpus/06`, owner `human-owner`.
+- Start the case with `brief.md`: objective, two protected constraints, source scope = `corpus/01` through `corpus/06`, owner `human-owner`.
 - Sources 01 through 06 are ingested as `source` nodes with content hashes. Requirement WS-ISO-1 is ingested as a `requirement` node with `protected: true`, `status: approved`, `owner: human-owner`, originating refs to 01 and 02.
 - Fixture runs are labeled `fixture_replay`. No output of either part is presented as live inference.
 

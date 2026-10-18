@@ -8,7 +8,7 @@ Entry skill `aipt-learn-from-outcomes` · Manager `audit-manager` · Minimum ris
 
 Learning from outcomes is where a team most easily fools itself: a complaint count falls and the feature is credited; one bad example is fixed and the fix becomes a rule; a prompt is tuned on the example that motivated it and promoted without a held-out check. This workflow puts a measurement step before the proposal, a drift check after it and a held-out comparison before promotion, and keeps the previous version and its results available so the change can be reversed.
 
-The user receives an improvement proposal that names the repeated failure it addresses and the evidence for it, a test and evaluation plan that says how the candidate was or will be compared against the current version, and a versioned change with its rollback path, carrying the audit-manager's review result and the promotion decision recorded through `aipt decision propose`: `accepted` by the decision-authority for a supported improvement within a delegation bound to the candidate version, `rejected` with the failing held-out cases, `deferred` with the evidence still needed, or `human_required` where the change touches a protected policy. The review says whether the candidate is supported; only the decision moves the current pointer. In the Reply Assist case, a drafting-instruction revision that fixes one tone complaint in ws-alpha is a candidate; it is promoted only if it also holds on the held-out cross-workspace negatives.
+The user receives an improvement proposal that names the repeated failure it addresses and the evidence for it, a test and evaluation plan that says how the candidate was or will be compared against the current version, and a versioned change with its rollback path, carrying the audit-manager's review result and the promotion decision recorded as a decision: `accepted` by the decision-authority for a supported improvement within a delegation bound to the candidate version, `rejected` with the failing held-out cases, `deferred` with the evidence still needed, or `human_required` where the change touches a protected policy. The review says whether the candidate is supported; only the decision moves the current pointer. In the Reply Assist case, a drafting-instruction revision that fixes one tone complaint in ws-alpha is a candidate; it is promoted only if it also holds on the held-out cross-workspace negatives.
 
 ## Inputs
 
@@ -28,7 +28,7 @@ The case must already contain accepted `review` nodes from independent audits ov
 
 `promotion-review.json` (registry output: versioned change and rollback path) — the `review` schema: `reviewed_refs`, `reviewer_role`, `reviewer_session`, `findings`, `evidence_sufficiency`, `result` (`ready`, `revise`, `blocked` or `escalate`), `conflict_check`, `unresolved`, plus `candidate_version_id`, `rollback_version_id`, `candidate_supported` (`true` only when every held-out slice passed with receipts), `protected_scope_touched` and `previous_results_retained` (always `true`). Stored as a `review` node. It records that the candidate is supported or not; it promotes nothing.
 
-`promotion-decision.json` — the `decision` schema: `proposal_version_id` (the improvement proposal), `outcome` (`accepted`, `rejected`, `deferred`, `human_required`), `selected_option`, `criteria`, `rationale`, `dissent`, `authority_basis` (`{kind: delegation|human_input, approval_version_id}`), `revisit_conditions`, `status`. Stored as a `decision` node, opened with `aipt decision propose` after the review. The outcome is recorded by the decision-authority within a delegation bound to the exact candidate version (W11 `apply-authority`, or a bounded decision-authority task when nothing is disputed), or by attested human input where `protected_scope_touched` is true; the audit-manager never records it.
+`promotion-decision.json` — the `decision` schema: `proposal_version_id` (the improvement proposal), `outcome` (`accepted`, `rejected`, `deferred`, `human_required`), `selected_option`, `criteria`, `rationale`, `dissent`, `authority_basis` (`{kind: delegation|human_input, approval_version_id}`), `revisit_conditions`, `status`. Stored as a `decision` node, opened as a proposed decision after the review. The outcome is recorded by the decision-authority within a delegation bound to the exact candidate version (W11 `apply-authority`, or a bounded decision-authority task when nothing is disputed), or by attested human input where `protected_scope_touched` is true; the audit-manager never records it.
 
 ## Work graph
 
@@ -57,7 +57,7 @@ The change-impact-analyst (`agents/change-impact-analyst.md`) receives the candi
 The evaluation-designer (`agents/evaluation-designer.md`) runs only when `improvement_needs_evaluation` is true: the changed behavior has fixtures or held-out cases. It receives the candidate and baseline versions, the dataset manifest and the likely regressions, and applies `aipt-method-evaluation-planning` to freeze metrics, slices and thresholds before any candidate result is seen, and `aipt-method-requirements-and-acceptance` to tie each slice to the requirement or invariant it protects. Execution of the comparison is a W05 task with receipts; results are recorded per case and per split, and a threshold changed after results is a disclosed proposal, not a pass. Accepted when `frozen_at` precedes every result, held-out cases are separate from development cases, and every result carries a `receipt_id` or is `not_run`.
 
 ### review-promotion
-The audit-manager (`agents/audit-manager.md`) receives the proposal, the impact report, the evaluation plan with results where it exists, and the author identities. It applies `aipt-method-structural-integrity-audit` to check that proposal, impact and results describe the same candidate version, `aipt-method-independent-audit` to require receipts rather than the steward's report of success, and `aipt-method-security-and-privacy-review` when the change touches access, data handling or an authority rule. It records whether the candidate is supported on held-out cases and whether protected scope is touched; it holds `acceptance_authority: none` and promotes nothing. A supported, unprotected R1 candidate gets `ready`, and the promotion then goes through `aipt decision propose` to the decision-authority, who accepts only within a delegation bound to the candidate version; a protected change gets `escalate`, and the decision is opened `human_required` for W11 and attested human acceptance; a failing held-out slice gets `revise` with the cases named, and a proposed decision is `rejected`. Accepted when the reviewer authored none of the inputs, the result follows from the recorded results, `candidate_supported` is `true` only with receipts for every held-out slice, and `previous_results_retained` is `true`.
+The audit-manager (`agents/audit-manager.md`) receives the proposal, the impact report, the evaluation plan with results where it exists, and the author identities. It applies `aipt-method-structural-integrity-audit` to check that proposal, impact and results describe the same candidate version, `aipt-method-independent-audit` to require receipts rather than the steward's report of success, and `aipt-method-security-and-privacy-review` when the change touches access, data handling or an authority rule. It records whether the candidate is supported on held-out cases and whether protected scope is touched; it holds `acceptance_authority: none` and promotes nothing. A supported, unprotected R1 candidate gets `ready`, and the promotion then goes as a proposed decision to the decision-authority, who accepts only within a delegation bound to the candidate version; a protected change gets `escalate`, and the decision is opened `human_required` for W11 and attested human acceptance; a failing held-out slice gets `revise` with the cases named, and a proposed decision is `rejected`. Accepted when the reviewer authored none of the inputs, the result follows from the recorded results, `candidate_supported` is `true` only with receipts for every held-out slice, and `previous_results_retained` is `true`.
 
 ## Gates
 
@@ -77,7 +77,7 @@ Budget guidance: focused (4 tasks) fits the four unconditional stages for a meth
 
 ## Status handling and recovery
 
-`needs_input`: the task and run move to `needs_input` with the exact question preserved, for example "The candidate changes the reply-tone instruction that the drafts-only policy references. Is this a method change within delegation or a policy change for the owner?" Completed stages stay accepted; the run returns to `planned` when `aipt decision record-user-input` stores the answer.
+`needs_input`: the task and run move to `needs_input` with the exact question preserved, for example "The candidate changes the reply-tone instruction that the drafts-only policy references. Is this a method change within delegation or a policy change for the owner?" Completed stages stay accepted; the run returns to `planned` when the answer is recorded in the case ledger as user input.
 
 `blocked`: the task names the unavailable capability or evidence, such as a missing held-out split, an audit without receipts or a sandbox the host cannot provide, and the run continues only the stages that do not depend on it. The user receives the outcome review and proposal so far and the blocker.
 
@@ -97,28 +97,22 @@ Scenario: a new prompt fixes the one example from which it was written but fails
 
 Expected behavior: the review result is `revise` with the failing held-out cases named, `candidate_supported` is `false`, and no promotion decision is accepted (a decision proposed anyway is recorded `rejected` by the decision-authority); the current version remains current and the candidate remains readable on its branch with its development and held-out results; the drafts-only requirement and the workspace-isolation requirement are untouched and no authority rule is weakened; the steward's next proposal must address the held-out failures or recommend `gather_more_evidence`.
 
-Path: `evals/workflows/learn-from-outcomes/fixture.json`. A replay of this fixture through the controller is labeled `fixture_replay` and is not a live run.
+Fixture: `evals/workflows/learn-from-outcomes/fixture.json` records this scenario, its expected behavior and the acceptance lines. It has not been run against a model or a host.
 
 ## Invocation
 
-Entry skill: `aipt-learn-from-outcomes`, loaded in the root session; it never runs in a forked context.
+Entry skill: `aipt-learn-from-outcomes`. It runs in your current session, never a forked one, and that session acts as the root orchestrator.
 
-- `aipt run start --case CASE --workflow learn-from-outcomes --mode standard` creates the run in `scoped` with the mode's budget.
-- `aipt run plan --run RUN` stores the route plan: included stages, satisfied stages with their version ids, omitted roles with reasons and the value of `improvement_needs_evaluation`.
-- `aipt task next --run RUN` lists the one ready task at each step, since the stages are sequential.
-- `aipt task admit --task TASK` runs the admission checks, reserves a budget slot and mints the work order.
-- `aipt task attach --task TASK --native-child-id CHILD` records the native child id so the execution mode is stored as observed rather than agent-reported.
-- `aipt task submit --task TASK --response response.json` validates the envelope and stores the outcome review, proposal, impact report and plan as proposed versions, with any comparison result lacking a receipt flagged `claimed_only`.
-- `aipt review submit --run RUN --record review.json` records the promotion review with its independence check.
-- `aipt decision propose --run RUN --record decision.json` stores the promotion decision in status `proposed` for the decision-authority, or `human_required` when protected scope is touched; the audit-manager's review is an input to it, not its author.
-- `aipt decision record-user-input --run RUN --record user-input.json` records the owner's answer or acceptance with `channel` and an `attested` flag set by the controller.
-- `aipt case report --case CASE --format markdown` renders the active decisions, validation coverage with applicability and the next action from stored state.
+- Claude Code: `/aipt-learn-from-outcomes` followed by your request and the files or folders to use.
+- Codex: `$aipt-learn-from-outcomes` followed by the same.
+- Either host: describe the request in plain language; the `aipt-start` entry skill routes it here when it fits.
+
+Example request: "Our last three evaluation runs show the same retrieval failure. Propose and test an improvement to the method."
+
+Before dispatching any role, the session states the route plan: the stages it will run, the stages it will skip and why, the artifacts it will write, any missing input, and anything it will not do. Artifacts and the case ledger go under `aipt-cases/<case-id>/` in your project, as the `aipt-start` skill describes.
+
+This release has no command-line controller. The record-keeping rules in this recipe (version binding, review independence, receipts, impact tracing) are followed by the orchestrating session as instructions; nothing enforces them in code. The experimental controller library in `src/` implements several of these rules in tested code, but it is not connected to either host.
 
 ## Live coverage
 
-| host | fixture_replay | native | last run |
-|---|---|---|---|
-| host adapter A | not yet run | not yet run | — |
-| host adapter B | not yet run | not yet run | — |
-
-Rows are keyed by the adapter id recorded on the run. This table is updated only from recorded runs.
+Per-host status is recorded in `docs/compatibility/`. As of this release, no workflow has been run end to end on either host, and this recipe's fixture is unrun.

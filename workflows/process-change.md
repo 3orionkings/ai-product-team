@@ -71,7 +71,7 @@ The registry acceptance lines are checked against the stored records: only decla
 
 ## Routing and pruning
 
-A stage is satisfied without a model call when a current accepted artifact of its type exists for the same changed version: `aipt change analyze` already produces a change assessment and a derived impact report, so a run started after it records `satisfied_by_version_id` on `preserve-versions` and, when the queue was accepted, on `map-affected`. A correction proposal accepted in an earlier run for the same contradiction satisfies `assess-contradictions`. The authorize review is never satisfied by an earlier review of a different version.
+A stage is satisfied without a model call when a current accepted artifact of its type exists for the same changed version: an earlier change assessment and impact report may already exist, so a run started after one records `satisfied_by_version_id` on `preserve-versions` and, when the queue was accepted, on `map-affected`. A correction proposal accepted in an earlier run for the same contradiction satisfies `assess-contradictions`. The authorize review is never satisfied by an earlier review of a different version.
 
 Conditional specialists join for an identified gap, not by default: evidence-curator when new evidence arrives without a `source` record; claim-checker when a contested claim's support is itself in doubt; requirements-writer, through W02, when an authorized correction requires rewording a requirement; refactoring-engineer and test-engineer, through W04 and W05, when rework or retest tasks are issued; decision-recorder when the authorize stage returns a decision from W11. `rework` joins on `rework_required`; `revalidate` joins on `revalidation_required`; W11 joins on `changes_protected_scope`.
 
@@ -81,7 +81,7 @@ Budget guidance: focused (4 tasks, no challenge round) fits the four uncondition
 
 ## Status handling and recovery
 
-`needs_input`: the task and run move to `needs_input` with the exact question preserved, for example "Is the new test the authoritative check for requirement REQ-ISO-01, or a diagnostic probe?" Completed artifacts stay accepted; the run returns to `planned` when the answer is recorded with `aipt decision record-user-input`.
+`needs_input`: the task and run move to `needs_input` with the exact question preserved, for example "Is the new test the authoritative check for requirement REQ-ISO-01, or a diagnostic probe?" Completed artifacts stay accepted; the run returns to `planned` when the answer is recorded in the case ledger as user input.
 
 `blocked`: the task reports the unavailable capability or evidence, such as a missing receipt or a host that cannot open a fresh review context, and the run continues only the stages that do not depend on it. The user receives the queue and proposal so far and the named blocker.
 
@@ -101,29 +101,22 @@ Scenario: a negative test disproves an isolation assumption after a positive tes
 
 Expected behavior: the isolation requirement remains mandatory and is queued as `review_required`; the release decision that depended on the isolation claim is queued for review; the old positive test keeps result `passed` with applicability `historical`; only the retrieval implementation and its isolation checks are requeued, through W04 and W05, and unrelated completed work is untouched.
 
-Path: `evals/workflows/process-change/fixture.json`. A replay of this fixture through the controller is labeled `fixture_replay` and is not a live run.
+Fixture: `evals/workflows/process-change/fixture.json` records this scenario, its expected behavior and the acceptance lines. It has not been run against a model or a host.
 
 ## Invocation
 
-Entry skill: `aipt-process-change`, loaded in the root session; it never runs in a forked context.
+Entry skill: `aipt-process-change`. It runs in your current session, never a forked one, and that session acts as the root orchestrator.
 
-- `aipt change analyze --case CASE --change change.json` records the new version with a proposed `supersedes` edge and a derived impact report without changing any current state.
-- `aipt run start --case CASE --workflow process-change --mode standard` creates the run in `scoped` with the mode's budget.
-- `aipt run plan --run RUN` stores the route plan: included stages, satisfied stages with their version ids, omitted roles with reasons and the predicate values.
-- `aipt task next --run RUN` lists ready tasks whose dependencies are accepted, in dependency order.
-- `aipt task admit --task TASK` runs the admission checks, reserves a budget slot and mints the work order.
-- `aipt task attach --task TASK --native-child-id CHILD` records the native child id so the execution mode is stored as observed rather than agent-reported.
-- `aipt task submit --task TASK --response response.json` validates the response envelope and stores artifacts, edges and queue rows as proposals.
-- `aipt review submit --run RUN --record review.json` records the authorize or revalidate review with its independence check.
-- `aipt decision propose --run RUN --record decision.json` opens the correction decision when protected scope is touched, for W11.
-- `aipt decision record-user-input --run RUN --record user-input.json` records the human answer or acceptance with `channel` and an `attested` flag set by the controller.
-- `aipt case report --case CASE --format markdown` renders the impact queue, validation coverage with applicability and the next action from stored state.
+- Claude Code: `/aipt-process-change` followed by your request and the files or folders to use.
+- Codex: `$aipt-process-change` followed by the same.
+- Either host: describe the request in plain language; the `aipt-start` entry skill routes it here when it fits.
+
+Example request: "This new negative test contradicts the isolation assumption. What must we revisit?"
+
+Before dispatching any role, the session states the route plan: the stages it will run, the stages it will skip and why, the artifacts it will write, any missing input, and anything it will not do. Artifacts and the case ledger go under `aipt-cases/<case-id>/` in your project, as the `aipt-start` skill describes.
+
+This release has no command-line controller. The record-keeping rules in this recipe (version binding, review independence, receipts, impact tracing) are followed by the orchestrating session as instructions; nothing enforces them in code. The experimental controller library in `src/` implements several of these rules in tested code, but it is not connected to either host.
 
 ## Live coverage
 
-| host | fixture_replay | native | last run |
-|---|---|---|---|
-| host adapter A | not yet run | not yet run | — |
-| host adapter B | not yet run | not yet run | — |
-
-Rows are keyed by the adapter id recorded on the run. This table is updated only from recorded runs.
+Per-host status is recorded in `docs/compatibility/`. As of this release, no workflow has been run end to end on either host, and this recipe's fixture is unrun.

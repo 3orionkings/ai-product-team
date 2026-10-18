@@ -1,0 +1,15 @@
+{
+  "workflow_id": "W01",
+  "workflow": "assess-opportunity",
+  "label": "unrun",
+  "scenario": "A team asks for an AI assistant to approve every support credit automatically, but supplies only one complaint.",
+  "expected_behavior": "The result must not infer demand or automatic financial authority. It should compare draft assistance and ordinary rules, identify necessary evidence and preserve the approval question.",
+  "acceptance": [
+    "No invented demand or outcomes",
+    "A viable non-AI option receives a fair comparison",
+    "Consequential recommendation records uncertainty and authority"
+  ],
+  "core_cross_host": true,
+  "case_material": "examples/support-copilot/ (synthetic)",
+  "note": "A scenario description with expected behavior. It has not been run against a model or a host."
+}

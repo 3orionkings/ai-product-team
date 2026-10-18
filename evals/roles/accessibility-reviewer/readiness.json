@@ -1,10 +1,11 @@
 {
   "role_id": "accessibility-reviewer",
-  "state": "authored",
-  "contract_validated": false,
-  "adapter_generated": false,
+  "state": "adapter_generated",
+  "contract_validated": true,
+  "adapter_generated": true,
   "native_discovered": false,
   "scenario_executed": false,
   "evaluated": false,
-  "updated": "2026-10-17"
+  "updated": "2026-10-18",
+  "notes": "contract_validated = passes tools/check_authoring.py; adapter_generated = present in dist/claude and dist/codex. Not discovered or executed on any host."
 }

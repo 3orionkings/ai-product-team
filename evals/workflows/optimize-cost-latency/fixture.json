@@ -1,0 +1,15 @@
+{
+  "workflow_id": "W08",
+  "workflow": "optimize-cost-latency",
+  "label": "unrun",
+  "scenario": "Trace spans run in parallel and only per-stage percentile numbers are supplied.",
+  "expected_behavior": "The analyst does not add p95s and call the result end-to-end p95. It identifies the measurement missing before claiming a latency improvement.",
+  "acceptance": [
+    "No fabricated prices or token totals",
+    "Quality constraints remain fixed",
+    "Savings are hypotheses until measured"
+  ],
+  "core_cross_host": false,
+  "case_material": "examples/support-copilot/ (synthetic)",
+  "note": "A scenario description with expected behavior. It has not been run against a model or a host."
+}

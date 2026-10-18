@@ -34,7 +34,7 @@ Journey: `journey.md`, headings `## Actors and entry`, `## Successful completion
 
 Acceptance map: `acceptance-map.json`, keys `entries` (each with `requirement_id`, `check`, `observable`, `negative_case`, `refusal_behavior`, `unknown_outcome`, `method`), `uncovered_requirements`, `checks_not_yet_runnable`. Stored as an `artifact`; each entry becomes a `validation` record with result `not_run` until W04 or W05 executes it.
 
-Unresolved decisions: the `open_decisions` array of `answers.json` (each with `id`, `question`, `changes`, `options`, `protected`, `requires`) together with the `unresolved` array of `experience-review.json`. Both travel with their parent records and surface in `aipt case report` under unresolved questions.
+Unresolved decisions: the `open_decisions` array of `answers.json` (each with `id`, `question`, `changes`, `options`, `protected`, `requires`) together with the `unresolved` array of `experience-review.json`. Both travel with their parent records and surface in the case report under unresolved questions.
 
 Supporting records: `context-brief.md` (headings `## Current job`, `## Controlling sources`, `## Conflicts`, `## Inherited decisions`, `## Existing behavior`, `## Open questions`; stored as an `artifact` with its statements proposed as `claim` records) and `experience-review.json` (keys `reviewed_refs`, `reviewer_role`, `reviewer_session`, `findings`, `evidence_sufficiency`, `result`, `conflict_check`, `unresolved`; stored as a `review` record).
 
@@ -101,7 +101,7 @@ Budget modes: `focused` (4 tasks, 2 concurrent, 0 challenge rounds) cannot hold 
 
 ## Status handling and recovery
 
-`needs_input`: `clarify` preserves each question verbatim and the run moves to `needs_input`; the brief and any accepted artifacts are kept. The user receives the questions, each with the choice it decides and the options. Answers are recorded with `aipt decision record-user-input`; an answer that changes a protected constraint is recorded as input, not as acceptance of that change. The run returns to `planned` and `clarify` is re-planned with the answer as an input ref.
+`needs_input`: `clarify` preserves each question verbatim and the run moves to `needs_input`; the brief and any accepted artifacts are kept. The user receives the questions, each with the choice it decides and the options. Answers are is recorded in the case ledger as user input; an answer that changes a protected constraint is recorded as input, not as acceptance of that change. The run returns to `planned` and `clarify` is re-planned with the answer as an input ref.
 
 `blocked`: a document in scope cannot be read, or a requirement needs a source outside scope. The task records the unavailable source, and stages that do not depend on it continue; requirements that depend on it are written as open decisions. The user receives the missing source and the action that would unblock it.
 
@@ -125,29 +125,22 @@ Scenario: "One document says drafts only; an older slide says send messages auto
 
 In the Larkspur Support case the policy page and the older slide conflict on whether Reply Assist may send. The expected run records both as claims with a `contradicts` relation, asks the owner which governs only if the policy page's authority does not already settle it, writes the drafting requirement in its no-send form with both refs, lists the send question under `open_decisions` as protected and requiring `human-owner`, and gives the acceptance map an entry whose negative case is "a send action is attempted; expected: refused and logged". The review returns `ready` with the send decision in `unresolved`.
 
-Fixture path: `evals/workflows/shape-feature/fixture.json`. A replay of this fixture is labeled `fixture_replay` and is not a live run; it checks the controller's transitions with predetermined outputs and demonstrates nothing about a model's judgment or a host's execution.
+Fixture: `evals/workflows/shape-feature/fixture.json` records this scenario, its expected behavior and the acceptance lines. It has not been run against a model or a host.
 
 ## Invocation
 
-The entry skill is `aipt-shape-feature`. It loads the orchestration contract into the current root session and never runs in a forked context.
+Entry skill: `aipt-shape-feature`. It runs in your current session, never a forked one, and that session acts as the root orchestrator.
 
-- `aipt run start --case CASE --workflow shape-feature --mode standard` creates the run, binds it to the case, the workflow version and the mode, and moves it from `created` to `scoped`.
-- `aipt run plan --run RUN_ID` records the route plan: which of the six stages are satisfied by current artifacts, whether `material_conflict` added the Contradiction Analyst, omitted roles with reasons, and the budget check.
-- `aipt task next --run RUN_ID` lists the ready tasks whose dependencies are accepted, in dependency order, starting with `reconstruct` or with `clarify` when a brief is reused.
-- `aipt task admit --task TASK_ID` runs the admission checks (dependencies, budget, role and write scope, source permissions, wall clock), reserves a slot and mints the work order.
-- `aipt task attach --task TASK_ID --native-child-id CHILD_ID` records the native child that executes the task; without it, a response claiming `native` is stored as `sequential` with `claimed_native_unobserved=true`.
-- `aipt task submit --task TASK_ID --response response.json` validates the agent response, stores the artifact as `proposed`, stores each requirement and each proposed link as a proposed record or edge, and preserves any `needs_input` question.
-- `aipt review submit --run RUN_ID --record review.json` records the Experience Manager's review with its result and conflict check; the author of a reviewed artifact is refused as its reviewer.
-- `aipt decision propose --run RUN_ID --record decision.json` records an open decision from `answers.json` (the send question) as a proposed decision for W11.
-- `aipt decision record-user-input --run RUN_ID --record user-input.json` records the owner's answers with channel `cli` and `attested=false`; it resolves `needs_input` and cannot complete a protected transition.
-- `aipt case report --case CASE --format markdown` renders the derived report: objective, approved requirements with protected ones flagged, unresolved questions, active decisions with dissent and the next action.
+- Claude Code: `/aipt-shape-feature` followed by your request and the files or folders to use.
+- Codex: `$aipt-shape-feature` followed by the same.
+- Either host: describe the request in plain language; the `aipt-start` entry skill routes it here when it fits.
+
+Example request: "Turn the documents in docs/reply-assist/ into a feature proposal with requirements and acceptance checks."
+
+Before dispatching any role, the session states the route plan: the stages it will run, the stages it will skip and why, the artifacts it will write, any missing input, and anything it will not do. Artifacts and the case ledger go under `aipt-cases/<case-id>/` in your project, as the `aipt-start` skill describes.
+
+This release has no command-line controller. The record-keeping rules in this recipe (version binding, review independence, receipts, impact tracing) are followed by the orchestrating session as instructions; nothing enforces them in code. The experimental controller library in `src/` implements several of these rules in tested code, but it is not connected to either host.
 
 ## Live coverage
 
-| Host | fixture_replay | native | Last run |
-|---|---|---|---|
-| native host 1 (adapter record in `docs/compatibility/`) | not yet run | not yet run | — |
-| native host 2 (adapter record in `docs/compatibility/`) | not yet run | not yet run | — |
-| sequential fallback (no native dispatch) | not yet run | — | — |
-
-This table is updated only from recorded runs: a `fixture_replay` result from `aipt eval fixtures`, or a native run whose dispatch rows carry a recorded child id. No cell changes on the basis of a description, a parsed file or a self-report.
+Per-host status is recorded in `docs/compatibility/`. As of this release, no workflow has been run end to end on either host, and this recipe's fixture is unrun.

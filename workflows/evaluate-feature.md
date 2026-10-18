@@ -35,7 +35,7 @@ When something is missing, the run returns `needs_input` and retains progress:
 | `dataset-manifest.json` | `{dataset_version, plan_version, source_scope, splits: {development: [], held_out: []}, cases: [{id, slice_ids, access_classification, synthetic}], sampling_limits, coverage_by_slice}` | `artifact` node, kind `dataset-manifest`, status `proposed`; `depends_on` edge to the plan version |
 | `results.json` | `{plan_version, dataset_version, label: live/fixture_replay, runs: [{candidate_id, configuration_requested, configuration_observed, split, execution_mode, receipt_id, outputs_ref, scores: {metric_id: value}, by_slice: {slice_id: {metric_id: value, n}}, unavailable_observations: []}]}` | `artifact` node plus one `validation` record per run with `receipt_id`, `result` and `applicability` |
 | `failure-analysis.md` | Headings: Error modes · Slice results against frozen thresholds · Discriminating explanations · Alternatives retained · Next tests. | `artifact` node, kind `failure-analysis`; each explanation proposed as a `claim` of type `hypothesis` |
-| `evaluation-review.json` | `review` fields `reviewed_refs, reviewer_role, reviewer_session, findings, evidence_sufficiency, result, conflict_check, unresolved`, plus `established: [], narrowly_demonstrated: [], needs_more_evidence: [], threshold_changes_disclosed: []` | `review` node via `aipt review submit` |
+| `evaluation-review.json` | `review` fields `reviewed_refs, reviewer_role, reviewer_session, findings, evidence_sufficiency, result, conflict_check, unresolved`, plus `established: [], narrowly_demonstrated: [], needs_more_evidence: [], threshold_changes_disclosed: []` | `review` record in the case ledger |
 
 The registry outputs map as follows: evaluation plan is `evaluation-plan.json`; versioned dataset is `dataset-manifest.json`; results by failure slice are `results.json` read with `failure-analysis.md`; review is `evaluation-review.json`.
 
@@ -60,7 +60,7 @@ Read `agents/evaluation-designer.md`. Apply `aipt-method-evaluation-planning` to
 Read `agents/dataset-curator.md`. Apply `aipt-method-evaluation-data-curation` to build representative, permissioned cases with development and held-out splits, and `aipt-method-evidence-and-lineage` to record each case's source, access classification and limitations. Input refs: the plan version, the source scope, the supplied cases. Held-out ids are never shared with anyone tuning a candidate. Sampling limits are stated plainly, for example "no ws-beta cases from before the drafts-only policy change". Accepted when every slice meets its minimum count or the shortfall is recorded in `coverage_by_slice`, the splits are disjoint, and no case classified private appears in a public or synthetic set.
 
 ### `execute` — evaluation-runner
-Read `agents/evaluation-runner.md`. Apply `aipt-method-evaluation-execution-and-receipts` to run each candidate against the frozen dataset through `aipt receipt run`, recording command, configuration observed, dataset version and exit status, and `aipt-method-cost-and-latency-analysis` to record usage and timing where the host exposes them and to mark them unknown where it does not. Input refs: the plan version, the dataset version, the candidate configuration refs. A proposed command is not an executed one; a run that did not happen is recorded as `not_run`. Replay output is labeled `fixture_replay` and is never mixed into live scores. Accepted when every run has a receipt or a `not_run` entry, `configuration_observed` is filled or marked unobservable, and scores are reported per slice with sample counts.
+Read `agents/evaluation-runner.md`. Apply `aipt-method-evaluation-execution-and-receipts` to run each candidate against the frozen dataset as recorded commands with receipts in the case ledger, recording command, configuration observed, dataset version and exit status, and `aipt-method-cost-and-latency-analysis` to record usage and timing where the host exposes them and to mark them unknown where it does not. Input refs: the plan version, the dataset version, the candidate configuration refs. A proposed command is not an executed one; a run that did not happen is recorded as `not_run`. Replay output is labeled `fixture_replay` and is never mixed into live scores. Accepted when every run has a receipt or a `not_run` entry, `configuration_observed` is filled or marked unobservable, and scores are reported per slice with sample counts.
 
 ### `analyze-failures` — failure-analyst
 Read `agents/failure-analyst.md`. Apply `aipt-method-evaluation-planning` to read results against the frozen thresholds, `aipt-method-evaluation-execution-and-receipts` to trace each failure to its recorded output, and `aipt-method-corpus-grounded-onboarding` to separate observed error modes from inferred causes. Input refs: `results.json`, the plan version, the dataset version. Group failures by error mode, state the discriminating explanation for each group, and retain the alternatives. A high mean that hides a failing `cross-workspace` slice is reported as a failing slice; the mean does not rescue it. Accepted when every error mode cites case ids and receipts, every explanation is typed hypothesis unless tested, and the next test for each open explanation is named.
@@ -97,7 +97,7 @@ Budget guidance: focused (4 tasks) fits one candidate on a current plan and data
 
 ## Status handling and recovery
 
-- `needs_input`: the exact question is preserved in the run record; the frozen plan and any accepted manifest stay accepted; the run returns to `planned` when `aipt decision record-user-input` supplies the answer.
+- `needs_input`: the exact question is preserved in the run record; the frozen plan and any accepted manifest stay accepted; the run returns to `planned` when the user's answer is recorded in the case ledger.
 - `blocked`: the runner records the configuration or tool that is unavailable, the other candidates keep running, and the runnable command is kept in `unavailable_observations`. The user receives the blocker, the results that did complete and the next resolving action.
 - `failed`: the receipt of the failed run is preserved with exit status and logs; a timeout is distinguished from a failing exit; retries stay within the work order's budget; a failed run never appears as a score.
 - `partial`: completed candidate runs and their analysis stay accepted; the run cannot complete while any planned candidate lacks a result; the review names the missing candidates.
@@ -112,31 +112,24 @@ This workflow never deploys, publishes, sends a message, pays, deletes data or c
 
 ## Fixture
 
-Scenario: A high average score hides failures on cross-workspace questions; the proposed threshold is changed after results. Expected behavior: the report preserves the failing `cross-workspace` slice and the original frozen criteria; the review lists the slice as failing or under `needs_more_evidence`, never under `established`; the new threshold appears as a disclosed decision proposal recorded with `aipt decision propose`, not as a retroactive pass.
+Scenario: A high average score hides failures on cross-workspace questions; the proposed threshold is changed after results. Expected behavior: the report preserves the failing `cross-workspace` slice and the original frozen criteria; the review lists the slice as failing or under `needs_more_evidence`, never under `established`; the new threshold appears as a disclosed decision proposal recorded as a proposed decision, not as a retroactive pass.
 
-Fixture path: `evals/workflows/evaluate-feature/fixture.json`. A replay of this fixture is labeled `fixture_replay` and is not a live run.
+Fixture: `evals/workflows/evaluate-feature/fixture.json` records this scenario, its expected behavior and the acceptance lines. It has not been run against a model or a host.
 
 ## Invocation
 
-Entry skill: `aipt-evaluate-feature`, loaded in the root session only.
+Entry skill: `aipt-evaluate-feature`. It runs in your current session, never a forked one, and that session acts as the root orchestrator.
 
-- `aipt run start --case CASE --workflow evaluate-feature --mode standard` records a run in state `created` then `scoped`, with the case, workflow version, mode, risk floor R1 and the host when observable.
-- `aipt run plan --run RUN` records the route plan: selected and omitted roles with reasons, included stages, satisfied-by versions, evaluated predicates and the budget check, including the count of runner tasks against the mode.
-- `aipt task next --run RUN` lists the ready tasks whose dependencies are accepted, in dependency order.
-- `aipt task admit --task TASK` runs the admission checks (dependencies, budget, write scope, author-as-reviewer, source scope, wall clock) and mints the work order with a reserved slot.
-- `aipt task attach --task TASK --native-child-id CHILD` records the native child identity and execution mode; without it, a native claim is downgraded to `sequential` with `observed_by=agent_reported`.
-- `aipt task submit --task TASK --response response.json` validates the envelope, stores the plan, manifest, results and analysis as proposed nodes, flags runs without receipts as `claimed_only` and moves the task to `submitted`.
-- `aipt receipt run --task TASK -- <command>` executes one evaluation run and stores the receipt with command, snapshot, dataset and configuration hashes, exit status and log locations.
-- `aipt review submit --run RUN --record review.json` records the manager review, or an evidence-judge ruling, with its conflict check.
-- `aipt decision propose --run RUN --record decision.json` records a threshold change or candidate adoption as a proposal; `aipt decision record-user-input --run RUN --record user-input.json` records the user's answer with `channel=cli` and `attested=false`.
-- `aipt case report --case CASE --format markdown` renders the derived report, including validation coverage with applicability and the open decision proposals.
+- Claude Code: `/aipt-evaluate-feature` followed by your request and the files or folders to use.
+- Codex: `$aipt-evaluate-feature` followed by the same.
+- Either host: describe the request in plain language; the `aipt-start` entry skill routes it here when it fits.
+
+Example request: "Evaluate Reply Assist's draft quality and workspace isolation against these test cases."
+
+Before dispatching any role, the session states the route plan: the stages it will run, the stages it will skip and why, the artifacts it will write, any missing input, and anything it will not do. Artifacts and the case ledger go under `aipt-cases/<case-id>/` in your project, as the `aipt-start` skill describes.
+
+This release has no command-line controller. The record-keeping rules in this recipe (version binding, review independence, receipts, impact tracing) are followed by the orchestrating session as instructions; nothing enforces them in code. The experimental controller library in `src/` implements several of these rules in tested code, but it is not connected to either host.
 
 ## Live coverage
 
-| Host | fixture_replay | native | Last run |
-|---|---|---|---|
-| first native host (see `docs/compatibility/`) | not yet run | not yet run | — |
-| second native host (see `docs/compatibility/`) | not yet run | not yet run | — |
-| fixture runner, no host | not yet run | — | — |
-
-This table is updated only from recorded runs; no cell is inferred from parsed files or from a run on another host.
+Per-host status is recorded in `docs/compatibility/`. As of this release, no workflow has been run end to end on either host, and this recipe's fixture is unrun.

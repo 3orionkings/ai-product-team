@@ -1,0 +1,15 @@
+{
+  "workflow_id": "W10",
+  "workflow": "process-change",
+  "label": "unrun",
+  "scenario": "A negative test disproves an isolation assumption after a positive test passed.",
+  "expected_behavior": "The requirement remains mandatory; the release decision is reviewed; the old result remains historical; only relevant implementation/checks are requeued.",
+  "acceptance": [
+    "Only declared affected dependencies are automatically queued",
+    "Constraints survive failed implementations",
+    "Historical test outcomes are preserved"
+  ],
+  "core_cross_host": true,
+  "case_material": "examples/support-copilot/ (synthetic)",
+  "note": "A scenario description with expected behavior. It has not been run against a model or a host."
+}

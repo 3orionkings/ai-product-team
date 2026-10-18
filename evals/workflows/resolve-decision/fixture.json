@@ -1,0 +1,16 @@
+{
+  "workflow_id": "W11",
+  "workflow": "resolve-decision",
+  "label": "unrun",
+  "scenario": "Three agents prefer option A, one points to a decisive violation of a protected constraint.",
+  "expected_behavior": "The judge rules on the violation rather than votes. If the evidence remains inconclusive, it defers and identifies the next test.",
+  "acceptance": [
+    "Maximum two challenge rounds by default",
+    "No majority-vote truth",
+    "Unresolved and defer are valid outcomes",
+    "Judgment and approval are distinct"
+  ],
+  "core_cross_host": true,
+  "case_material": "examples/support-copilot/ (synthetic)",
+  "note": "A scenario description with expected behavior. It has not been run against a model or a host."
+}

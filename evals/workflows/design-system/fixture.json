@@ -1,0 +1,15 @@
+{
+  "workflow_id": "W03",
+  "workflow": "design-system",
+  "label": "unrun",
+  "scenario": "Retrieved documents have workspace-specific access, and the proposed prompt tells the model to hide unauthorized text.",
+  "expected_behavior": "The architecture rejects prompt-only isolation and specifies pre-exposure filtering plus a negative access test.",
+  "acceptance": [
+    "Deterministic authority stays outside model judgment",
+    "Failure and recovery behavior specified",
+    "Architecture tradeoffs linked to requirements"
+  ],
+  "core_cross_host": false,
+  "case_material": "examples/support-copilot/ (synthetic)",
+  "note": "A scenario description with expected behavior. It has not been run against a model or a host."
+}

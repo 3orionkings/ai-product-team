@@ -102,28 +102,22 @@ This workflow never changes routing, caching, batching, context assembly or mode
 
 Registry scenario: trace spans run in parallel and only per-stage percentile numbers are supplied. Expected behavior: the latency-analyst does not add per-stage p95 values and call the result the end-to-end p95; `latency-model.json` reports `end_to_end.available: false`, lists the missing end-to-end samples in `measurement_gaps`, and the review names that measurement as the next step before any latency improvement is claimed.
 
-Fixture path: `evals/workflows/optimize-cost-latency/fixture.json`. A replay of this fixture is labeled `fixture_replay` and is not a live run.
+Fixture: `evals/workflows/optimize-cost-latency/fixture.json` records this scenario, its expected behavior and the acceptance lines. It has not been run against a model or a host.
 
 ## Invocation
 
-Entry skill: `aipt-optimize-cost-latency`.
+Entry skill: `aipt-optimize-cost-latency`. It runs in your current session, never a forked one, and that session acts as the root orchestrator.
 
-- `aipt run start --case CASE --workflow optimize-cost-latency --mode standard` records a run bound to the case, this workflow version and the `standard` budget.
-- `aipt run plan --run RUN_ID` records the route plan with the predicate results for the two conditional stages and any pruned stage's satisfying version.
-- `aipt task next --run RUN_ID` lists the ready tasks, which at the start are `cost-job` and `map-delay` together.
-- `aipt task admit --task TASK_ID` records the admission checks and reserves a worker slot.
-- `aipt task attach --task TASK_ID --native-child-id CHILD_ID` records which native child executes the task so the execution mode is observed.
-- `aipt receipt run --task TASK_ID -- <trace query command>` records a receipt for any command used to reproduce a figure.
-- `aipt task submit --task TASK_ID --response response.json` records the response envelope and stores its artifacts as proposed versions.
-- `aipt review submit --run RUN_ID --record review.json` records the operations-manager review against the exact versions reviewed.
-- `aipt decision propose --run RUN_ID --record decision.json` records a proposal to change the floor or to authorize a W04 task, with the authority it requests.
-- `aipt decision record-user-input --run RUN_ID --record user-input.json` records the user's answer to a `needs_input` question with `attested: false`.
-- `aipt case report --case CASE --format markdown` renders the case state, including the models, options and their unknowns.
+- Claude Code: `/aipt-optimize-cost-latency` followed by your request and the files or folders to use.
+- Codex: `$aipt-optimize-cost-latency` followed by the same.
+- Either host: describe the request in plain language; the `aipt-start` entry skill routes it here when it fits.
+
+Example request: "Cut the time agents wait for a draft without dropping below the isolation and quality floor."
+
+Before dispatching any role, the session states the route plan: the stages it will run, the stages it will skip and why, the artifacts it will write, any missing input, and anything it will not do. Artifacts and the case ledger go under `aipt-cases/<case-id>/` in your project, as the `aipt-start` skill describes.
+
+This release has no command-line controller. The record-keeping rules in this recipe (version binding, review independence, receipts, impact tracing) are followed by the orchestrating session as instructions; nothing enforces them in code. The experimental controller library in `src/` implements several of these rules in tested code, but it is not connected to either host.
 
 ## Live coverage
 
-| host | fixture_replay | native | last run |
-|---|---|---|---|
-| `adapters/<host>` (one row per host directory) | not yet run | not yet run | — |
-
-This table is updated only from recorded runs.
+Per-host status is recorded in `docs/compatibility/`. As of this release, no workflow has been run end to end on either host, and this recipe's fixture is unrun.
